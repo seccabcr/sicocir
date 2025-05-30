@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Control de Circulación</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+
+  <!-- Favicons -->
+  <link href="./img/logo.ico" rel="icon">
+
+
+
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="./css/style.css" rel="stylesheet">
+
+   <!-- DataTables CSS files-->
+   <link rel="stylesheet" type="text/css" href="../assets/datatables/datatables.min.css" />
+
+
+
+  <!-- Sweet Alert Files-->
+  <!--link type="text/css" href="../assets/css/sweetalert.css" rel="stylesheet" /-->
+  <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+
+  <!-- jQuery js-->
+  <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+  <!-- App Lotto JS -->
+  <script src="./js/Main.js"></script>
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <script>
+
+      checkInicioSesion();
+      addHeader();
+
+    </script>
+
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <script>
+        addMenu();
+
+      </script>
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main" style="min-height:600px">
+
+    <div class="pagetitle">
+      <h1>Actualiza Productos</h1>
+      <!--span>Nombre del módulo</span-->
+
+
+      <!-- Barra botones -->
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-lg-center justify-content-end">
+
+
+
+        <!--button id="btnActualizar" type="button" class="btn btn-primary" data-bs-toggle="tooltip"
+          title="Actualizar">Actualizar</button-->
+
+        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
+            class="bi bi-search"></i></button-->
+
+      </div>
+
+    </div><!-- End Page Title -->
+
+    <section class="section">
+
+      <div id="spinner" class="text-center" style="display: none">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div class="row d-flex justify-content-center">
+
+        <!-- Div del formulario-->
+        <div class="col-lg-8">
+
+          <div class="card">
+            <div class="card-body">
+
+              <form method="post" autocomplete="off">
+
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtCodItem" class="col-lg-3 col-12 col-form-label me-1">Codigo Item</label>
+                  <div class="col-lg-2 col-3 me-2">
+                    <input id="txtCodItem" name="txtCodItem" type="text" class="form-control"
+                      oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6" inputmode="numeric"
+                      autofocus>
+                  </div>
+
+                  <div class="col-lg-1 col-2">
+                    <button id="btnBuscaItem" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modBuscaItems"><i class="bi bi-search"></i></button>
+                  </div>
+
+                  <div class="col-lg-1">
+                    <button id="btnNuevoItem" class="btn btn-dark">Nuevo</button>
+                  </div>
+
+                </div>
+
+                <div class="input-group mb-3">
+                  <label for="txtNomItem" class="col-lg-3 col-form-label">Descripción</label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomItem" name="txtNomItem" type="text" class="form-control" maxlength="80">
+                  </div>
+
+                </div>
+
+               
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-12 col-form-label">Tipo Item</label>
+                  <div class="col-lg-4 col-9">
+                    <select id="cbTipoItem" class="form-select" aria-label="Default select example">
+                      <option value="0">Seleccione tipo item</option>
+                      <option value="1">Producto para Venta</option>
+                      <option value="2">Merchandising</option>
+
+                    </select>
+                  </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                  <label for="txtCodBarras" class="col-lg-3 col-form-label">Cod. Barras</label>
+                  <div class="col-lg-3 col-9">
+                    <input id="txtCodBarras" name="txtCodBarras" type="text" class="form-control"
+                      oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="13" inputmode="numeric">
+                  </div>
+
+                </div>
+
+               
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-6 col-form-label">Estado</label>
+                  <div class="col-lg-3 col-6">
+                    <select id="cbEstado" class="form-select" aria-label="Default select example">
+                      <option value="0">Inactivo</option>
+                      <option value="1">Activo</option>
+                    </select>
+                  </div>
+                </div>
+
+
+
+                <div class="row mb-3">
+                  <label class="col-lg-3 col-form-label"></label>
+                  <div class="col-lg-6">
+
+                    <button id="btnActualizar" class="btn btn-success me-3">Actualizar</i></button>
+                    <button id="btnCancelar" class="btn btn-dark">Cancelar</i></button>
+
+                  </div>
+
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+
+  <!-- Modal Buscar Items-->
+  <div class="modal" id="modBuscaItems" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Buscar Productos</h5>
+          <button id="btnCerrarModItems" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="tblItems" class="table table-light" width="100%">
+                  <thead>
+                    <tr>
+                      <th class="col-1">Código</th>
+                      <th class="">Descripcion</th>
+                      <th class="col-1 text-end"></th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--div class="modal-footer">
+          <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
+        </div-->
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+    </div>
+
+  </footer><!-- End Footer -->
+
+
+
+  <!-- Vendor JS Files -->
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script src="../assets/datatables/datatables.min.js"></script>
+
+
+  <!-- Carga el script de la pagina -->
+  <script src="./js/actualizaItems.js"></script>
+
+</body>
+
+</html>

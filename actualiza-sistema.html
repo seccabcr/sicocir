@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="cache-control" content="no-cache" />
+
+  <title>Control de Circulación</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="./img/logo.ico" rel="icon">
+
+  <!--link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"-->
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/boostrap/5.3.0/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- DataTables CSS files-->
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/2.1.5/dataTables.bootstrap5.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.css" />
+
+
+  <!-- Template Main CSS File -->
+  <link href="./css/style.css" rel="stylesheet">
+
+  <!-- Sweet Alert Files-->
+  <!--link type="text/css" href="../assets/css/sweetalert.css" rel="stylesheet" /-->
+  <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+
+  <!-- jQuery js-->
+  <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+  <!-- App Lotto JS -->
+  <script src="./js/Main.js"></script>
+
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <script>
+
+      addHeader();
+
+    </script>
+
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <script>
+        addMenu();
+
+      </script>
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main" style="min-height:600px">
+
+    <div class="row ">
+      <div class="pagetitle col-lg-4 mb-lg-3">
+        <h1>Actualiza Archivos Sistema</h1>
+        <!--span>Módulo Mantenimiento</span-->
+
+      </div><!-- End Page Title -->
+
+      <!-- Barra botones -->
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-lg-center justify-content-end">
+
+
+
+        <!--button id="btnActualizar" type="button" class="btn btn-primary" data-bs-toggle="tooltip"
+          title="Actualizar">Actualizar</button-->
+
+        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
+            class="bi bi-search"></i></button-->
+
+      </div>
+
+    </div>
+
+
+
+    <section class="section">
+
+      <div id="spinner" class="text-center" style="display: none">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div class="row d-flex ">
+        <!-- Div del formulario-->
+        <div class="col-lg-8">
+
+          <div class="card">
+            <div class="card-body">
+
+              <div id="tabs" class="mt-3">
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="usuarios-tab" data-bs-toggle="tab" data-bs-target="#usuarios"
+                      type="button" role="tab" aria-controls="usuarios" aria-selected="true">Usuarios</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tipoNegocio-tab" data-bs-toggle="tab" data-bs-target="#tipoNegocio"
+                      type="button" role="tab" aria-controls="tipoNegocio" aria-selected="false">Tipo Negocio</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="mercha-tab" data-bs-toggle="tab" data-bs-target="#mercha" type="button"
+                      role="tab" aria-controls="mercha" aria-selected="false">Merchandising</button>
+                  </li>
+
+                </ul>
+
+
+                <div class="tab-content" id="myTabContent">
+
+                  <div class="tab-pane fade show active" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
+
+                    <div class="card">
+                      <div class="card-body">
+
+                        <div class="d-flex mt-2 mb-2">
+
+                          <h5>Usuarios registrados</h5>
+                          <div class="col-lg-2 col-3 text-center">
+                            <button id="btnAgregaUsu" type="button" class="btn btn-success" data-bs-toggle="modal"
+                              data-bs-target="#modActUsu"><i class="bi bi-plus"></i></button>
+
+                          </div>
+                          <div id="spinnerUsu" class="col-1" style="display: none">
+                            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;"
+                              role="status">
+                              <span class="visually-hidden">Cargando...</span>
+                            </div>
+                          </div>
+
+                        </div>
+
+
+                        <div class="table-responsive">
+                          <table id="tblUsuarios" class="table table-primary nowrap" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="col-1">Código</th>
+                                <th class="col-4">Nombre</th>
+                                <th class="col-2 text-center">Tipo</th>
+                                <th class="col-1 text-center">Estado</th>
+                                <th class="col-2"></th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                          </table>
+
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+
+                  <div class="tab-pane fade" id="tipoNegocio" role="tabpanel" aria-labelledby="tipoNegocio-tab">
+
+                    <div class="card">
+                      <div class="card-body">
+
+                        <div class="d-flex mt-2 mb-2">
+
+                          <h5>Tipo Negocios Registrados</h5>
+                          <div class="col-2 text-center">
+                            <button id="btnAgregaTipoNeg" type="button" class="btn btn-success" data-bs-toggle="modal"
+                              data-bs-target="#modActTipoNeg"><i class="bi bi-plus"></i></button>
+
+                          </div>
+                          <div id="spinnerTipoNeg" class="col-1" style="display: none">
+                            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;"
+                              role="status">
+                              <span class="visually-hidden">Cargando...</span>
+                            </div>
+                          </div>
+
+                        </div>
+
+
+                        <div class="table-responsive">
+                          <table id="tblTipoNeg" class="table table-primary nowrap" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="col-1">Código</th>
+                                <th class="">Descripción</th>
+                                <th class="col-1 text-center">Estado</th>
+                                <th class="col-2"></th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="mercha" role="tabpanel" aria-labelledby="mercha-tab">
+
+                        <div class="card">
+                      <div class="card-body">
+
+                        <div class="d-flex mt-2 mb-2">
+
+                          <h5>Merchandising</h5>
+                          <div class="col-2 text-center">
+                            <button id="btnAgregaMercha" type="button" class="btn btn-success" data-bs-toggle="modal"
+                              data-bs-target="#modActMercha"><i class="bi bi-plus"></i></button>
+
+                          </div>
+                          <div id="spinnerMercha" class="col-1" style="display: none">
+                            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;"
+                              role="status">
+                              <span class="visually-hidden">Cargando...</span>
+                            </div>
+                          </div>
+
+                        </div>
+
+
+                        <div class="table-responsive">
+                          <table id="tblItemsMercha" class="table table-primary nowrap" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="col-1">Código</th>
+                                <th class="">Descripción</th>
+                                <th class="col-1 text-center">Estado</th>
+                                <th class="col-2"></th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+                          </table>
+                        </div>
+
+                      </div>
+                    </div>
+
+
+
+                  </div>
+
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <!-- Modal para actualizar datos de usuarios-->
+  <div id="modActUsu" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Actualiza Usuarios</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="card">
+            <div class="card-body">
+
+              <form autocomplete="off">
+
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtCodUsu" class="col-3 col-form-label">Codigo</label>
+                  <div class="col-lg-2 col-4">
+                    <input id="txtCodUsu" name="txtCodUsu" type="text" class="form-control" disabled>
+                  </div>
+
+                </div>
+
+                 <div class="input-group mb-3">
+                  <label for="txtIdUsu" class="col-3 col-form-label">ID</label>
+                  <div class="col-lg-4 col-9">
+                    <input id="txtIdUsu" name="txtIdUsu" type="text" class="form-control" maxlength="20">
+                  </div>
+
+                </div>
+
+
+                <div class="input-group mb-3">
+                  <label for="txtNomUsu" class="col-lg-3 col-12 col-form-label">Nombre</label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomUsu" name="txtNomUsu" type="text" class="form-control" maxlength="40">
+                  </div>
+
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="col-3 col-form-label">Tipo</label>
+                  <div class="col-lg-3 col-6">
+                    <select id="cbTipoUsu" class="form-select" aria-label="Default select example">
+                      <option value="2">Ejecutivo</option>
+                      <option value="3">Supervisor</option>
+                      <option value="4">Super ADM</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="col-3 col-form-label">Estado</label>
+                  <div class="col-lg-3 col-6">
+                    <select id="cbEstadoUsu" class="form-select" aria-label="Default select example">
+                      <option value="0">Inactivo</option>
+                      <option value="1">Activo</option>
+                    </select>
+                  </div>
+                </div>
+
+            </div>
+
+          </div>
+          <div class="modal-footer">            
+            <button id="btnActUsu" type="button" class="btn btn-primary">Actualizar</button>
+          </div>
+
+          </form>
+
+          <div id="spinnerActUsu" class="text-center" style="display: none">
+            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <!-- Modal para actualizar datos de tipo negocio-->
+  <div id="modActTipoNeg" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Actualiza Tipo Negocios</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="card">
+            <div class="card-body">
+
+              <form autocomplete="off">
+
+             
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtNomTipoNego" class="col-lg-3 col-12 col-form-label">Descripción</label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomTipoNeg" name="txtNomTipoNeg" type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="col-3 col-form-label">Estado</label>
+                  <div class="col-6">
+                    <select id="cbEstadoTipoNeg" class="form-select" aria-label="Default select example">
+                      <option value="0">Inactivo</option>
+                      <option value="1">Activo</option>
+                    </select>
+                  </div>
+                </div>
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <!--button id="btnCanSuc" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button-->
+            <button id="btnActTipoNeg" type="button" class="btn btn-primary">Actualizar</button>
+          </div>
+
+          </form>
+
+          <div id="spinnerActTipoNeg" class="text-center" style="display: none">
+            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  
+  <!-- Modal para actualizar datos de items merchandising-->
+  <div id="modActMercha" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Actualiza Items Merchandising</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="card">
+            <div class="card-body">
+
+              <form autocomplete="off">
+
+             
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtNomMercha" class="col-lg-3 col-12 col-form-label">Descripción</label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomMercha" name="txtNomMercha" type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="col-3 col-form-label">Estado</label>
+                  <div class="col-6">
+                    <select id="cbEstadoMercha" class="form-select" aria-label="Default select example">
+                      <option value="0">Inactivo</option>
+                      <option value="1">Activo</option>
+                    </select>
+                  </div>
+                </div>
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <!--button id="btnCanSuc" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button-->
+            <button id="btnActMercha" type="button" class="btn btn-primary">Actualizar</button>
+          </div>
+
+          </form>
+
+          <div id="spinnerActMercha" class="text-center" style="display: none">
+            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+    </div>
+
+  </footer><!-- End Footer -->
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/boostrap/5.3.0/bootstrap.bundle.min.js"></script>
+
+
+  <!--script src="../assets/datatables/datatables.min.js"></script-->
+  <script src="../assets/datatables/2.1.5/datatables.js"></script>
+  <script src="../assets/datatables/2.1.5/dataTables.bootstrap5.js"></script>
+
+  <script src="../assets/datatables/responsive/3.0.3/dataTables.responsive.js"></script>
+  <script src="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.js"></script>
+
+  <!-- Archivo JS pagina -->
+
+  <script src="./js/actualiza-sistema.js"></script>
+
+</body>
+
+</html>

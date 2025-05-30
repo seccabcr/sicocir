@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="cache-control" content="no-cache" />
+
+    <title>Control Circulaciòn</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="./img/logo.ico" rel="icon">
+    <!--link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"-->
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="./css/style.css" rel="stylesheet">
+
+    <!-- Sweet Alert Files-->
+    <!--link type="text/css" href="../assets/css/sweetalert.css" rel="stylesheet" /-->
+    <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+
+    <!-- jQuery js-->
+    <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+    <!-- App Lotto JS -->
+    <script src="./js/Main.js"></script>
+
+
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <script>
+            addHeader();
+
+        </script>
+
+
+    </header><!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <script>
+                addMenu();
+
+            </script>
+
+        </ul>
+
+    </aside><!-- End Sidebar-->
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+            <h1>Cambio de PIN</h1>
+            <!--span>Nombre del módulo</span-->
+
+        </div><!-- End Page Title -->
+
+        <section class="section">
+
+            <div id="spinner" class="text-center" style="display: none">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <form  novalidate>
+                                <div class="row mb-3 mt-3">
+                                    <label for="idPerfil" class="col-sm-3 col-form-label">ID Usuario</label>
+                                    <div class="col-sm-3">
+                                        <input id="idPerfil" name="idPerfil" type="text" class="form-control" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="nomUsuPerfil" class="col-sm-3 col-form-label">Nombre Usuario</label>
+                                    <div class="col-sm-4">
+                                        <input id="nomUsuPerfil" name="nomUsuPerfil" type="text" class="form-control"
+                                            disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="pinActual" class="col-sm-3 col-form-label" >PIN Actual</label>
+                                    <div class="col-sm-4">
+                                        <input id="pinActual" name="pinActual" type="password" class="form-control"
+                                            oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="8" required autocomplete="off" autofocus>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="pinNuevo" class="col-sm-3 col-form-label">Digite Nuevo PIN</label>
+                                    <div class="col-sm-4">
+                                        <input id="pinNuevo" name="pinNuevo" type="password" class="form-control"
+                                            oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="8" required autocomplete="off">
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-3">
+                                    <label for="pinNuevoConf" class="col-sm-3 col-form-label">Reescriba Nuevo
+                                        Pin</label>
+                                    <div class="col-sm-4">
+                                        <input id="pinNuevoConf" name="pinNuevoConf" type="password"
+                                            class="form-control"
+                                            oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="8" required autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-4">
+                                        <input id="btnCambiar" type="button" class="btn btn-primary" value="Cambiar">
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+
+
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+        </div>
+
+    </footer><!-- End Footer -->
+
+
+
+    <!-- Vendor JS Files -->
+
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <!--script src="../assets/js/main.js"></script-->
+
+    <!-- Archivo JS pagina -->
+    <script src="./js/cambio-pin.js"></script>
+
+</body>
+
+</html>

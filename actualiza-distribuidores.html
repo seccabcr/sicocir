@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="cache-control" content="no-cache" />
+
+  <title>Control de Circulación</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="./img/logo.ico" rel="icon">
+  <!--link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"-->
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/boostrap/5.3.0/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- DataTables CSS files-->
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/2.1.5/dataTables.bootstrap5.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="./css/style.css" rel="stylesheet">
+
+  <!-- Sweet Alert Files-->
+  <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+
+  <!-- jQuery js-->
+  <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+  <!-- App Lotto JS -->
+  <script src="./js/Main.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <script>
+
+      //checkInicioSesion();
+
+      addHeader();
+
+    </script>
+
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+
+      <script>
+        addMenu();
+      </script>
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main" style="min-height:600px">
+
+    <div class="row ">
+      <div class="pagetitle col-lg-4 mb-lg-3">
+        <h1>Actualiza Distribuidores</h1>
+        <!--span>Módulo Vendedor</span-->
+
+      </div><!-- End Page Title -->
+
+      <!-- Barra botones -->
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
+
+        <!--button id="btnEnviar" class="btn btn-primary me-3">Enviar</button-->
+
+        <!--button id="btnCompartir" type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Compartir"><i
+            class="bi bi-share"></i></button-->
+
+        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
+            class="bi bi-search"></i></button-->
+
+      </div>
+
+    </div>
+
+
+
+    <section class="section">
+
+      <div id="spinner" class="text-center" style="display: none">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <!-- Div del formulario-->
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-body">
+
+              <form id="actUsu-form" autocomplete="off">
+
+
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtCodUsu" class="col-3 col-form-label me-1">Código</label>
+                  <div class="col-lg-3 col-4 me-3">
+                    <input id="txtCodUsu" name="txtCodUsu" type="text" class="form-control" maxlength="5" autofocus>
+                  </div>
+
+                  <div class="col-2">
+                    <button id="btnNuevoUsu" type="button" class="btn btn-dark">Nuevo</button-->
+                  </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                  <label for="txtIdUsu" class="col-3 col-form-label">ID</label>
+                  <div class="col-lg-6 col-8">
+                    <input id="txtIdUsu" name="txtIdUsu" type="text" class="form-control" maxlength="20">
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label for="txtNomUsu" class="col-lg-3 col-12 col-form-label">Nombre</label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomUsu" name="txtNomUsu" type="text" class="form-control" maxlength="40">
+                  </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-6 col-form-label">Estado</label>
+                  <div class="col-lg-3 col-6">
+                    <select id="cbEstadoUsu" class="form-select" aria-label="Default select example">
+                      <option value="0">Inactivo</option>
+                      <option selected value="1">Activo</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-form-label"></label>
+                  <div class="col-lg-9">
+
+                    <button id="btnActUsuario" class="btn btn-success me-3">Actualizar</button>
+                    <button id="btnCancelar" class="btn btn-dark">Cancelar</button>
+
+                  </div>
+                </div>
+
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Div del data teble-->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="d-flex mt-2 mb-2">
+                <h5>Distribuidores Registrados</h5>
+
+                <div id="spinnerDis" class="col-1" style="display: none">
+                  <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              </div>
+
+              
+                <div class="input-group mb-3">
+                  <label class="col-lg-2 col-6 col-form-label">Filtro</label>
+                  <div class="col-lg-4 col-6">
+                    <select id="cbFiltraDis" class="form-select" aria-label="Default select example">
+                      <option value="1">Solo Activos</option>
+                      <option value="2">Todos</option>
+                    </select>
+                  </div>
+                </div>
+
+
+              <div class="table-responsive">
+                <table id="tblUsuarios" class="table table-primary nowrap" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th class="col-1">Código</th>                     
+                      <th class="">Nombre</th>
+                       <th class="col-3 text-center">ID</th>
+                      <th class="col-1 text-center">Estado</th>
+                      <th class="col-2 text-center"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+    </div>
+
+  </footer><!-- End Footer -->
+
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/boostrap/5.3.0/bootstrap.bundle.min.js"></script>
+
+
+  <!--script src="../assets/datatables/datatables.min.js"></script-->
+  <script src="../assets/datatables/2.1.5/datatables.js"></script>
+  <script src="../assets/datatables/2.1.5/dataTables.bootstrap5.js"></script>
+
+  <script src="../assets/datatables/responsive/3.0.3/dataTables.responsive.js"></script>
+  <script src="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.js"></script>
+
+  <!-- Archivo JS pagina -->
+
+  <!-- Archivo JS pagina -->
+
+  <script src="./js/actualiza-distribuidores.js"></script>
+
+</body>
+
+</html>

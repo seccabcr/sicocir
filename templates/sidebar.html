@@ -1,0 +1,176 @@
+<h5 class="text-center mb-3">CONTROL DE CIRCULACIÓN</h5>
+
+<div id="spinnerMenu" class="text-center" style="display: none">
+  <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+</div>
+
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" data-bs-target="#mantenimiento-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-list-ul"></i><span>Mantenimiento</span><i class="bi bi-chevron-down ms-auto"></i>
+  </a>
+  <ul id="mantenimiento-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+    <li>
+
+      <a href="./actualiza-pdv.html">
+        <i class="bi bi-circle"></i><span>Puntos de Venta (PDV)</span>
+      </a>
+    </li>
+    <li>
+      <a href="javascript:accesoAdmGen('./actualiza-distribuidores.html')">
+        <i class="bi bi-circle"></i><span>Distribuidores</span>
+      </a>
+    </li>
+
+    <!--li>
+      <a href="javascript:accesoAdmGen('./actualizaItems.html')">
+        <i class="bi bi-circle"></i><span>Productos</span>
+      </a>
+    </li-->
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Precios</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="javascript:accesoAdmGen('./actualiza-sistema.html')">
+        <i class="bi bi-circle"></i><span>Sistema</span>
+      </a>
+    </li>
+  </ul>
+</li><!-- End Mantenimiento Nav -->
+
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="javascript:accesoAdmGen('./actualiza-picking.html')">
+    <i class="bi bi-chevron-right"></i>
+    <span>Actualiza Picking</span>
+  </a>
+</li><!-- End Control Actualiza Picking Nav -->
+
+
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" data-bs-target="#entrega-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-list-ul"></i><span>Entrega de Producto</span><i class="bi bi-chevron-down ms-auto"></i>
+  </a>
+  <ul id="entrega-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+    <li>
+      <a href="./entrega-diaria.html">
+        <i class="bi bi-circle"></i><span>Entrega diaria</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="javascript:accesoAdmGen('./entrega-mercha.html')">
+        <i class="bi bi-circle"></i><span>Entrega Merchandising</span>
+      </a>
+    </li>
+
+
+  </ul>
+</li><!-- End Proceso Entrega Nav -->
+
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="./registro-liq-diaria.html">
+    <i class="bi bi-chevron-right"></i>
+    <span>Registro Liquidación Diaria</span>
+  </a>
+</li><!-- End Control Actualiza Picking Nav -->
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" data-bs-target="#consultas-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-list-ul"></i><span>Reportes / Consultas</span><i class="bi bi-chevron-down ms-auto"></i>
+  </a>
+  <ul id="consultas-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Reporte Clientes</span>
+      </a>
+    </li>
+
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Reporte Entrega Diaria</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Reporte Entrega Merchandising</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Reporte liquidación (Periodo)</span>
+      </a>
+    </li>
+
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Saldos Consignación</span>
+      </a>
+    </li>
+
+    <!--li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Estado Cuenta Distribuidor</span>
+      </a>
+    </li>
+    <li>
+
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Estado Cuenta x PDV</span>
+      </a>
+    </li-->
+
+  </ul>
+</li><!-- End Consultas Nav -->
+
+
+<li class="nav-heading">Administracion GE</li>
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" data-bs-target="#cierreLiq-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-list-ul"></i><span>Cierre Liquidaciones</span><i class="bi bi-chevron-down ms-auto"></i>
+  </a>
+  <ul id="cierreLiq-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Cierre Liquidaciones (Periodo)</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Reporte Cierre Liq. (Periodo)</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Reporte Liq. Pendientes</span>
+      </a>
+    </li>
+
+
+
+  </ul>
+</li><!-- End Proceso Cierre Liquidación Nav -->

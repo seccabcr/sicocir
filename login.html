@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta http-equiv="cache-control" content="no-cache" />
+
+  <title>Control Circulación</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="./img/logo.ico" rel="icon">
+  <!--ink href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"-->
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+
+  <!-- Template Main CSS File -->
+  <link href="./css/style.css" rel="stylesheet">
+
+
+  <!-- jQuery js-->
+  <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+  <!-- Sweet Alert Files-->
+  <!--link type="text/css" href="../assets/css/sweetalert.css" rel="stylesheet" /-->
+  <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+  <!-- App Lotto JS -->
+  <script src="./js/Main.js"></script>
+
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center"
+              style="background-color: white;">
+
+              <div class="d-flex justify-content-center">
+                <a href="#" class="d-flex align-items-center w-auto">
+                  <img src="./img/logo.png" alt="" width="300px">                  
+                </a>
+              </div><!-- End Logo -->
+
+              <div>
+
+                <h3 class="card-title text-center pb-0 fs-1">Control Circulación</h3>
+              </div>
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pb-2">
+                    <h5 class="card-title text-center pb-0 fs-2">Ingreso al Sistema</h5>
+                    <!--p class="text-center small">Digite su ID de Usuario y PIN</p-->
+                  </div>
+
+                  <form class="row g-3" method="POST" novalidate autocomplete="off">
+
+
+                    <div class="col-12">
+                      <label for="idUsuario" class="form-label"> ID Usuario</label>
+                      <div class="input-group ">
+                        <input type="text" name="idUsuario" class="form-control" id="idUsuario" autofocus>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="pinUsuario" class="form-label">PIN</label>
+                      <input type="password" name="pinUsuario" class="form-control" id="pinUsuario"
+                        oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="8" inputmode="numeric">
+
+                    </div>
+
+                    <!--div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                      </div>
+                    </div-->
+                    <div class="col-12">
+                      <button id="btnIngresar" class="btn btn-primary w-100" type="submit">Ingresar</button>
+                    </div>
+                    <!--div class="col-12">
+                      <p class="small mb-0">Don't have account? <a href="pages-register.html">Create an account</a></p>
+                    </div-->
+                  </form>
+
+                </div>
+              </div>
+
+              <div class="credits">
+                <!-- All the links in the footer should remain intact. -->
+                <!-- You can delete the links only if you purchased the pro version. -->
+                <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+                Diseñado por <a href="#">Seccab Software</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+
+
+  <!-- Vendor JS Files -->
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!--script src="../assets/vendor/tinymce/tinymce.min.js"></script-->
+
+  <!-- Template Main JS File -->
+  <!--script src="../assets/js/main.js"></script-->
+
+  <script src="./js/login.js"></script>
+</body>
+
+</html>

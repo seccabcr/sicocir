@@ -116,7 +116,8 @@
                 <label for="txtCodDistri" class="col-lg-2 col-4 col-form-label me-1">Distribuidor</label>
                 <div class="col-lg-1 col-4 me-2">
                   <input id="txtCodDistri" name="txtCodDistri" type="text" class="form-control"
-                    oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6" inputmode="numeric" autofocus>
+                    oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6" inputmode="numeric" autofocus
+                    autocomplete="off">
                 </div>
 
                 <div class="col-lg-1 col-2">
@@ -125,7 +126,7 @@
 
                 </div>
 
-                <div class="col-lg-6 col-12">
+                <div class="col-lg-6 col-12 mt-lg-0 mt-2">
                   <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
                 </div>
 
@@ -309,6 +310,38 @@
 
                       </div>
 
+                      <div class="row">
+
+                         <label class="col-lg-2 col-form-label">Ubicación</label>
+
+                        <div class="col-lg-4">
+                          <div class="row mb-3">
+                            <label for="txtLatitud" class="col-lg-3 col-6 col-form-label">Latitud</label>
+                            <div class="col-lg-5 col-6">
+                              <input id="txtLatitud" name="txtLatitud" type="text" class="form-control text-end" maxlength="12">
+                            </div>
+
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                          <div class="row mb-3">
+                            <label for="txtLongitud" class="col-lg-3 col-6 col-form-label">Longitud</label>
+                            <div class="col-lg-5 col-6">
+                              <input id="txtLongitud" name="txtLongitud" type="text" class="form-control text-end"
+                                oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="12"
+                                inputmode="numeric">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-1">
+                          <button id="btnUbicacion" class="btn btn-secondary"><i class="bi bi-geo-alt-fill"></i></button>
+
+                        </div>
+
+                      </div>
+
                     </form>
 
                   </div>
@@ -366,7 +399,7 @@
               </div>
 
               <div class="table-responsive">
-                <table id="tblClientes" class="table table-light" width="100%">
+                <table id="tblClientes" class="table table-sm table-striped" width="100%">
                   <thead>
                     <tr>
                       <th class="col-1">Código</th>
@@ -395,7 +428,7 @@
 
   <!-- Modal Buscar Distribuidor-->
   <div class="modal" id="modBuscaDis" tabindex="-1" aria-labelledby="modBuscaDisLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modBuscaDisLabel">Busca Distribuidor</h5>
@@ -407,7 +440,7 @@
             <div class="card-body">
 
               <div class="table-responsive">
-                <table id="tblDistri" class="table table-light" width="100%">
+                <table id="tblDistri" class="table table-sm table-striped" width="100%">
                   <thead>
                     <tr>
                       <th class="col-1">Código</th>

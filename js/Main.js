@@ -12,6 +12,10 @@ const nf_dec1 = new Intl.NumberFormat('en', {
   minimumFractionDigits: 1
 });
 
+const nf_dec6 = new Intl.NumberFormat('en', {
+  style: "decimal",
+  minimumFractionDigits: 6
+});
 
 
 const pattern_entero = /^-?\d*(\.\d+)?$/;

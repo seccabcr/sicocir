@@ -25,11 +25,15 @@ $(function () {
 
     const $txtEmail = $('#txtEmail');
     const $txtNomContacto = $('#txtNomContacto');
+
+
     const $txtTelContacto = $('#txtTelContacto');
     const $txtFecApe = $('#txtFecApe').val(obtieneFechaActual());
     const $cbEstado = $('#cbEstado').val(1);
     const $cbTipoNeg = $('#cbTipoNeg').val(0);
 
+    const $txtLatitud = $('#txtLatitud');
+    const $txtLongitud = $('#txtLongitud');
 
     const $cbProvincias = $('#cbProvincias')
         .change(() => {
@@ -52,16 +56,9 @@ $(function () {
     const $btnActualizar = $('#btnActualizar');
     const $btnCancelar = $('#btnCancelar');
 
+    const $btnUbicacion = $('#btnUbicacion');
+
     const $btnCerrarModCli = $('#btnCerrarModCli');
-
-
-    ini_componentes();
-
-    limpiaCampos();
-    inactivaCampos();
-    llenaComboProvincias();
-    //llenaComboTipoNegocios();
-
 
 
     function ini_componentes() {
@@ -72,7 +69,8 @@ $(function () {
             data: listaClientes,
             columns: [
                 {
-                    data: 'cod_cliente'
+                    data: 'cod_cliente',
+                    visible: false
 
                 },
                 {
@@ -115,7 +113,8 @@ $(function () {
             data: listaDistri,
             columns: [
                 {
-                    data: 'cod_dis'
+                    data: 'cod_dis',
+                    visible: false
 
                 },
                 {
@@ -135,20 +134,24 @@ $(function () {
 
         }); /// Fin de creacion de datatable
 
-        $tblClientes.clear().draw();
 
 
-        $('#tblDistri').on('click', 'button.editar', function () {
+        $tblDistri.on('click', 'button.editar', function () {
 
-            let fila = $tblDistri.row($(this).parents('tr')).index();
+            let fila = $tblDistri.row($(this).parents('tr')).data();
 
-            $('#txtNomComercial').focus();
+            //$('#txtNomComercial').focus();
 
-            $('#modBuscaCli').modal('hide');
+            $('#modBuscaDis').modal('hide');
 
-            $txtCodDistri.val(listaDistri[fila].cod_dis);
+            $txtCodDistri.val(fila.cod_dis);
+            $txtNomDistri.val(fila.nom_dis);
 
-            //consultaCliente();
+            $txtCodCliente.prop('disabled', false);
+            $btnBuscaCli.prop('disabled', false);
+            $btnNuevoCliente.prop('disabled', false);
+
+            $txtCodCliente.focus();
 
         });
 
@@ -158,6 +161,14 @@ $(function () {
                 limpiaCampos();
                 inactivaCampos();
 
+                $txtCodDistri.val('');
+                $txtNomDistri.val('');
+
+                $btnBuscaCli.prop('disabled', true);
+                $btnNuevoCliente.prop('disabled', true);
+                $txtCodCliente.prop('disabled', true);
+
+
 
             }).keydown(function (e) {
                 let code = e.keyCode || e.which;
@@ -166,9 +177,7 @@ $(function () {
 
                     if ($txtCodDistri.val().length > 0) {
 
-
-
-                        //consultaDistribuidor();
+                        consultaDistribuidor();
                     }
 
 
@@ -183,11 +192,14 @@ $(function () {
         $txtCodCliente
             .focus(function () {
                 $(this).select();
-
+                limpiaCampos();
+                inactivaCampos();
 
             }).keydown(function (e) {
                 let code = e.keyCode || e.which;
                 if (code == 13 || code == 9) {
+
+                    e.preventDefault();
 
                     if ($txtCodCliente.val().length > 0) {
 
@@ -196,7 +208,6 @@ $(function () {
                         nuevoCliente();
                     }
 
-                    e.preventDefault();
                 }
             });
 
@@ -209,7 +220,11 @@ $(function () {
                 let code = e.keyCode || e.which;
                 if (code == 13 || code == 9) {
 
-                    $txtNomTributa.focus();
+                    let x = $(this).val();
+                    $(this).val(x.toUpperCase());
+
+
+                    $cbTipoNeg.focus();
                     e.preventDefault();
                 }
             });
@@ -256,6 +271,41 @@ $(function () {
                 }
             });
 
+        $txtLatitud
+            .focus(function () {
+                $(this).select();
+
+            }).keydown(function (e) {
+                let code = e.keyCode || e.which;
+                if (code == 13 || code == 9) {
+
+                    let x = Number.parseFloat($(this).val());
+                    $(this).val(nf_dec6.format(x));
+
+                    $txtLongitud.focus();
+
+
+                    e.preventDefault();
+                }
+            });
+
+        $txtLongitud
+            .focus(function () {
+                $(this).select();
+
+            }).keydown(function (e) {
+                let code = e.keyCode || e.which;
+                if (code == 13 || code == 9) {
+
+                    let x = Number.parseFloat($(this).val());
+                    $(this).val(nf_dec6.format(x));
+
+                    $btnActualizar.focus();
+                    e.preventDefault();
+                }
+            });
+
+
 
         $txtSennas
             .focus(function () {
@@ -266,9 +316,8 @@ $(function () {
         $btnBuscaCli.click(function (e) {
 
 
-            $('#modBuscaCli').modal('show');
-
-
+            limpiaCampos();
+            inactivaCampos();
 
             e.preventDefault();
 
@@ -276,14 +325,21 @@ $(function () {
 
         $btnBuscaDis.click(function (e) {
 
-            $('#modBuscaDis').modal('show');
+            //$('#modBuscaDis').modal('show');
+
+            llenaTablaDistribuidores();
 
             e.preventDefault();
 
         });
 
 
+        $btnUbicacion.click(function (e) {
 
+
+
+            e.preventDefault();
+        });
 
 
         $btnNuevoCliente.click(function (e) {
@@ -313,8 +369,7 @@ $(function () {
 
         $btnCerrarModCli.click(function (e) {
 
-            limpiaCampos();
-            inactivaCampos();
+
             $txtCodCliente.focus();
 
             e.preventDefault();
@@ -323,6 +378,8 @@ $(function () {
 
 
     }
+
+
 
     /***************************************************************
      *  Consulta cliente
@@ -334,7 +391,7 @@ $(function () {
 
 
         let req = new Object();
-        req.w = 'apiSeccab';
+        req.w = 'apiSicocir';
         req.r = 'consulta_cliente';
         req.cod_cliente = Number.parseInt($txtCodCliente.val());
 
@@ -399,13 +456,55 @@ $(function () {
     }
 
 
+    /***************************************************************
+     *  Consulta distribuidor
+     ***************************************************************/
+
+    async function consultaDistribuidor() {
+
+        $('#spinner').show();
+
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'consulta_distribuidor';
+        req.cod_usuario = Number.parseInt($txtCodDistri.val());
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                //console.log(data)
+
+                $('#spinner').hide();
+
+                let element = data.resp;
+
+                if (element.estadoRes == 'error') {
+                    $txtCodDistri.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
+                    return;
+                }
+
+                $txtNomDistri.val(element.datos.nom_usuario);
+
+                $txtCodCliente.prop('disabled', false);
+                $btnBuscaCli.prop('disabled', false);
+                $btnNuevoCliente.prop('disabled', false);
+
+                $txtCodCliente.focus();
+
+            });
+    }
+
+
     async function actualizaCliente() {
 
         // Validacion de campos
 
-        if ($txtNomCliente.val().length == 0) {
+        if ($txtNomCliente.val().length < 4) {
             $txtNomCliente.focus();
-            Swal.fire({ title: "Nombre del cliente es requerido", icon: "warning" });
+            Swal.fire({ title: "Nombre del cliente debe tener minimo 4 caracteres", icon: "warning" });
             return;
         }
 
@@ -428,6 +527,9 @@ $(function () {
             Swal.fire({ title: "Debe seleccionar un distrito", icon: "warning" });
             return;
         }
+
+        let x = $txtNomCliente.val();
+        $txtNomCliente.val(x.toUpperCase());
 
 
 
@@ -511,8 +613,8 @@ $(function () {
         $cbProvincias.val('0');
         $cbCantones.val('0');
         $cbDistritos.val('0');
-        $txtCodDistri.val('');
-        $txtNomDistri.val('');
+        $txtLatitud.val(nf_dec6.format(0));
+        $txtLongitud.val(nf_dec6.format(0));
 
     }
 
@@ -520,7 +622,6 @@ $(function () {
 
 
         $txtNomCliente.prop('disabled', true);
-
         $txtNomContacto.prop('disabled', true);
         $txtTelContacto.prop('disabled', true);
         $txtEmail.prop('disabled', true);
@@ -532,18 +633,22 @@ $(function () {
         $cbCantones.prop('disabled', true);
         $cbDistritos.prop('disabled', true);
         $btnActualizar.prop('disabled', true);
-        $btnBuscaCli.prop('disabled', true);
-        $txtCodCliente.prop('disabled', true);
+        //$btnBuscaCli.prop('disabled', true);
+        //$btnNuevoCliente.prop('disabled', true);
+        //$txtCodCliente.prop('disabled', true);
+        $txtLatitud.prop('disabled', true);
+        $txtLongitud.prop('disabled', true);
+        $btnUbicacion.prop('disabled', true);
+
     }
 
     function activaCampos() {
 
         $txtNomCliente.prop('disabled', false);
-
         $txtNomContacto.prop('disabled', false);
         $txtTelContacto.prop('disabled', false);
-        $cbEstado.prop('disabled', sessionStorage.getItem('TIPO_USUARIO') < '2' ? true : false);
-        $txtFecApe.prop('disabled', sessionStorage.getItem('TIPO_USUARIO') < '2' ? true : false);
+        $cbEstado.prop('disabled', mNuevo);
+        $txtFecApe.prop('disabled', mNuevo == false);
         $txtEmail.prop('disabled', false);
         $txtSennas.prop('disabled', false);
         $cbTipoNeg.prop('disabled', false);
@@ -552,7 +657,9 @@ $(function () {
         $cbCantones.prop('disabled', false);
         $cbDistritos.prop('disabled', false);
         $btnActualizar.prop('disabled', false);
-        $btnBuscaCli.prop('disabled', false);
+        $txtLatitud.prop('disabled', false);
+        $txtLongitud.prop('disabled', false);
+        $btnUbicacion.prop('disabled', false);
 
     }
 
@@ -672,35 +779,75 @@ $(function () {
     async function llenaComboTipoNegocios() {
 
         let req = new Object();
-        req.w = 'apiSeccab';
-        req.r = 'lista_categorias_pdv';
+        req.w = 'apiSicocir';
+        req.r = 'lista_tipo_neg';
+        req.filtro = 1;
 
 
-        $('#cbCatPdv').empty();
+        //$('#cbCatPdv').empty();
+        $cbTipoNeg.empty();
+
+        $cbTipoNeg.append($("<option>", {
+            value: '0',
+            text: 'Seleccione una categoría'
+        }));
 
 
         await fetch_postRequest(req,
             function (data) {
 
+                let categorias = data.resp;
 
-                if (data.resp != null) {
-                    let categorias = data.resp.categorias;
+                for (item in categorias) {
 
-                    for (item in categorias) {
+                    let _codCat = categorias[item]['nom_tipo_neg'];
+                    let _nomCat = categorias[item]['nom_tipo_neg'];
 
-                        let _codCat = categorias[item]['cat_pdv'];
-                        let _nomCat = categorias[item]['nom_cat_pdv'];
-
-                        $('#cbCatPdv').append($("<option>", {
-                            value: _codCat,
-                            text: _nomCat
-                        }));
-                    }
-
+                    $cbTipoNeg.append($("<option>", {
+                        value: _codCat,
+                        text: _nomCat
+                    }));
                 }
+
 
             });
 
+    }
+
+    async function llenaTablaDistribuidores() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_distribuidores';
+        req.filtro = 1;
+
+        listaDistri = new Array();
+
+        $tblDistri.clear().draw();
+
+        $('#spinnerDis').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinnerDis').hide();
+
+                let listaUsuarios = data.resp;
+
+                for (let i = 0; i < listaUsuarios.length; i++) {
+
+                    const element = listaUsuarios[i];
+
+                    let itemTabla = new Object();
+
+                    itemTabla.cod_dis = element.cod_usuario;
+                    itemTabla.nom_dis = element.nom_usuario;
+
+                    listaDistri.push(itemTabla);
+                }
+
+                $tblDistri.rows.add(listaDistri).draw();
+            });
     }
 
     async function llenaTablaClientes() {
@@ -708,7 +855,7 @@ $(function () {
 
 
         let req = new Object();
-        req.w = 'apiSeccab';
+        req.w = 'apiSicocir';
         req.r = 'lista_clientes_pdv';
 
         listaClientes = new Array();
@@ -744,7 +891,42 @@ $(function () {
     }
 
 
+    ini_componentes();
 
+    limpiaCampos();
+    inactivaCampos();
+    llenaComboProvincias();
+    llenaComboTipoNegocios();
+
+    if (sessionStorage.getItem('TIPO_USUARIO') == '1') {
+
+        $txtCodDistri.val(sessionStorage.getItem('COD_USUARIO'));
+        $txtNomDistri.val(sessionStorage.getItem('NOM_USUARIO'));
+
+        $btnBuscaDis.prop('disabled', true);
+        $txtCodDistri.prop('disabled', true);
+
+
+        $btnBuscaCli.prop('disabled', false);
+        $btnNuevoCliente.prop('disabled', false);
+        $txtCodCliente.prop('disabled', false);
+
+        $txtCodCliente.focus();
+
+
+
+    } else {
+
+
+        $txtCodDistri.val('');
+        $txtNomDistri.val('');
+
+        $btnBuscaCli.prop('disabled', true);
+        $btnNuevoCliente.prop('disabled', true);
+        $txtCodCliente.prop('disabled', true);
+
+
+    }
 
 
 

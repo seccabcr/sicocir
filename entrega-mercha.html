@@ -160,20 +160,13 @@
                 </div>
               </div>
 
-
-
               <div class="input-group mb-3">
-                <label for="txtFecEnt" class="col-lg-3 col-6 col-form-label">Fecha Entrega</label>
-                <div class="col-lg-4 col-6">
-                  <input id="txtFecEnt" name="txtFecEnt" type="date" class="form-control">
-                </div>
-              </div>
+                <label class="col-lg-3 col-12 col-form-label">Item</label>
+                <div class="col-lg-6 col-12">
+                  <select id="cbTipoNeg" class="form-select" aria-label="Default select example">
+                    <option value="0">Seleccione una ítem</option>
 
-
-              <div class="input-group mb-3">
-                <label for="txtNomItem" class="col-lg-3 col-12 col-form-label">Producto</label>
-                <div class="col-lg-9 col-12">
-                  <input id="txtNomItem" name="txtNomItem" type="text" class="form-control" maxlength="40">
+                  </select>
                 </div>
               </div>
 
@@ -216,7 +209,7 @@
             <div class="card-body">
 
               <div class="d-flex mt-3 mb-3">
-                <h5>Detalle de Entrega</h5>
+                <h5>Detalle Items Entregados</h5>
                 <!--div class="col-2 text-center">
                   <button id="btnAgregaPickPdv" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modBuscaPdv"><i class="bi bi-plus"
                       data-bs-toggle="tooltip" title="Agregar"></i></button>
@@ -234,7 +227,7 @@
                 <table id="tblItemsPdvs" class="table table-primary nowrap" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="col-2 text-center">Fecha Entrega</th>
+
                       <th class="">Nombre Item</th>
                       <th class="col-1 text-end">Cantidad</th>
                       <th class="col-2 text-center"></th>

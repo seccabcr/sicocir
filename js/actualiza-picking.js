@@ -9,7 +9,7 @@ $(function () {
    
    
 
-    var lista_picking_pdvs = [];
+    var lista_picking_pdv = [];
     var lista_distribuidores = [];
     var lista_pdvs = [];
    
@@ -45,7 +45,7 @@ $(function () {
 
                     let x = Number.parseInt($(this).val().replace(/,/g, ''));
                     $(this).val(nf_entero.format(x));
-                    $btnActUsuario.focus();
+                    $btnActPicking.focus();
 
                 }
 
@@ -54,6 +54,20 @@ $(function () {
             }
         });
 
+
+
+        
+    const $txtFechaIni = $('#txtFechaIni')
+        .val(obtieneFechaActual())
+        .change(function () {
+
+        });
+
+    const $txtFechaFin = $('#txtFechaFin')
+        .val(obtieneFechaActual())
+        .change(function () {
+
+        });
 
    
 
@@ -74,17 +88,7 @@ $(function () {
     const $btnActPicking = $('#btnActPicking')
         .click(function (e) {
 
-            actualizaUsuario();
-            e.preventDefault();
-
-        });
-
-    const $btnCancelar = $('#btnCancelar')
-        .click(function (e) {
-
-            limpiaCampos();
-            inactivaCampos();
-
+           
             e.preventDefault();
 
         });
@@ -106,19 +110,15 @@ $(function () {
 
 
 
-    var $tblPickingPdvs = $('#tblPickingPdvs').DataTable({
+    var $tblPickingPdv = $('#tblPickingPdv').DataTable({
         //destroy: true,
         responsive: true,
-        data: lista_picking_pdvs,
+        data: lista_picking_pdv,
         columns: [
             {
-                data: 'cod_pdv',
-                visible: false
-            },
-            {
-                data: 'nom_pdv'
-
-            },          
+                data: 'fec_pic'
+               
+            },                  
             {
                 data: 'can_pick',
                 className: 'text-end',
@@ -139,15 +139,15 @@ $(function () {
     });
 
 
-    $tblPickingPdvs.on('click', 'button.editar', function () {
+    $tblPickingPdv.on('click', 'button.editar', function () {
 
-        let fila = $tblPickingPdvs.row($(this).parents('tr')).data();
+        let fila = $tblPickingPdv.row($(this).parents('tr')).data();
 
       
 
     });
 
-    $tblPickingPdvs.on('click', 'button.eliminar', function () {
+    $tblPickingPdv.on('click', 'button.eliminar', function () {
 
         let fila = $tblPickingPdvs.row($(this).parents('tr')).data();
 
@@ -155,7 +155,7 @@ $(function () {
 
         Swal
             .fire({
-                title: "Desea Eliminar el Picking del Punto de Ventas?",
+                title: "Desea Eliminar el Picking?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: "Sí, eliminar",
@@ -274,8 +274,10 @@ $(function () {
 
     function limpiaCampos() {
 
-        $tblPickingPdvs.clear().draw();
-        lista_picking_pdvs = [];
+
+
+        $tblPickingPdv.clear().draw();
+        lista_picking_pdv = [];
 
     }
 

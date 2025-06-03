@@ -312,13 +312,14 @@
 
                       <div class="row">
 
-                         <label class="col-lg-2 col-form-label">Ubicación</label>
+                        <label class="col-lg-2 col-form-label">Ubicación</label>
 
                         <div class="col-lg-4">
                           <div class="row mb-3">
                             <label for="txtLatitud" class="col-lg-3 col-6 col-form-label">Latitud</label>
                             <div class="col-lg-5 col-6">
-                              <input id="txtLatitud" name="txtLatitud" type="text" class="form-control text-end" maxlength="12">
+                              <input id="txtLatitud" name="txtLatitud" type="text" class="form-control text-end"
+                                maxlength="12">
                             </div>
 
                           </div>
@@ -336,7 +337,8 @@
                         </div>
 
                         <div class="col-1">
-                          <button id="btnUbicacion" class="btn btn-secondary"><i class="bi bi-geo-alt-fill"></i></button>
+                          <button id="btnUbicacion" class="btn btn-secondary"><i
+                              class="bi bi-geo-alt-fill"></i></button>
 
                         </div>
 
@@ -380,6 +382,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3 class="modal-title">Buscar Cliente</h3>
+
+          <div id="spinnerModCli" class="col-1" style="display: none">
+            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
           <button id="btnCerrarModCli" type="button" class="btn-close" data-bs-dismiss="modal"
             aria-label="Close"></button>
         </div>
@@ -390,12 +399,14 @@
               <div class="row mb-3 mt-3">
                 <label class="col-lg-2 col-12 col-form-label">Filtro</label>
                 <div class="col-lg-4 col-12">
-                  <select id="cbTipoNeg" class="form-select" aria-label="Default select example">
+                  <select id="cbFiltro" class="form-select" aria-label="Default select example">
                     <option value="1">Solo Activos</option>
                     <option value="2">Todos</option>
 
                   </select>
                 </div>
+
+
               </div>
 
               <div class="table-responsive">

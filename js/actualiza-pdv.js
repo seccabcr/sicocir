@@ -31,6 +31,12 @@ $(function () {
     const $txtFecApe = $('#txtFecApe').val(obtieneFechaActual());
     const $cbEstado = $('#cbEstado').val(1);
     const $cbTipoNeg = $('#cbTipoNeg').val(0);
+    const $cbFiltro = $('#cbFiltro')
+        .val(1)
+        .change(function (e) {
+            llenaTablaClientes();
+
+        });
 
     const $txtLatitud = $('#txtLatitud');
     const $txtLongitud = $('#txtLongitud');
@@ -95,13 +101,11 @@ $(function () {
 
         $('#tblClientes').on('click', 'button.editar', function () {
 
-            let fila = $tblClientes.row($(this).parents('tr')).index();
-
-            $('#txtNomComercial').focus();
+            let fila = $tblClientes.row($(this).parents('tr')).data();
 
             $('#modBuscaCli').modal('hide');
 
-            $txtCodCliente.val(listaClientes[fila].cod_cliente);
+            $txtCodCliente.val(fila.cod_cliente);
 
             consultaCliente();
 
@@ -315,9 +319,7 @@ $(function () {
 
         $btnBuscaCli.click(function (e) {
 
-
-            limpiaCampos();
-            inactivaCampos();
+            llenaTablaClientes();
 
             e.preventDefault();
 
@@ -394,63 +396,67 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'consulta_cliente';
         req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
 
 
         await fetch_postRequest(req,
             function (data) {
 
-                //console.log(data)
-
                 $('#spinner').hide();
 
-                if (data.resp != null) {
+                let element = data.resp;
 
-                    $txtNomCliente.val(data.resp.nom_cliente);
-                    $txtEmail.val(data.resp.email_cliente);
-                    $txtNomContacto.val(data.resp.nom_contacto);
-                    $txtTelContacto.val(data.resp.tel_negocio);
+                if (element.estadoRes == 'error') {
 
-                    $txtFecApe.val(data.resp.fecapertura);
-                    $cbEstado.val(data.resp.status_cli);
-
-
-
-                    $txtSennas.val(data.resp.referencia);
-
-                    let _idProvincia = data.resp.idProvincia;
-                    let _idCanton = data.resp.idCanton;
-                    let _idDistrito = data.resp.idDistrito;
-
-                    mLatitud = data.resp.latitud;
-                    mLongitud = data.resp.longitud;
-
-                    $cbProvincias.val(_idProvincia);
-
-                    llenaComboCantones().then(() => {
-                        $cbCantones.val(_idCanton);
-                        llenaComboDistritos().then(() => {
-                            $cbDistritos.val(_idDistrito);
-                        })
-
-                    });
-
-                    llenaComboPdvs($cbAgencias.val()).then(() => {
-                        $cbPdvs.val(_codPdv);
-
-                    });
-
-                    activaCampos();
-                    mNuevo = false;
-
-                    $txtNomCliente.focus();
-
-
-
-                } else {
-                    //$('#spinner').hide();
-                    Swal.fire({ title: "Cliente NO existe", icon: "error" });
-
+                    $txtCodCliente.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
+                    return;
                 }
+
+
+                $txtNomCliente.val(element.datos.nom_cliente);
+                $txtEmail.val(element.datos.email);
+                $txtNomContacto.val(element.datos.nom_contacto);
+                $txtTelContacto.val(element.datos.tel_contacto);
+
+                $cbTipoNeg.val(element.datos.tipo_negocio);
+
+                let fecha = new Date(element.datos.fec_reg);
+                let dia = fecha.getDate() > 9 ? fecha.getDate() : '0' + fecha.getDate();
+                let mes = (fecha.getMonth() + 1) > 9 ? fecha.getMonth() + 1 : '0' + (fecha.getMonth() + 1);
+                let anio = fecha.getFullYear();
+                var fecApertura = anio + "-" + mes + "-" + dia;
+
+                $txtFecApe.val(fecApertura);
+                $cbEstado.val(element.datos.estado_cli);
+                $txtSennas.val(element.datos.otras_sennas);
+
+                let _idProvincia = Number.parseInt(element.datos.idProvincia);
+                let _idCanton = Number.parseInt(element.datos.idCanton);
+                let _idDistrito = Number.parseInt(element.datos.idDistrito);
+
+                mLatitud = Number.parseFloat(element.datos.latitud);
+                mLongitud = Number.parseFloat(element.datos.longitud);
+
+                $cbProvincias.val(_idProvincia);
+
+                llenaComboCantones().then(() => {
+                    $cbCantones.val(_idCanton);
+                    llenaComboDistritos().then(() => {
+                        $cbDistritos.val(_idDistrito);
+                    })
+
+                });
+
+                mNuevo = false;
+
+                activaCampos();
+
+                $txtNomCliente.focus();
+
+
+
+
 
             });
     }
@@ -516,22 +522,30 @@ $(function () {
         }
 
         if ($cbProvincias.val() == 0) {
+
+            $cbProvincias.focus();
             Swal.fire({ title: "Debe seleccionar una provincia", icon: "warning" });
             return;
         }
         if ($cbCantones.val() == 0) {
+            $cbCantones.focus();
             Swal.fire({ title: "Debe seleccionar un cantón", icon: "warning" });
             return;
         }
         if ($cbDistritos.val() == 0) {
+            $cbDistritos.focus();
             Swal.fire({ title: "Debe seleccionar un distrito", icon: "warning" });
+            return;
+        }
+
+        if ($cbTipoNeg.val() == 0) {
+            $cbTipoNeg.focus();
+            Swal.fire({ title: "Debe seleccionar un tipo de negocio", icon: "warning" });
             return;
         }
 
         let x = $txtNomCliente.val();
         $txtNomCliente.val(x.toUpperCase());
-
-
 
         $('#spinner').show();
 
@@ -539,10 +553,10 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'actualiza_cliente';
         req.nuevo = mNuevo;
-        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_cliente = $txtCodCliente.val() > 0 ? Number.parseInt($txtCodCliente.val()) : 0;
         req.nom_cliente = $txtNomCliente.val();
-        req.email_cliente = $txtEmail.val();
-        req.tel_negocio = $txtTelContacto.val();
+        req.tipo_negocio = Number.parseInt($cbTipoNeg.val());
+        req.email = $txtEmail.val();
         req.tel_contacto = $txtTelContacto.val();
         req.nom_contacto = $txtNomContacto.val();
         req.idProvincia = Number.parseInt($cbProvincias.val());
@@ -551,11 +565,12 @@ $(function () {
         req.canton = $('select[id="cbCantones"] option:selected').text();
         req.idDistrito = Number.parseInt($cbDistritos.val());
         req.distrito = $('select[id="cbDistritos"] option:selected').text();
-        req.referencia = $txtSennas.val();
-
-        req.estado_cli = Number.parseInt($cbEstado.val());
-        req.latitud = mLatitud;
-        req.longitud = mLongitud;
+        req.otras_sennas = $txtSennas.val();
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
+        req.latitud = Number.parseFloat($txtLatitud.val());
+        req.longitud = Number.parseFloat($txtLongitud.val());
+        req.est_cliente = Number.parseInt($cbEstado.val());
+        req.id_usu_reg = sessionStorage.getItem('ID_USUARIO');
 
 
         await fetch_postRequest(req,
@@ -564,15 +579,11 @@ $(function () {
 
                 $('#spinner').hide();
 
-
-                //console.log(data)
-
                 if (mNuevo) {
                     $txtCodCliente.val(data.resp.cod_cliente);
-
                 }
 
-                //limpiaCampos();
+                $txtCodCliente.val('');
                 $txtCodCliente.focus();
 
                 let msg = data.resp.msg;
@@ -800,7 +811,7 @@ $(function () {
 
                 for (item in categorias) {
 
-                    let _codCat = categorias[item]['nom_tipo_neg'];
+                    let _codCat = categorias[item]['cod_tipo_neg'];
                     let _nomCat = categorias[item]['nom_tipo_neg'];
 
                     $cbTipoNeg.append($("<option>", {
@@ -856,11 +867,14 @@ $(function () {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'lista_clientes_pdv';
+        req.r = 'llena_tabla_clientes';
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
+        req.filtro = Number.parseInt($cbFiltro.val());
 
         listaClientes = new Array();
 
         $tblClientes.clear().draw();
+
         $('#spinnerModCli').show();
 
 
@@ -869,22 +883,21 @@ $(function () {
             function (data) {
                 $('#spinnerModCli').hide();
 
-                if (data.resp.clientes != null) {
 
-                    let clientes = data.resp.clientes;
+                let clientes = data.resp;
 
-                    for (let i = 0; i < clientes.length; i++) {
-                        let cliente = new Object();
-                        cliente.cod_cliente = clientes[i].cod_cliente;
-                        cliente.nom_cliente = clientes[i].nom_cliente;
+                for (let i = 0; i < clientes.length; i++) {
+                    let cliente = new Object();
+                    cliente.cod_cliente = clientes[i].cod_cliente;
+                    cliente.nom_cliente = clientes[i].nom_cliente;
 
-                        listaClientes.push(cliente);
-                    }
-
-
-                    $tblClientes.rows.add(listaClientes).draw();
-
+                    listaClientes.push(cliente);
                 }
+
+
+                $tblClientes.rows.add(listaClientes).draw();
+
+
 
 
             });

@@ -454,10 +454,6 @@ $(function () {
 
                 $txtNomCliente.focus();
 
-
-
-
-
             });
     }
 

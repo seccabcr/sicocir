@@ -130,7 +130,7 @@ $(function () {
     const $btnActEntrega = $('#btnActEnt')
         .click(function (e) {
 
-            actualizaEntregaPdv().then(()=>{
+            actualizaEntregaPdv().then(() => {
                 llenaTablaEntregaPdvs();
             });
             e.preventDefault();
@@ -153,15 +153,7 @@ $(function () {
 
             e.preventDefault();
 
-
-
         });
-
-
-
-
-
-
 
 
     var $tblEntregaPdvs = $('#tblEntregaPdvs').DataTable({
@@ -425,7 +417,7 @@ $(function () {
                     itemTabla.nom_pdv = element.nom_cliente;
                     itemTabla.can_ent = element.can_entrega
 
-                    totalEnt+=Number.parseInt(element.can_entrega);
+                    totalEnt += Number.parseInt(element.can_entrega);
 
                     lista_entrega_pdvs.push(itemTabla);
                 }
@@ -436,34 +428,6 @@ $(function () {
 
             });
     }
-
-
-    /*********************************************************************************************************************** */
-
-    async function consultaEntregaPdv() {
-
-        let req = new Object();
-        req.w = 'apiSicocir';
-        req.r = 'consulta_entrega_diaria';
-        req.cod_cliente = Number.parseInt($txtCodCliente.val());
-        req.cod_item = 1;
-        req.fec_entrega = $txtFechaEnt.val();
-
-        $('#spinner').show();
-
-        await fetch_postRequest(req,
-            function (data) {
-
-                $('#spinner').hide();
-
-                //console.log(data)
-
-
-            });
-    }
-
-
-
 
 
     async function actualizaEntregaPdv() {
@@ -489,8 +453,6 @@ $(function () {
 
                 let response = data.resp;
 
-
-
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -503,21 +465,21 @@ $(function () {
             });
     }
 
-     inactivaCampos();
+    inactivaCampos();
 
-      if (sessionStorage.getItem('TIPO_USUARIO') == '1') {
+    if (sessionStorage.getItem('TIPO_USUARIO') == '1') {
 
         $txtCodDistri.val(sessionStorage.getItem('COD_USUARIO'));
         $txtNomDistri.val(sessionStorage.getItem('NOM_USUARIO'));
 
         $btnBuscaDis.prop('disabled', true);
-        $txtCodDistri.prop('disabled', true); 
-        
-        $txtFechaEnt.prop('disabled',false);
-        $btnConsultar.prop('disabled',false);
+        $txtCodDistri.prop('disabled', true);
+
+        $txtFechaEnt.prop('disabled', false);
+        $btnConsultar.prop('disabled', false);
         $btnConsultar.focus();
 
-    } 
+    }
 
 
 

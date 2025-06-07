@@ -10,31 +10,84 @@ $(function () {
 
 
     var lista_liq_pdvs = [];
+    var listaTablaLiq = [];
+
     var lista_distribuidores = [];
-    var lista_pdvs = [];
+    var listaClientes = [];
 
 
+    const $txtCodDistri = $('#txtCodDistri')
+        .focus(function () {
+            $(this).select();
+            limpiaCampos();
+            inactivaCampos();
 
-    var mNuevoPdv = true;
-    var mCodUsuario = 0;
+            $txtCodDistri.val('');
+            $txtNomDistri.val('');
 
+            //$btnBuscaCli.prop('disabled', true);
+            //$txtCodCliente.prop('disabled', true);
 
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+                e.preventDefault();
 
+                if ($txtCodDistri.val().length > 0) {
 
-    const $txtCodDis = $('#txtCodDistri')
+                    consultaDistribuidor();
+                }
+            }
+        });
+
+    const $txtNomDistri = $('#txtNomDistri')
         .val('');
 
+    const $txtCodCliente = $('#txtCodPdv')
+        .focus(function () {
+            $(this).select();
+            limpiaCampos();
+            $txtFechaIni.prop('disabled', true);
+            $txtFechaFin.prop('disabled', true);
+            $btnConsultar.prop('disabled', true);
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+
+                e.preventDefault();
+
+                if ($txtCodCliente.val().length > 0) {
+
+                    consultaCliente();
+                }
+
+            }
+        });
 
 
-    const $txtNomDis = $('#txtNomDistri')
-        .val('');
-
-
-
+    const $txtNomCliente = $('#txtNomPdv');
 
     const $txtCanEnt = $('#txtCanEnt')
         .val('0');
 
+    const $txtFechaIni = $('#txtFechaIni')
+        .val(obtieneFechaActual())
+        .change(function () {
+
+        });
+
+    const $txtFechaFin = $('#txtFechaFin')
+        .val(obtieneFechaActual())
+        .change(function () {
+
+        });
+
+    const $txtTotalEnt = $('#txtTotalEnt');
+    const $txtTotalDev = $('#txtTotalDev');
+    const $txtTotalVta = $('#txtTotalVta');
+
+    const $txtFechaLiq = $('#txtFechaLiq');
     const $txtCanDev = $('#txtCanDev')
         .val('0')
         .focus(function () {
@@ -57,38 +110,31 @@ $(function () {
             }
         });
 
-    const $txtCanVta = $('#txtCanVta');
+    const $btnConsultar = $('#btnConsultar')
+        .click(function (e) {
 
+            llenaTablaLiqDiaria();
 
-
-    const $txtFechaIni = $('#txtFechaIni')
-        .val(obtieneFechaActual())
-        .change(function () {
-
-        });
-
-    const $txtFechaFin = $('#txtFechaFin')
-        .val(obtieneFechaActual())
-        .change(function () {
+            e.preventDefault();
 
         });
-
-
-
-    const $txtFechaLiq = $('#txtFechaLiq');
 
 
 
 
     const $btnBuscaDis = $('#btnBuscaDis')
         .click(function (e) {
-
-
-            //llenaTablaUsuarios();
-
-
+            llenaTablaDistribuidores();
+            e.preventDefault();
 
         });
+
+    const $btnBuscaCli = $('#btnBuscaPdv')
+        .click(function (e) {
+            e.preventDefault();
+            llenaTablaClientes();
+        });
+
 
 
     const $btnActLiqDia = $('#btnActLiqDia')
@@ -96,26 +142,13 @@ $(function () {
 
 
             e.preventDefault();
-
         });
-
-    const $btnCancelar = $('#btnCancelar')
-        .click(function (e) {
-
-            limpiaCampos();
-            inactivaCampos();
-
-            e.preventDefault();
-
-        });
-
-
 
 
     var $tblLiqPdvs = $('#tblLiqPdvs').DataTable({
         //destroy: true,
         responsive: true,
-        data: lista_liq_pdvs,
+        data: listaTablaLiq,
         columns: [
             {
                 data: 'fec_liq'
@@ -164,21 +197,18 @@ $(function () {
     });
 
 
-
-
-
     var $tblDistri = $('#tblDistri').DataTable({
 
         responsive: true,
         data: lista_distribuidores,
         columns: [
             {
-                data: 'cod_distri',
+                data: 'cod_dis',
                 visible: false
 
             },
             {
-                data: 'nom_distri'
+                data: 'nom_dis'
             },
 
             {
@@ -199,28 +229,31 @@ $(function () {
 
         let fila = $tblDistri.row($(this).parents('tr')).data();
 
-        $txtCodDis.val(fila.cod_usuario);
+        $txtCodDistri.val(fila.cod_dis);
+        $txtNomDistri.val(fila.nom_dis);
 
-        //$('#modBuscaDis').modal('hide');
+        $('#modBuscaDis').modal('hide');
 
-        //consultaUsuario();
+        $txtCodCliente.prop('disabled', false);
+        $btnBuscaCli.prop('disabled', false);
+        $txtCodCliente.focus();
 
 
     });
 
 
-    var $tblPdvs = $('#tblPdvs').DataTable({
+    var $tblClientes = $('#tblPdvs').DataTable({
 
         responsive: true,
-        data: lista_pdvs,
+        data: listaClientes,
         columns: [
             {
-                data: 'cod_pdv',
+                data: 'cod_cliente',
                 visible: false
 
             },
             {
-                data: 'nom_pdv'
+                data: 'nom_cliente'
             },
 
             {
@@ -237,15 +270,20 @@ $(function () {
     }); /// Fin de creacion de datatable
 
 
-    $tblPdvs.on('click', 'button.editar', function () {
+    $tblClientes.on('click', 'button.editar', function () {
 
-        let fila = $tblPdvs.row($(this).parents('tr')).data();
+        let fila = $tblClientes.row($(this).parents('tr')).data();
 
 
 
         $('#modBuscaPdv').modal('hide');
 
-        //consultaUsuario();
+        $txtCodCliente.val(fila.cod_cliente);
+        $txtNomCliente.val(fila.nom_cliente);
+        $txtFechaIni.prop('disabled', false);
+        $txtFechaFin.prop('disabled', false);
+        $btnConsultar.prop('disabled', false);
+        $btnConsultar.focus();
 
 
     });
@@ -254,6 +292,12 @@ $(function () {
 
     function inactivaCampos() {
 
+
+        $txtCodCliente.prop('disabled', true);
+        $btnBuscaCli.prop('disabled', true);
+        $btnConsultar.prop('disabled', true);
+        $txtFechaFin.prop('disabled', true);
+        $txtFechaIni.prop('disabled', true);
 
 
 
@@ -267,229 +311,144 @@ $(function () {
 
     function limpiaCampos() {
 
+        $txtCodCliente.val('');
+        $txtNomCliente.val('');
+        $txtFechaIni.val(obtieneFechaActual());
+        $txtFechaFin.val(obtieneFechaActual());
         $tblLiqPdvs.clear().draw();
         lista_liq_pdvs = [];
-
     }
 
 
-    async function llenaTablaUsuarios() {
 
-        let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'lista_usuarios';
-        req.cod_suc = Number.parseInt($cbSucursales.val())
-        req.todos = $todos.prop('checked');
+    /***************************************************************
+     *  Consulta distribuidor
+     ***************************************************************/
 
-        lista_usuarios = new Array();
-
-        $tblUsuarios.clear().draw();
-
-        $('#spinnerModUsu').show();
-
-
-        await fetch_postRequest(req,
-            function (data) {
-
-                $('#spinnerModUsu').hide();
-
-                if (data.resp != null) {
-
-                    let usuarios = data.resp.usuarios;
-
-                    for (let i = 0; i < usuarios.length; i++) {
-
-                        const element = usuarios[i];
-
-                        let usu = new Object();
-                        usu.cod_usuario = element.cod_usuario;
-                        usu.nom_usuario = element.nom_usuario;
-
-                        lista_usuarios.push(usu);
-                    }
-
-                    $tblUsuarios.rows.add(lista_usuarios).draw();
-                }
-            });
-    }
-
-    /******************************************************************************************************************** */
-
-    async function llenaTablaPickingPdv() {
-
-        let req = new Object();
-        req.w = 'api';
-        req.r = 'lista_';
-        req.cod_usuario = Number.parseInt($txtCodUsu.val())
-
-        lista_sorteos_usu = new Array();
-        $tblSorteosUsu.clear().draw();
+    async function consultaDistribuidor() {
 
         $('#spinner').show();
 
-
-        await fetch_postRequest(req,
-            function (data) {
-
-                //console.log(data)
-
-                $('#spinner').hide();
-
-                let sorteos = data.resp.sorteosUsu;
-
-                for (let i = 0; i < sorteos.length; i++) {
-
-                    const element = sorteos[i];
-
-                    let sorteo = new Object();
-                    sorteo.cod_sorteo = element.cod_sorteo;
-                    sorteo.nom_sorteo = element.nom_sorteo;
-                    sorteo.cod_rango = element.cod_rango;
-                    sorteo.nom_rango = element.nom_rango;
-                    sorteo.fac_premio_usu = Number.parseInt(element.facPremioUsu);
-                    sorteo.fac_premio_comb_usu = Number.parseInt(element.facPremioCombUsu);
-                    sorteo.por_comision_suc = Number.parseFloat(element.porComSuc);
-                    sorteo.por_comision_usu = Number.parseFloat(element.porComUsu);
-
-                    lista_sorteos_usu.push(sorteo);
-                }
-
-                $tblSorteosUsu.rows.add(lista_sorteos_usu).draw();
-
-            });
-    }
-
-    /*********************************************************************************************************************** */
-
-    async function consultaPickingPdv() {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'consulta_usuario';
-        req.cod_usuario = Number.parseInt($txtCodUsu.val());
+        req.r = 'consulta_distribuidor';
+        req.cod_usuario = Number.parseInt($txtCodDistri.val());
 
-        $('#spinner').show();
 
         await fetch_postRequest(req,
             function (data) {
-
-                $('#spinner').hide();
 
                 //console.log(data)
 
+                $('#spinner').hide();
+
                 let element = data.resp;
 
-                $txtIdUsu.val(element.id_usuario);
-                $txtNomUsu.val(element.nom_usuario);
-                $cbTipoUsu.val(element.tipo_usuario);
-                let mon = Number.parseInt(element.lim_venta.replace(/,/g, ''));
-                $txtMonMax.val(nf_entero.format(mon));
-                $cbProcesoOnLIne.val(element.proceso_online);
-                $cbEstadoUsu.val(element.est_usuario);
-
-                mNuevoUsu = false;
-
-                let user = sessionStorage.getItem('TIPO_USUARIO');
-
-                if (element.tipo_usuario <= user) {
-
-                    llenaTablaSorteosUsuarios().then(() => {
-
-                        //activaCampos();
-                        $txtIdUsu.prop('disabled', true);
-                        $txtNomUsu.prop('disabled', element.tipo_usuario >= user & user < '3')
-                        $cbTipoUsu.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $txtMonMax.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $cbProcesoOnLIne.prop('disabled', element.tipo_usuario <= user & user < '3');
-                        $cbEstadoUsu.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $btnActUsuario.prop('disabled', element.tipo_usuario >= user & user < '3');
-
-                        $cbProcesoOnLIne.prop('disabled', sessionStorage.getItem('TIPO_USUARIO') < '3' || mProcesoOnLine == 0);
-
-                        $btnAgregaSor.prop('disabled', element.tipo_usuario > user & user < '3');
-
-                        $txtNomUsu.focus();
-                    });
-
-                } else {
-
-                    Swal.fire({ title: "NO autorizado a modificar los datos de este usuario", icon: "warning" });
-
+                if (element.estadoRes == 'error') {
+                    $txtCodDistri.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
+                    return;
                 }
+
+                $txtNomDistri.val(element.datos.nom_usuario);
+
+                $txtCodCliente.prop('disabled', false);
+                $btnBuscaCli.prop('disabled', false);
+
+                $txtCodCliente.focus();
 
             });
     }
 
 
+    async function llenaTablaDistribuidores() {
 
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_distribuidores';
+        req.filtro = 1;
 
+        listaDistri = new Array();
 
-    async function actualizaPickingPdv() {
+        $tblDistri.clear().draw();
 
+        $('#spinnerDis').show();
 
+        await fetch_postRequest(req,
+            function (data) {
 
-        let index = $cbSucursales.prop('selectedIndex') - 1;
-        mMonMaxSuc = lista_sucursales[index].lim_venta;
+                $('#spinnerDis').hide();
 
+                let listaUsuarios = data.resp;
 
-        if ($txtIdUsu.val().length < 4 && mNuevoUsu) {
-            $txtIdUsu.focus();
-            Swal.fire({ title: "El ID debe tener como minimo 4 caracteres", icon: "warning" });
-            return;
-        }
+                for (let i = 0; i < listaUsuarios.length; i++) {
 
-        if ($txtNomUsu.val().length < 4) {
-            $txtNomUsu.focus();
-            Swal.fire({ title: "El nombre debe tener como minimo 4 caracteres", icon: "warning" });
-            return;
-        }
+                    const element = listaUsuarios[i];
 
-        if ($txtMonMax.val().length == 0) {
-            $txtMonMax.focus();
-            Swal.fire({ title: "El maximo disponible es requerido", icon: "warning" });
-            return;
-        }
+                    let itemTabla = new Object();
 
+                    itemTabla.cod_dis = element.cod_usuario;
+                    itemTabla.nom_dis = element.nom_usuario;
 
-        if ($cbTipoUsu.val() > sessionStorage.getItem('TIPO_USUARIO')) {
-            $cbTipoUsu.focus();
-            Swal.fire({ title: "NO autorizado a asignar este tipo de usuario", icon: "warning" });
-            return;
-        }
+                    listaDistri.push(itemTabla);
+                }
 
-        let monMax = Number.parseInt($txtMonMax.val().replace(/,/g, ''));
+                $tblDistri.rows.add(listaDistri).draw();
+            });
+    }
 
+    async function llenaTablaClientes() {
 
-        if (mMonMaxSuc > 0 && monMax > mMonMaxSuc) {
-            $txtMonMax.focus();
-            Swal.fire({ title: "El maximo disponible NO puede ser mayor al limite disponible de la sucursal", icon: "warning" });
-            return;
-        }
-
-
-        let codUsuario = $txtCodUsu.val().length > 0 ? Number.parseInt($txtCodUsu.val()) : 0;
-
-        if (nuevoUsuario) {
-
-            let x = $txtIdUsu.val().replace(/ /g, '');
-            $txtIdUsu.val(x.toLowerCase());
-        }
 
 
         let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'actualiza_usuario';
-        req.nuevo = mNuevoUsu;
-        req.cod_usuario = codUsuario;
-        req.id_usuario = $txtIdUsu.val();
-        req.nom_usuario = $txtNomUsu.val();
-        req.tipo_usuario = Number.parseInt($cbTipoUsu.val());
-        req.cod_suc = Number.parseInt($cbSucursales.val());
-        req.lim_venta = monMax;
-        req.proceso_online = Number.parseInt($cbProcesoOnLIne.val());
-        req.est_usuario = Number.parseInt($cbEstadoUsu.val());
+        req.w = 'apiSicocir';
+        req.r = 'llena_tabla_clientes';
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
+        req.filtro = 1;
+
+        listaClientes = new Array();
+
+        $tblClientes.clear().draw();
+
+        $('#spinnerModCli').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+                $('#spinnerModCli').hide();
+
+
+                let clientes = data.resp;
+
+                for (let i = 0; i < clientes.length; i++) {
+                    let cliente = new Object();
+                    cliente.cod_cliente = clientes[i].cod_cliente;
+                    cliente.nom_cliente = clientes[i].nom_cliente;
+
+                    listaClientes.push(cliente);
+                }
+
+                $tblClientes.rows.add(listaClientes).draw();
+
+            });
+    }
+
+
+    /***************************************************************
+     *  Consulta cliente
+     ***************************************************************/
+
+    async function consultaCliente() {
 
         $('#spinner').show();
+
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'consulta_cliente';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
 
 
         await fetch_postRequest(req,
@@ -497,72 +456,95 @@ $(function () {
 
                 $('#spinner').hide();
 
+                let element = data.resp;
 
-                let response = data.resp;
-                if (response.status == 'error') {
+                if (element.estadoRes == 'error') {
 
-                    Swal.fire({ title: response.msg, icon: "error" });
+                    $txtCodCliente.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
                     return;
-
                 }
 
-                mNuevoUsu = false;
-                $txtCodUsu.val(response.cod_usuario);
+                $txtNomCliente.val(element.datos.nom_cliente);
+                $txtFechaIni.prop('disabled', false);
+                $txtFechaFin.prop('disabled', false);
+                $btnConsultar.prop('disabled', false);
+                $btnConsultar.focus();
 
-                $btnAgregaSor.prop('disabled', false);
-
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: response.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                });
 
 
             });
     }
 
+    async function llenaTablaLiqDiaria() {
+
+        let fechaIni = $txtFechaIni.val();
+        let fechaFin = $txtFechaFin.val();
 
 
+        if (fechaIni > fechaFin) {
+            $txtFechaFin.focus();
+            Swal.fire({ title: "Fecha Inicial NO puede ser mayor que la Fecha Final", icon: "warning" });
+            return;
+        }
 
 
-    async function eliminaPickingPdv(fila) {
-
-        $('#spinner').show();
 
         let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'elimina_sorteo_usu';
+        req.w = 'apiSicocir';
+        req.r = 'lista_liq_diaria_pdv';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.fecha_ini = $txtFechaIni.val();
+        req.fecha_fin = $txtFechaFin.val();
+        req.cod_item = 1;
 
-        req.cod_usuario = Number.parseInt($txtCodUsu.val());
-        req.cod_sorteo = Number.parseInt(fila.cod_sorteo);
 
+        listaTablaLiq = new Array();
+        $tblLiqPdvs.clear().draw();
 
-        await fetch_postRequest(req, function (data) {
+        $('#spinnerModCli').show();
 
-            $('#spinner').hide();
+        await fetch_postRequest(req,
+            function (data) {
+                $('#spinnerModCli').hide();
 
-            //console.log(data)
+                lista_liq_pdvs = data.resp;
 
-            if (data.resp.status == 'error') {
+                let totEnt = 0;
+                let totDev = 0;
+                let totVta = 0;
 
-                Swal.fire({ title: data.resp.msg, icon: 'error' });
-                return;
+                for (let i = 0; i < lista_liq_pdvs.length; i++) {
 
-            }
+                    let element = lista_liq_pdvs[i];
+                    console.log(element)
 
-            llenaTablaSorteosUsuarios();
+                    let a_fecha = element.fec_entrega.split('-');
+                    let canEnt = Number.parseInt(element.can_entrega);
+                    let canDev = Number.parseInt(element.can_dev);
+                    let canVta = canEnt - canDev;
 
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: data.resp.msg,
-                showConfirmButton: false,
-                timer: 1500
+                    totEnt += canEnt;
+                    totDev += canDev;
+                    totVta += canVta;
+
+                    let fechaLiq = new Object();
+                    fechaLiq.fec_ent = a_fecha[2] + '/' + a_fecha[1] + '/' + a_fecha[0];
+                    fechaLiq.can_ent = canEnt;
+                    fechaLiq.can_dev = canDev;
+                    fechaLiq.can_vta = canVta;
+
+                    lista_liq_pdvs.push(fechaLiq);
+                }
+
+                $tblLiqPdvs.rows.add(lista_liq_pdvs).draw();
+                $txtTotalEnt.val(nf_entero.format(totEnt));
+                $txtTotalDev.val(nf_entero.format(totDev));
+                $txtTotalVta.val(nf_entero.format(totVta));
+
             });
-        });
     }
+
 
 
 
@@ -570,6 +552,20 @@ $(function () {
 
     inactivaCampos();
 
+
+    if (sessionStorage.getItem('TIPO_USUARIO') == '1') {
+
+        $txtCodDistri.val(sessionStorage.getItem('COD_USUARIO'));
+        $txtNomDistri.val(sessionStorage.getItem('NOM_USUARIO'));
+
+        $btnBuscaDis.prop('disabled', true);
+        $txtCodDistri.prop('disabled', true);
+
+        $txtFechaEnt.prop('disabled', false);
+        $btnConsultar.prop('disabled', false);
+        $btnConsultar.focus();
+
+    }
 
 
 

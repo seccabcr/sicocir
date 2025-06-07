@@ -47,12 +47,36 @@
 
 
 
-<li class="nav-item">
+<!--li class="nav-item">
   <a class="nav-link collapsed" href="javascript:accesoAdmGen('./actualiza-picking.html')">
     <i class="bi bi-chevron-right"></i>
     <span>Actualiza Picking</span>
   </a>
-</li><!-- End Control Actualiza Picking Nav -->
+</li--><!-- End Control Actualiza Picking Nav -->
+
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" data-bs-target="#picking-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-list-ul"></i><span>Proceso picking</span><i class="bi bi-chevron-down ms-auto"></i>
+  </a>
+  <ul id="picking-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+    <li>
+      <a href="javascript:accesoAdmGen('./actualiza-picking.html')">
+        <i class="bi bi-circle"></i><span>Picking Edición Diaria</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Picking Suscripción Mensual</span>
+      </a>
+    </li>
+
+
+  </ul>
+</li><!-- End Proceso Picking Nav -->
 
 
 
@@ -65,10 +89,10 @@
 
     <li>
       <a href="./entrega-diaria.html">
-        <i class="bi bi-circle"></i><span>Entrega diaria</span>
+        <i class="bi bi-circle"></i><span>Entrega Edición Diaria</span>
       </a>
     </li>
-
+    
     <li>
       <a href="javascript:accesoAdmGen('./entrega-mercha.html')">
         <i class="bi bi-circle"></i><span>Entrega Merchandising</span>
@@ -81,12 +105,36 @@
 
 
 
-<li class="nav-item">
+<!--li class="nav-item">
   <a class="nav-link collapsed" href="./registro-liq-diaria.html">
     <i class="bi bi-chevron-right"></i>
     <span>Registro Liquidación Diaria</span>
   </a>
-</li><!-- End Control Actualiza Picking Nav -->
+</li--><!-- End Control Actualiza Picking Nav -->
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" data-bs-target="#liquidacion-nav" data-bs-toggle="collapse" href="#">
+    <i class="bi bi-list-ul"></i><span>Proceso liquidación</span><i class="bi bi-chevron-down ms-auto"></i>
+  </a>
+  <ul id="liquidacion-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+    <li>
+      <a href="./registro-liq-diaria.html">
+        <i class="bi bi-circle"></i><span>Liquidación Edición Diaria</span>
+      </a>
+    </li>
+    
+    <li>
+      <a href="#">
+        <i class="bi bi-circle"></i><span>Liquidación Suscripción Mensual</span>
+      </a>
+    </li>
+
+
+  </ul>
+</li><!-- End Proceso Liquidacion Nav -->
+
 
 
 <li class="nav-item">

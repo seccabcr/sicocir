@@ -925,12 +925,7 @@ $(function () {
         $txtCodCliente.prop('disabled', false);
 
         $txtCodCliente.focus();
-
-
-
     } else {
-
-
         $txtCodDistri.val('');
         $txtNomDistri.val('');
 

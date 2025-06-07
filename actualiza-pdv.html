@@ -319,7 +319,8 @@
                             <label for="txtLatitud" class="col-lg-3 col-6 col-form-label">Latitud</label>
                             <div class="col-lg-5 col-6">
                               <input id="txtLatitud" name="txtLatitud" type="text" class="form-control text-end"
-                                maxlength="12">
+                                 oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="12"
+                                inputmode="numeric">
                             </div>
 
                           </div>

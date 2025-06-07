@@ -138,18 +138,22 @@
                 </div>
               </div>
 
-             
-                <div class="input-group mb-3">
-                  <label for="txtFecEnt" class="col-lg-3 col-6 col-form-label">Fecha Entrega</label>
-                  <div class="col-lg-4 col-6">
-                    <input id="txtFecEnt" name="txtFecEnt" type="date" class="form-control">
-                  </div>
+
+              <div class="input-group mb-3">
+                <label for="txtFecEnt" class="col-lg-3 col-6 col-form-label ">Fecha Entrega</label>
+                <div class="col-lg-4 col-6 me-lg-2">
+                  <input id="txtFecEnt" name="txtFecEnt" type="date" class="form-control">
                 </div>
-          
+
+                 <div class="col-3">
+                  <button id="btnConsultar" class="btn btn-dark">Consultar</button>
+                </div>
+              </div>
 
 
 
-              <div class="input-group mb-2">
+
+              <!--div class="input-group mb-2">
                 <label for="txtCodPdv" class="col-lg-3 col-6 col-form-label">PDV</label>
                 <div class="col-lg-2 col-3 me-2">
                   <input id="txtCodPdv" name="txtCodPdv" type="text" class="form-control"
@@ -162,37 +166,33 @@
                       class="bi bi-search" data-bs-toggle="tooltip" title="Buscar PDV"></i></button>
 
                 </div>
-              </div>
+              </div-->
 
-              <div class="input-group mb-3">
+              <!--div class="input-group mb-3">
                 <label for="txtNomPdv" class="col-lg-3 col-form-label"></label>
                 <div class="col-lg-9 col-12">
                   <input id="txtNomPdv" name="txtNomPdv" type="text" class="form-control" disabled>
                 </div>
-              </div>
+              </div-->
 
-              <div class="input-group mb-3">
-                <label for="txtCanPick" class="col-lg-3 col-6 col-form-label">Cantidad</label>
+              <!--div class="input-group mb-3">
+                <label for="txtCanEnt" class="col-lg-3 col-6 col-form-label">Cantidad</label>
                 <div class="col-lg-3 col-6">
-                  <input id="txtCanPick" name="txtCanPick" type="text" inputmode="numeric" class="form-control text-end"
+                  <input id="txtCanEnt" name="txtCanEnt" type="text" inputmode="numeric" class="form-control text-end"
                     oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="10">
                 </div>
-              </div>
+              </div-->
 
 
-              <div class="input-group mb-3">
+              <!--div class="input-group mb-3">
                 <label class="col-lg-3 col-form-label"></label>
                 <div class="col-lg-9">
 
-                  <button id="btnActPick" class="btn btn-success me-3">Actualizar</button>
+                  <button id="btnActEntrega" class="btn btn-success me-3">Actualizar</button>
                   <button id="btnCancelar" class="btn btn-dark">Cancelar</button>
 
                 </div>
-              </div>
-
-
-
-
+              </div-->
 
             </div>
           </div>
@@ -215,7 +215,7 @@
                       data-bs-toggle="tooltip" title="Agregar"></i></button>
 
                 </div-->
-                <div id="spinnerPdv" class="col-1" style="display: none">
+                <div id="spinnerEnt" class="col-1" style="display: none">
                   <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
                     <span class="visually-hidden">Cargando...</span>
                   </div>
@@ -224,13 +224,13 @@
 
 
               <div class="table-responsive">
-                <table id="tblEntregaPdvs" class="table table-primary nowrap" style="width: 100%;">
+                <table id="tblEntregaPdvs" class="table table-primary" style="width: 100%;">
                   <thead>
                     <tr>
                       <th class="col-1">Codigo</th>
                       <th class="">Nombre PDV</th>
                       <th class="col-1">Cantidad</th>
-                      <th class="col-2 text-center"></th>
+                      <th class="col-3 text-center"></th>
                     </tr>
                   </thead>
 
@@ -243,7 +243,7 @@
               <div class="input-group mb-3">
                 <label for="txtTotalEnt" class="col-lg-3 col-6 col-form-label">Total Entrega</label>
                 <div class="col-lg-4 col-6">
-                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control" disabled>
+                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control text-end" disabled>
                 </div>
               </div>
             </div>
@@ -304,52 +304,62 @@
 
 
 
-  <!-- Modal Buscar PDV -->
-  <div class="modal" id="modBuscaPdv" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-lg">
+  <!-- Modal para actualizar datos entrega-->
+  <div id="modActEnt" class="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Busca PDV</h5>
-
-          <button id="btnCerrarModPdv" type="button" class="btn-close" data-bs-dismiss="modal"
-            aria-label="Close"></button>
-
+          <h5 class="modal-title">Actualiza Entrega Diaria</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body">
+
           <div class="card">
             <div class="card-body">
 
-              <div id="spinnerModUsu" class="text-center" style="display: none">
-                <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
-                  <span class="visually-hidden">Cargando...</span>
+              <form autocomplete="off">
+            
+
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtNomPdvMod" class="col-lg-3 col-form-label">PDV</label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomPdv" name="txtNomPdv" type="text" class="form-control" disabled>
+                  </div>
                 </div>
-              </div>
 
+                <div class="input-group mb-3">
+                  <label for="txtCanEnt" class="col-lg-3 col-form-label">Cantidad</label>
+                  <div class="col-lg-4 col-6">
+                    <input id="txtCanEnt" name="txtCanEnt" type="text" class="form-control text-end"
+                      oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="10" inputmode="numeric">
+                  </div>
 
-              <div class="table-responsive">
-                <table id="tblPdvs" class="table table-light" width="100%">
-                  <thead>
-                    <tr>
-                      <th>Código</th>
-                      <th>Nombre PDV</th>
-                      <th></th>
+                </div>
+            </div>
 
-                    </tr>
-                  </thead>
-                  <tbody>
+          </div>
 
-                  </tbody>
-                </table>
-              </div>
+          <div class="modal-footer">
+            <!--button id="btnCanSuc" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button-->
+            <button id="btnActEnt" type="button" class="btn btn-primary">Actualizar</button>
+          </div>
+
+          </form>
+
+          <div id="spinnerActEnt" class="text-center" style="display: none">
+            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+              <span class="visually-hidden">Cargando...</span>
             </div>
           </div>
+
         </div>
-        <!--div class="modal-footer">
-        <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
-      </div-->
       </div>
+
     </div>
   </div>
+
+
 
 
 

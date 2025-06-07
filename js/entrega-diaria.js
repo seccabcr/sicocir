@@ -1,38 +1,91 @@
 $(function () {
 
 
-     checkInicioSesion();
+    checkInicioSesion();
     /** Procesos de carga de pagina */
     cargaDatosUsuario(); // Carga los datos del usuario en el Header la pagina
     activaBotonMenu();
-    
-   
-   
+
+
+
 
     var lista_entrega_pdvs = [];
     var lista_distribuidores = [];
-    var lista_pdvs = [];
-   
-   
+    var listaClientes = [];
 
-    var mNuevoPdv = true;
-    var mCodUsuario = 0;
-   
+    var codCliente = 0;
 
-   
 
-    const $txtCodDis = $('#txtCodDistri')
+
+    const $txtCodDistri = $('#txtCodDistri')
+        .focus(function () {
+            $(this).select();
+            limpiaCampos();
+            inactivaCampos();
+
+            $txtCodDistri.val('');
+            $txtNomDistri.val('');
+
+            //$btnBuscaCli.prop('disabled', true);
+            //$txtCodCliente.prop('disabled', true);
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+                e.preventDefault();
+
+                if ($txtCodDistri.val().length > 0) {
+
+                    consultaDistribuidor();
+                }
+
+
+            }
+        });
+
+
+
+    const $txtNomDistri = $('#txtNomDistri')
         .val('');
 
 
 
-    const $txtNomDis = $('#txtNomDistri')
-        .val('');
-        
+    const $txtFechaEnt = $('#txtFecEnt')
+        .val(obtieneFechaActual())
+        .change(function () {
 
-  
+        });
 
-    const $txtCanPick = $('#txtCanPick')
+
+
+    /*const $txtCodCliente = $('#txtCodPdv')
+        .focus(function () {
+            $(this).select();
+
+            $txtNomCliente.val('');
+            $txtCanEnt.prop('disabled', true);
+            $btnActEntrega.prop('disabled', true);
+
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+
+                e.preventDefault();
+
+                if ($txtCodCliente.val().length > 0) {
+
+                    consultaCliente();
+                }
+
+            }
+        });*/
+
+
+
+    const $txtNomCliente = $('#txtNomPdv');
+
+    const $txtCanEnt = $('#txtCanEnt')
         .val('0')
         .focus(function () {
             $(this).select();
@@ -45,70 +98,69 @@ $(function () {
 
                     let x = Number.parseInt($(this).val().replace(/,/g, ''));
                     $(this).val(nf_entero.format(x));
-                    $btnActUsuario.focus();
+
+                    $btnActEntrega.focus();
 
                 }
-
-
                 e.preventDefault();
             }
         });
 
+    const $txtTotalEnt = $('#txtTotalEnt').val('0');
 
-   
-
-    const $txtFechaEnt = $('#txtFecEnt')
-        .val(obtieneFechaActual())
-        .change(function(){
-
-        });
-        
 
 
 
     const $btnBuscaDis = $('#btnBuscaDis')
         .click(function (e) {
 
-          
-            //llenaTablaUsuarios();
-
-
+            llenaTablaDistribuidores();
 
         });
 
-   
-    const $btnActPicking = $('#btnActPicking')
+    /* const $btnBuscaCli = $('#btnBuscaPdv')
+         .click(function (e) {
+ 
+ 
+             llenaTablaClientes();
+         });*/
+
+
+
+    const $btnActEntrega = $('#btnActEnt')
         .click(function (e) {
 
-            actualizaUsuario();
+            actualizaEntregaPdv().then(()=>{
+                llenaTablaEntregaPdvs();
+            });
             e.preventDefault();
 
         });
 
-    const $btnCancelar = $('#btnCancelar')
+    /*const $btnCancelar = $('#btnCancelar')
         .click(function (e) {
 
-            limpiaCampos();
-            inactivaCampos();
+
 
             e.preventDefault();
 
-        });
+        });*/
 
-   
-
-   
-
-
-    const $btnAgregaPickPdv = $('#btnAgregaPickPdv')
+    const $btnConsultar = $('#btnConsultar')
         .click(function (e) {
 
+            llenaTablaEntregaPdvs();
+
+            e.preventDefault();
 
 
-            e.preventDefault();        
-          
-            
+
         });
+
+
+
+
+
 
 
 
@@ -124,16 +176,16 @@ $(function () {
             {
                 data: 'nom_pdv'
 
-            },          
+            },
             {
-                data: 'can_pick',
+                data: 'can_ent',
                 className: 'text-end',
                 render: DataTable.render.number(',', '.'),
                 searchable: false
 
             },
             {
-                defaultContent: '<button class="editar btn btn-primary"><i class="bi bi-pen"></i></button> <button class="eliminar btn btn-danger"><i class="bi bi-x"></i></button>',
+                defaultContent: '<button class="editar btn btn-primary"><i class="bi bi-pen"></i></button>',
                 className: 'text-center'
 
             }
@@ -147,13 +199,18 @@ $(function () {
 
     $tblEntregaPdvs.on('click', 'button.editar', function () {
 
-        let fila = $tblEntregaPdvs.row($(this).parents('tr')).data();
+        let fila = $tblEntregaPdvs.row($(this).parents('tr')).index();
 
-      
+        $('#modActEnt').modal('show');
+
+        codCliente = Number.parseInt(lista_entrega_pdvs[fila].cod_pdv);
+
+        $txtNomCliente.val(lista_entrega_pdvs[fila].nom_pdv);
+        $txtCanEnt.val(lista_entrega_pdvs[fila].can_ent).focus();
 
     });
 
-    $tblEntregaPdvs.on('click', 'button.eliminar', function () {
+    /*$tblEntregaPdvs.on('click', 'button.eliminar', function () {
 
         let fila = $tblEntregaPdvs.row($(this).parents('tr')).data();
 
@@ -161,7 +218,7 @@ $(function () {
 
         Swal
             .fire({
-                title: "Desea Eliminar el Picking del Punto de Ventas?",
+                title: "Desea Eliminar la Entrega del PDV?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: "Sí, eliminar",
@@ -170,12 +227,12 @@ $(function () {
             .then(resultado => {
                 if (resultado.value) {
 
-                   
+
 
                 }
             });
 
-    });
+    });*/
 
 
 
@@ -186,12 +243,12 @@ $(function () {
         data: lista_distribuidores,
         columns: [
             {
-                data: 'cod_distri',
+                data: 'cod_dis',
                 visible: false
 
             },
             {
-                data: 'nom_distri'
+                data: 'nom_dis'
             },
 
             {
@@ -212,174 +269,185 @@ $(function () {
 
         let fila = $tblDistri.row($(this).parents('tr')).data();
 
-        $txtCodDis.val(fila.cod_usuario);
+        $txtCodDistri.val(fila.cod_dis);
+        $txtNomDistri.val(fila.nom_dis);
 
-        //$('#modBuscaDis').modal('hide');
-
-        //consultaUsuario();
-
-
-    });
-
-    
-    var $tblPdvs = $('#tblPdvs').DataTable({
-
-        responsive: true,
-        data: lista_pdvs,
-        columns: [
-            {
-                data: 'cod_pdv',
-                visible: false
-
-            },
-            {
-                data: 'nom_pdv'
-            },
-
-            {
-                defaultContent: '<button class="editar btn btn-light"><i class="bi bi-arrow-right-circle"></i></button>',
-                className: 'dt-right',
-                with: "10%"
-            }
-
-        ],
-        info: false,
-        ordering: false,
-        language: lenguaje_data_table
-
-    }); /// Fin de creacion de datatable
+        $('#modBuscaDis').modal('hide');
 
 
-    $tblPdvs.on('click', 'button.editar', function () {
-
-        let fila = $tblPdvs.row($(this).parents('tr')).data();
-
-        
-
-        $('#modBuscaPdv').modal('hide');
-
-        //consultaUsuario();
+        $txtFechaEnt.prop('disabled', false);
+        $btnConsultar.prop('disabled', false);
 
 
     });
 
-
+    /******************************************************************************************
+     * 
+     */
 
     function inactivaCampos() {
 
-       
-        $btnAgregaPickPdv.prop('disabled', true);
+
+        $txtFechaEnt.prop('disabled', true);
+        //$txtCanEnt.prop('disabled', true);
+        $btnConsultar.prop('disabled', true);
 
     }
 
-    function activaCampos() {
-      
-        
-
-    }
 
     function limpiaCampos() {
 
-        $tblPickingPdvs.clear().draw();
-        lista_picking_pdvs = [];
+
+        $txtFechaEnt.val(obtieneFechaActual());
+
+        $tblEntregaPdvs.clear().draw();
+        lista_entrega_pdvs = [];
 
     }
 
 
-    async function llenaTablaUsuarios() {
+    /***************************************************************
+     *  Consulta distribuidor
+     ***************************************************************/
 
-        let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'lista_usuarios';
-        req.cod_suc = Number.parseInt($cbSucursales.val())
-        req.todos = $todos.prop('checked');
-
-        lista_usuarios = new Array();
-
-        $tblUsuarios.clear().draw();
-
-        $('#spinnerModUsu').show();
-
-
-        await fetch_postRequest(req,
-            function (data) {
-
-                $('#spinnerModUsu').hide();
-
-                if (data.resp != null) {
-
-                    let usuarios = data.resp.usuarios;
-
-                    for (let i = 0; i < usuarios.length; i++) {
-
-                        const element = usuarios[i];
-
-                        let usu = new Object();
-                        usu.cod_usuario = element.cod_usuario;
-                        usu.nom_usuario = element.nom_usuario;
-
-                        lista_usuarios.push(usu);
-                    }
-
-                    $tblUsuarios.rows.add(lista_usuarios).draw();
-                }
-            });
-    }
-
-    /******************************************************************************************************************** */
-
-    async function llenaTablaPickingPdv() {
-
-        let req = new Object();
-        req.w = 'api';
-        req.r = 'lista_';
-        req.cod_usuario = Number.parseInt($txtCodUsu.val())
-
-        lista_sorteos_usu = new Array();
-        $tblSorteosUsu.clear().draw();
+    async function consultaDistribuidor() {
 
         $('#spinner').show();
 
-
-        await fetch_postRequest(req,
-            function (data) {
-
-                //console.log(data)
-
-                $('#spinner').hide();
-
-                let sorteos = data.resp.sorteosUsu;
-
-                for (let i = 0; i < sorteos.length; i++) {
-
-                    const element = sorteos[i];
-
-                    let sorteo = new Object();
-                    sorteo.cod_sorteo = element.cod_sorteo;
-                    sorteo.nom_sorteo = element.nom_sorteo;
-                    sorteo.cod_rango = element.cod_rango;
-                    sorteo.nom_rango = element.nom_rango;
-                    sorteo.fac_premio_usu = Number.parseInt(element.facPremioUsu);
-                    sorteo.fac_premio_comb_usu = Number.parseInt(element.facPremioCombUsu);
-                    sorteo.por_comision_suc = Number.parseFloat(element.porComSuc);
-                    sorteo.por_comision_usu = Number.parseFloat(element.porComUsu);
-
-                    lista_sorteos_usu.push(sorteo);
-                }
-
-                $tblSorteosUsu.rows.add(lista_sorteos_usu).draw();
-
-            });
-    }
-
-    /*********************************************************************************************************************** */
-
-    async function consultaPickingPdv() {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'consulta_usuario';
-        req.cod_usuario = Number.parseInt($txtCodUsu.val());
+        req.r = 'consulta_distribuidor';
+        req.cod_usuario = Number.parseInt($txtCodDistri.val());
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                //console.log(data)
+
+                $('#spinner').hide();
+
+                let element = data.resp;
+
+                if (element.estadoRes == 'error') {
+                    $txtCodDistri.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
+                    return;
+                }
+
+                $txtNomDistri.val(element.datos.nom_usuario);
+
+                $txtFechaEnt.prop('disabled', false);
+                $btnConsultar.prop('disabled', false);
+
+                $btnConsultar.focus();
+
+            });
+    }
+
+
+    async function llenaTablaDistribuidores() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_distribuidores';
+        req.filtro = 1;
+
+        listaDistri = new Array();
+
+        $tblDistri.clear().draw();
+
+        $('#spinnerDis').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinnerDis').hide();
+
+                let listaUsuarios = data.resp;
+
+                for (let i = 0; i < listaUsuarios.length; i++) {
+
+                    const element = listaUsuarios[i];
+
+                    let itemTabla = new Object();
+
+                    itemTabla.cod_dis = element.cod_usuario;
+                    itemTabla.nom_dis = element.nom_usuario;
+
+                    listaDistri.push(itemTabla);
+                }
+
+                $tblDistri.rows.add(listaDistri).draw();
+            });
+    }
+
+
+
+
+
+    /******************************************************************************************************************** */
+
+    async function llenaTablaEntregaPdvs() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_entrega_diaria_pdvs';
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
+        req.cod_item = 1;
+        req.fec_entrega = $txtFechaEnt.val();
+
+        lista_entrega_pdvs = new Array();
+        $tblEntregaPdvs.clear().draw();
+
+        $('#spinnerEnt').show();
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                //console.log(data)
+
+                $('#spinnerEnt').hide();
+
+                let totalEnt = 0;
+
+                let entregas = data.resp;
+
+                for (let i = 0; i < entregas.length; i++) {
+
+                    const element = entregas[i];
+
+                    let itemTabla = new Object();
+
+                    itemTabla.cod_pdv = element.cod_cliente;
+                    itemTabla.nom_pdv = element.nom_cliente;
+                    itemTabla.can_ent = element.can_entrega
+
+                    totalEnt+=Number.parseInt(element.can_entrega);
+
+                    lista_entrega_pdvs.push(itemTabla);
+                }
+
+                $tblEntregaPdvs.rows.add(lista_entrega_pdvs).draw();
+
+                $txtTotalEnt.val(nf_entero.format(totalEnt));
+
+            });
+    }
+
+
+    /*********************************************************************************************************************** */
+
+    async function consultaEntregaPdv() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'consulta_entrega_diaria';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_item = 1;
+        req.fec_entrega = $txtFechaEnt.val();
 
         $('#spinner').show();
 
@@ -390,139 +458,38 @@ $(function () {
 
                 //console.log(data)
 
-                let element = data.resp;
-
-                $txtIdUsu.val(element.id_usuario);
-                $txtNomUsu.val(element.nom_usuario);
-                $cbTipoUsu.val(element.tipo_usuario);
-                let mon = Number.parseInt(element.lim_venta.replace(/,/g, ''));
-                $txtMonMax.val(nf_entero.format(mon));
-                $cbProcesoOnLIne.val(element.proceso_online);
-                $cbEstadoUsu.val(element.est_usuario);
-
-                mNuevoUsu = false;
-
-                let user = sessionStorage.getItem('TIPO_USUARIO');
-
-                if (element.tipo_usuario <= user) {
-
-                    llenaTablaSorteosUsuarios().then(() => {
-
-                        //activaCampos();
-                        $txtIdUsu.prop('disabled', true);
-                        $txtNomUsu.prop('disabled', element.tipo_usuario >= user & user < '3')
-                        $cbTipoUsu.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $txtMonMax.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $cbProcesoOnLIne.prop('disabled', element.tipo_usuario <= user & user < '3');
-                        $cbEstadoUsu.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $btnActUsuario.prop('disabled', element.tipo_usuario >= user & user < '3');
-
-                        $cbProcesoOnLIne.prop('disabled', sessionStorage.getItem('TIPO_USUARIO') < '3' || mProcesoOnLine == 0);
-
-                        $btnAgregaSor.prop('disabled', element.tipo_usuario > user & user < '3');
-
-                        $txtNomUsu.focus();
-                    });
-
-                } else {
-
-                    Swal.fire({ title: "NO autorizado a modificar los datos de este usuario", icon: "warning" });
-
-                }
 
             });
     }
 
 
-    
 
 
-    async function actualizaPickingPdv() {
 
-       
-
-        let index = $cbSucursales.prop('selectedIndex') - 1;
-        mMonMaxSuc = lista_sucursales[index].lim_venta;
-
-
-        if ($txtIdUsu.val().length < 4 && mNuevoUsu) {
-            $txtIdUsu.focus();
-            Swal.fire({ title: "El ID debe tener como minimo 4 caracteres", icon: "warning" });
-            return;
-        }
-
-        if ($txtNomUsu.val().length < 4) {
-            $txtNomUsu.focus();
-            Swal.fire({ title: "El nombre debe tener como minimo 4 caracteres", icon: "warning" });
-            return;
-        }
-
-        if ($txtMonMax.val().length == 0) {
-            $txtMonMax.focus();
-            Swal.fire({ title: "El maximo disponible es requerido", icon: "warning" });
-            return;
-        }
-
-
-        if ($cbTipoUsu.val() > sessionStorage.getItem('TIPO_USUARIO')) {
-            $cbTipoUsu.focus();
-            Swal.fire({ title: "NO autorizado a asignar este tipo de usuario", icon: "warning" });
-            return;
-        }
-
-        let monMax = Number.parseInt($txtMonMax.val().replace(/,/g, ''));
-
-
-        if (mMonMaxSuc > 0 && monMax > mMonMaxSuc) {
-            $txtMonMax.focus();
-            Swal.fire({ title: "El maximo disponible NO puede ser mayor al limite disponible de la sucursal", icon: "warning" });
-            return;
-        }
-
-
-        let codUsuario = $txtCodUsu.val().length > 0 ? Number.parseInt($txtCodUsu.val()) : 0;
-
-        if(nuevoUsuario){
-
-            let x = $txtIdUsu.val().replace(/ /g, '');
-            $txtIdUsu.val(x.toLowerCase());
-        }
-
+    async function actualizaEntregaPdv() {
 
         let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'actualiza_usuario';
-        req.nuevo = mNuevoUsu;
-        req.cod_usuario = codUsuario;
-        req.id_usuario = $txtIdUsu.val();
-        req.nom_usuario = $txtNomUsu.val();
-        req.tipo_usuario = Number.parseInt($cbTipoUsu.val());
-        req.cod_suc = Number.parseInt($cbSucursales.val());
-        req.lim_venta = monMax;
-        req.proceso_online = Number.parseInt($cbProcesoOnLIne.val());
-        req.est_usuario = Number.parseInt($cbEstadoUsu.val());
+        req.w = 'apiSicocir';
+        req.r = 'actualiza_entrega_diaria';
+
+        req.cod_cliente = codCliente;
+        req.cod_item = 1;
+        req.fec_entrega = $txtFechaEnt.val();
+        req.can_entrega = Number.parseInt($txtCanEnt.val());
+        req.id_usu_reg = sessionStorage.getItem('ID_USUARIO');
 
         $('#spinner').show();
-
 
         await fetch_postRequest(req,
             function (data) {
 
                 $('#spinner').hide();
 
+                $('#modActEnt').modal('hide');
 
                 let response = data.resp;
-                if (response.status == 'error') {
 
-                    Swal.fire({ title: response.msg, icon: "error" });
-                    return;
 
-                }
-
-                mNuevoUsu = false;
-                $txtCodUsu.val(response.cod_usuario);
-
-                $btnAgregaSor.prop('disabled', false);
 
                 Swal.fire({
                     position: 'top-end',
@@ -536,53 +503,21 @@ $(function () {
             });
     }
 
+     inactivaCampos();
 
-    
+      if (sessionStorage.getItem('TIPO_USUARIO') == '1') {
 
+        $txtCodDistri.val(sessionStorage.getItem('COD_USUARIO'));
+        $txtNomDistri.val(sessionStorage.getItem('NOM_USUARIO'));
 
-    async function eliminaPickingPdv(fila) {
+        $btnBuscaDis.prop('disabled', true);
+        $txtCodDistri.prop('disabled', true); 
+        
+        $txtFechaEnt.prop('disabled',false);
+        $btnConsultar.prop('disabled',false);
+        $btnConsultar.focus();
 
-        $('#spinner').show();
-
-        let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'elimina_sorteo_usu';
-
-        req.cod_usuario = Number.parseInt($txtCodUsu.val());
-        req.cod_sorteo = Number.parseInt(fila.cod_sorteo);
-
-
-        await fetch_postRequest(req, function (data) {
-
-            $('#spinner').hide();
-
-            //console.log(data)
-
-            if (data.resp.status == 'error') {
-
-                Swal.fire({ title: data.resp.msg, icon: 'error' });
-                return;
-
-            }
-
-            llenaTablaSorteosUsuarios();
-
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: data.resp.msg,
-                showConfirmButton: false,
-                timer: 1500
-            });
-        });
-    }
-
-
-   
-
-
-    inactivaCampos(); 
-
+    } 
 
 
 

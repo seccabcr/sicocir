@@ -75,22 +75,18 @@
   <main id="main" class="main" style="min-height:600px">
 
     <div class="row ">
-      <div class="pagetitle col-lg-4 mb-lg-3">
+      <div class="pagetitle col-6">
         <h1>Actualiza Distribuidores</h1>
         <!--span>Módulo Vendedor</span-->
 
       </div><!-- End Page Title -->
 
       <!-- Barra botones -->
-      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
+      <div class="col-6 d-flex  justify-content-end">
 
-        <!--button id="btnEnviar" class="btn btn-primary me-3">Enviar</button-->
 
-        <!--button id="btnCompartir" type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Compartir"><i
-            class="bi bi-share"></i></button-->
-
-        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
-            class="bi bi-search"></i></button-->
+        <button id="btnImprimir" class="btn btn-light" data-bs-toggle="tooltip" title="Imprimir"><i
+            class="bi bi-printer"></i></button>
 
       </div>
 
@@ -143,16 +139,29 @@
                   </div>
                 </div>
 
+                <div class="row">
 
-                <div class="input-group mb-3">
-                  <label class="col-lg-3 col-6 col-form-label">Estado</label>
-                  <div class="col-lg-3 col-6">
-                    <select id="cbEstadoUsu" class="form-select" aria-label="Default select example">
-                      <option value="0">Inactivo</option>
-                      <option selected value="1">Activo</option>
-                    </select>
+                  <div class="col-lg-8 mb-3">
+                    <div class="input-group ">
+                      <label class="col-lg-4 col-6 form-label me-lg-3">Estado</label>
+                      <div class="col-6">
+                        <select id="cbEstadoUsu" class="form-select" aria-label="Default select example">
+                          <option value="0">Inactivo</option>
+                          <option value="1">Activo</option>
+                        </select>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="text-center">
+                      <button id="btnResPin" class="btn btn-primary">Resetea PIN</button>
+                    </div>
                   </div>
                 </div>
+
+
 
                 <div class="input-group mb-3">
                   <label class="col-lg-3 col-form-label"></label>
@@ -186,25 +195,25 @@
                 </div>
               </div>
 
-              
-                <div class="input-group mb-3">
-                  <label class="col-lg-2 col-6 col-form-label">Filtro</label>
-                  <div class="col-lg-4 col-6">
-                    <select id="cbFiltraDis" class="form-select" aria-label="Default select example">
-                      <option value="1">Solo Activos</option>
-                      <option value="2">Todos</option>
-                    </select>
-                  </div>
+
+              <div class="input-group mb-3">
+                <label class="col-lg-2 col-6 col-form-label">Filtro</label>
+                <div class="col-lg-4 col-6">
+                  <select id="cbFiltraDis" class="form-select" aria-label="Default select example">
+                    <option value="1">Solo Activos</option>
+                    <option value="2">Todos</option>
+                  </select>
                 </div>
+              </div>
 
 
               <div class="table-responsive">
                 <table id="tblUsuarios" class="table table-sm nowrap" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="col-1">Código</th>                     
+                      <th class="col-1">Código</th>
                       <th class="">Nombre</th>
-                       <th class="col-3 text-center">ID</th>
+                      <th class="col-3 text-center">ID</th>
                       <th class="col-1 text-center">Estado</th>
                       <th class="col-2 text-center"></th>
                     </tr>
@@ -224,15 +233,6 @@
     </section>
 
   </main><!-- End #main -->
-
-
-
-
-
-
-
-
-
 
 
   <!-- ======= Footer ======= -->
@@ -260,6 +260,9 @@
   <!-- Archivo JS pagina -->
 
   <script src="./js/actualiza-distribuidores.js"></script>
+   <script src="../assets/jsPDF/jspdf.debug.js"></script>
+   <script src="./js/reportesPDF.js"></script>
+
 
 </body>
 

@@ -893,9 +893,6 @@ $(function () {
 
                 $tblClientes.rows.add(listaClientes).draw();
 
-
-
-
             });
     }
 

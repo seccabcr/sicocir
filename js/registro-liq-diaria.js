@@ -68,9 +68,6 @@ $(function () {
 
     const $txtNomCliente = $('#txtNomPdv');
 
-    const $txtCanEnt = $('#txtCanEnt')
-        .val('0');
-
     const $txtFechaIni = $('#txtFechaIni')
         .val(obtieneFechaActual())
         .change(function () {
@@ -87,7 +84,10 @@ $(function () {
     const $txtTotalDev = $('#txtTotalDev');
     const $txtTotalVta = $('#txtTotalVta');
 
-    const $txtFechaLiq = $('#txtFechaLiq');
+    const $txtFecLiq = $('#txtFecLiq');
+    const $txtCanEnt = $('#txtCanEnt');
+    const $txtCanVta = $('#txtCanVta');
+
     const $txtCanDev = $('#txtCanDev')
         .val('0')
         .focus(function () {
@@ -101,6 +101,12 @@ $(function () {
 
                     let x = Number.parseInt($(this).val().replace(/,/g, ''));
                     $(this).val(nf_entero.format(x));
+
+                    let ent = Number.parseInt($txtCanEnt.val().replace(/,/g, ''))
+                    let dev = Number.parseInt($(this).val().replace(/,/g, ''))
+
+                    $txtCanVta.val(nf_entero.format(ent - dev));
+
                     $btnActLiqDia.focus();
 
                 }
@@ -140,7 +146,9 @@ $(function () {
     const $btnActLiqDia = $('#btnActLiqDia')
         .click(function (e) {
 
-
+            actualizaFechaLiq().then(() => {
+                llenaTablaLiqDiaria();
+            });
             e.preventDefault();
         });
 
@@ -151,7 +159,7 @@ $(function () {
         data: listaTablaLiq,
         columns: [
             {
-                data: 'fec_liq'
+                data: 'fec_ent'
 
             },
             {
@@ -172,7 +180,8 @@ $(function () {
                 data: 'can_vta',
                 className: 'text-end',
                 render: DataTable.render.number(',', '.'),
-                searchable: false
+                searchable: false,
+                responsivePriority: 1
 
             },
             {
@@ -190,9 +199,20 @@ $(function () {
 
     $tblLiqPdvs.on('click', 'button.editar', function () {
 
-        let fila = $tblLiqPdvs.row($(this).parents('tr')).data();
+        let fila = $tblLiqPdvs.row($(this).parents('tr')).index();
 
 
+        $('#modActLiqDia').modal('show');
+
+        $txtFecLiq.val(lista_liq_pdvs[fila].fec_entrega);
+        let x = Number.parseInt(lista_liq_pdvs[fila].can_entrega);
+        let y = Number.parseInt(lista_liq_pdvs[fila].can_dev)
+
+        $txtCanEnt.val(nf_entero.format(x));
+        $txtCanDev.val(nf_entero.format(y));
+        $txtCanVta.val(nf_entero.format(x - y))
+
+        $txtCanDev.focus();
 
     });
 
@@ -293,7 +313,7 @@ $(function () {
     function inactivaCampos() {
 
 
-        $txtCodCliente.prop('disabled', true);
+        //$txtCodCliente.prop('disabled', true);
         $btnBuscaCli.prop('disabled', true);
         $btnConsultar.prop('disabled', true);
         $txtFechaFin.prop('disabled', true);
@@ -315,6 +335,9 @@ $(function () {
         $txtNomCliente.val('');
         $txtFechaIni.val(obtieneFechaActual());
         $txtFechaFin.val(obtieneFechaActual());
+        $txtTotalEnt.val('0');
+        $txtTotalDev.val('0');
+        $txtTotalVta.val('0');
         $tblLiqPdvs.clear().draw();
         lista_liq_pdvs = [];
     }
@@ -517,7 +540,6 @@ $(function () {
                 for (let i = 0; i < lista_liq_pdvs.length; i++) {
 
                     let element = lista_liq_pdvs[i];
-                    console.log(element)
 
                     let a_fecha = element.fec_entrega.split('-');
                     let canEnt = Number.parseInt(element.can_entrega);
@@ -534,10 +556,10 @@ $(function () {
                     fechaLiq.can_dev = canDev;
                     fechaLiq.can_vta = canVta;
 
-                    lista_liq_pdvs.push(fechaLiq);
+                    listaTablaLiq.push(fechaLiq);
                 }
 
-                $tblLiqPdvs.rows.add(lista_liq_pdvs).draw();
+                $tblLiqPdvs.rows.add(listaTablaLiq).draw();
                 $txtTotalEnt.val(nf_entero.format(totEnt));
                 $txtTotalDev.val(nf_entero.format(totDev));
                 $txtTotalVta.val(nf_entero.format(totVta));
@@ -546,8 +568,58 @@ $(function () {
     }
 
 
+    async function actualizaFechaLiq() {
 
 
+        let ent = Number.parseInt($txtCanEnt.val().replace(/,/g, ''));
+        let dev = Number.parseInt($txtCanDev.val().replace(/,/g, ''));
+
+        if (dev > ent) {
+            $txtCanDev.focus();
+            Swal.fire({ title: "Cantidad devuelta NO puede ser mayor a la cantidad entregada", icon: "warning" });
+            return;
+        }
+
+        $txtCanVta.val(nf_entero.format(ent - dev));
+
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'actualiza_liq_diaria';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.fec_entrega = $txtFecLiq.val();
+        req.can_dev = Number.parseInt($txtCanDev.val().replace(/,/g, ''));
+        req.cod_item = 1;
+        req.id_usu_reg = sessionStorage.getItem('ID_USUARIO');
+
+
+        $('#spinnerActLiq').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+                $('#spinnerActLiq').hide();
+
+                $('#modActLiqDia').modal('hide');
+
+                let response = data.resp;
+
+                if (response.estadoRes == 'error') {
+                    $txtCanDev.focus();
+                    Swal.fire({ title: response.msg, icon: "warning" });
+                    return;
+                }
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            });
+
+    }
 
 
     inactivaCampos();
@@ -560,10 +632,8 @@ $(function () {
 
         $btnBuscaDis.prop('disabled', true);
         $txtCodDistri.prop('disabled', true);
-
-        $txtFechaEnt.prop('disabled', false);
-        $btnConsultar.prop('disabled', false);
-        $btnConsultar.focus();
+        $btnBuscaCli.prop('disabled', false);    
+        $txtCodCliente.focus();
 
     }
 

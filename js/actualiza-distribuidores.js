@@ -83,7 +83,28 @@ $(function () {
 
         });
 
+    const $btnResPin = $('#btnResPin')
+        .click(function (e) {
 
+            Swal
+                .fire({
+                    title: "Esta seguro de resetear el PIN?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, resetear",
+                    cancelButtonText: "Cancelar",
+                })
+                .then(resultado => {
+                    if (resultado.value) {
+
+                        reseteaPin();
+
+                    }
+                });
+
+            e.preventDefault();
+
+        });
 
 
 
@@ -114,6 +135,21 @@ $(function () {
             inactivaCampos();
 
             e.preventDefault();
+
+        });
+
+    const $btnImprimir = $('#btnImprimir')
+        .click(function (e) {
+
+            if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/Windows Phone/i)) {
+                console.log("Estás usando un dispositivo móvil!!");
+                Swal.fire({ title: "Proceso de impresion no esta disponible en dispositivos móviles", icon: "error" });
+                return;
+            }
+
+            e.preventDefault();
+
+            imprimeReporte();
 
         });
 
@@ -166,15 +202,7 @@ $(function () {
 
         consultaUsuario();
 
-
-
     });
-
-
-
-
-
-
 
 
     function inactivaCampos() {
@@ -183,6 +211,7 @@ $(function () {
         $txtNomUsu.prop('disabled', true);
         $cbEstadoUsu.prop('disabled', true);
         $btnActUsuario.prop('disabled', true);
+        $btnResPin.prop('disabled', true);
 
     }
 
@@ -294,16 +323,12 @@ $(function () {
                 nuevoUsu = false;
 
                 activaCampos();
+                $btnResPin.prop('disabled', false);
+
                 $txtNomUsu.focus();
-
-
 
             });
     }
-
-
-
-
 
     async function actualizaUsuario() {
 
@@ -371,6 +396,51 @@ $(function () {
 
             });
     }
+
+    async function reseteaPin() {
+
+
+        let req = new Object();
+        req.w = "apiSicocir";
+        req.r = "resetea_pin";
+
+        req.cod_usu = codUsuario;
+
+
+        $('#spinnerActUsu').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinnerActUsu').hide();
+
+                let response = data.resp;
+
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+    }
+
+    function imprimeReporte() {
+
+        if (listaUsuarios.length > 0) {
+            console.log('Imprimiendo reporte');
+
+            let datos = new Object();
+
+            datos.lista = lista_usuarios;         
+
+            new Listado_Distribuidores(datos);
+
+        }
+    }
+
 
 
     llenaTablaDistribuidores();

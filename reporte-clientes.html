@@ -79,21 +79,16 @@
 
     <div class="row ">
       <div class="pagetitle col-lg-4 mb-lg-3">
-        <h1>Entrega Merchandising</h1>
+        <h1>Listado Clientes</h1>
         <!--span>Módulo Vendedor</span-->
 
       </div><!-- End Page Title -->
 
       <!-- Barra botones -->
-      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">      
 
-        <!--button id="btnEnviar" class="btn btn-primary me-3">Enviar</button-->
-
-        <!--button id="btnCompartir" type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Compartir"><i
-            class="bi bi-share"></i></button-->
-
-        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
-            class="bi bi-search"></i></button-->
+        <button id="btnImprimir" class="btn btn-light" data-bs-toggle="tooltip" title="Imprimir"><i
+            class="bi bi-printer"></i></button-->
 
       </div>
 
@@ -111,7 +106,7 @@
 
       <div class="row">
 
-        <div class="col-lg-6">
+        <div class="col-lg-5">
 
           <div class="card">
             <div class="card-body">
@@ -136,59 +131,9 @@
                 <div class="col-lg-9 col-12">
                   <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
                 </div>
-              </div>
-
-              <div class="input-group mb-2">
-                <label for="txtCodPdv" class="col-lg-3 col-6 col-form-label">PDV</label>
-                <div class="col-lg-2 col-3 me-2">
-                  <input id="txtCodPdv" name="txtCodPdv" type="text" class="form-control"
-                    oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="5" inputmode="numeric"
-                    autofocus>
-                </div>
-
-                <div class="col-lg-1 col-2">
-                  <button id="btnBuscaPdv" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modBuscaPdv"><i
-                      class="bi bi-search" data-bs-toggle="tooltip" title="Buscar PDV"></i></button>
-
-                </div>
-              </div>
-
-              <div class="input-group mb-3">
-                <label for="txtNomPdv" class="col-lg-3 col-form-label"></label>
-                <div class="col-lg-9 col-12">
-                  <input id="txtNomPdv" name="txtNomPdv" type="text" class="form-control" disabled>
-                </div>
-              </div>
-
-              <div class="input-group mb-3">
-                <label class="col-lg-3 col-12 col-form-label">Item</label>
-                <div class="col-lg-6 col-12">
-                  <select id="cbItemsMercha" class="form-select" aria-label="Default select example">
-                    <option value="0">Seleccione un ítem</option>
-
-                  </select>
-                </div>
-              </div>
+              </div>          
 
 
-              <div class="input-group mb-3">
-                <label for="txtCanItem" class="col-lg-3 col-6 col-form-label">Cantidad</label>
-                <div class="col-lg-2 col-6">
-                  <input id="txtCanItem" name="txtCanItem" type="text" inputmode="numeric" class="form-control text-end"
-                    oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6">
-                </div>
-              </div>
-
-
-              <div class="input-group mb-3">
-                <label class="col-lg-3 col-form-label"></label>
-                <div class="col-lg-9">
-
-                  <button id="btnActItem" class="btn btn-success me-3">Actualizar</button>
-                  <button id="btnCancelar" class="btn btn-dark">Cancelar</button>
-
-                </div>
-              </div>
 
             </div>
           </div>
@@ -198,20 +143,16 @@
 
 
 
-        <div class="col-lg-6">
+        <div class="col-lg-7">
 
 
           <div class="card">
             <div class="card-body">
 
               <div class="d-flex mt-3 mb-3">
-                <h5>Detalle Items Entregados</h5>
-                <!--div class="col-2 text-center">
-                  <button id="btnAgregaPickPdv" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modBuscaPdv"><i class="bi bi-plus"
-                      data-bs-toggle="tooltip" title="Agregar"></i></button>
-
-                </div-->
-                <div id="spinnerPdv" class="col-1" style="display: none">
+                <h5>Clientes registrados</h5>
+              
+                <div id="spinnerEnt" class="col-1" style="display: none">
                   <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
                     <span class="visually-hidden">Cargando...</span>
                   </div>
@@ -220,13 +161,14 @@
 
 
               <div class="table-responsive">
-                <table id="tblItemsPdv" class="table table-primary nowrap" style="width: 100%;">
+                <table id="tblClientes" class="table table-primary " style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="col-1">Código</th>
-                      <th class="">Nombre Item</th>
-                      <th class="col-1 text-end">Cantidad</th>
-                      <th class="col-3 text-center"></th>
+                      <th class="col-1">Codigo</th>
+                      <th class="">Nombre Cliente</th>
+                      <th class="col-2 text-center">Tipo Negocio</th>
+                      <!--th class="col-2 text-center">Fecha Apertura</th-->
+                      <th class="col-1">Estado</th>                    
                     </tr>
                   </thead>
 
@@ -236,9 +178,7 @@
                 </table>
               </div>
 
-
-            </div>
-
+             
           </div>
 
         </div>
@@ -295,54 +235,6 @@
 
 
 
-  <!-- Modal Buscar PDV -->
-  <div class="modal" id="modBuscaPdv" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Busca PDV</h5>
-
-          <button id="btnCerrarModPdv" type="button" class="btn-close" data-bs-dismiss="modal"
-            aria-label="Close"></button>
-
-        </div>
-        <div class="modal-body">
-          <div class="card">
-            <div class="card-body">
-
-              <div id="spinnerModUsu" class="text-center" style="display: none">
-                <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-              </div>
-
-
-              <div class="table-responsive">
-                <table id="tblPdvs" class="table table-light" width="100%">
-                  <thead>
-                    <tr>
-                      <th>Código</th>
-                      <th>Nombre PDV</th>
-                      <th></th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--div class="modal-footer">
-        <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
-      </div-->
-      </div>
-    </div>
-  </div>
-
-
 
 
   <!-- ======= Footer ======= -->
@@ -369,7 +261,7 @@
 
   <!-- Archivo JS pagina -->
 
-  <script src="./js/entrega-mercha.js"></script>
+  <script src="./js/reporte-clientes.js"></script>
 
 </body>
 

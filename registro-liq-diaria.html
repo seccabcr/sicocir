@@ -182,28 +182,21 @@
               <div class="input-group mb-3">
                 <label for="txtTotalEnt" class="col-6 col-form-label text-end me-2">Total Entrega</label>
                 <div class="col-lg-4 col-5">
-                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control" disabled>
+                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control text-end" disabled>
                 </div>
               </div>
               <div class="input-group mb-3">
                 <label for="txtTotalDev" class="col-6 col-form-label text-end me-2">Total Devolución</label>
                 <div class="col-lg-4 col-5">
-                  <input id="txtTotalDev" name="txtTotalDev" type="text" class="form-control" disabled>
+                  <input id="txtTotalDev" name="txtTotalDev" type="text" class="form-control text-end" disabled>
                 </div>
               </div>
               <div class="input-group mb-3">
                 <label for="txtTotalVta" class="col-6 col-form-label text-end me-2">Total Venta</label>
                 <div class="col-lg-4 col-5">
-                  <input id="txtTotalVta" name="txtTotalVta" type="text" class="form-control" disabled>
+                  <input id="txtTotalVta" name="txtTotalVta" type="text" class="form-control text-end" disabled>
                 </div>
               </div>
-
-
-
-
-
-
-
 
             </div>
           </div>
@@ -238,10 +231,10 @@
                 <table id="tblLiqPdvs" class="table table-primary nowrap" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="">Fecha</th>
-                      <th class="">Entrega</th>
-                      <th class="">Devolución</th>
-                      <th class="">Venta</th>
+                      <th class="col-2">Fecha</th>
+                      <th class="col-2">Entrega</th>
+                      <th class="col-2">Devolución</th>
+                      <th class="col-2">Venta</th>
                       <th class="col-2 text-center"></th>
                     </tr>
                   </thead>
@@ -360,7 +353,7 @@
 
   <!-- Modal Buscar Actualiza liquidación diaria -->
   <div class="modal" id="modActLiqDia" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Actualiza liquidacion día</h5>
@@ -411,6 +404,13 @@
                 </div>
 
               </form>
+
+               <div id="spinnerActLiq" class="text-center" style="display: none">
+                <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

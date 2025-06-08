@@ -11,21 +11,70 @@ $(function () {
 
     var lista_items_pdv = [];
     var lista_distribuidores = [];
-    var lista_pdvs = [];
+    var listaClientes = [];
 
+    const $txtCodDistri = $('#txtCodDistri')
+        .focus(function () {
+            $(this).select();
+            limpiaCampos();
+            inactivaCampos();
 
-    const $txtCodDis = $('#txtCodDistri')
+            $txtCodDistri.val('');
+            $txtNomDistri.val('');
+
+            //$btnBuscaCli.prop('disabled', true);
+            //$txtCodCliente.prop('disabled', true);
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+                e.preventDefault();
+
+                if ($txtCodDistri.val().length > 0) {
+
+                    consultaDistribuidor();
+                }
+            }
+        });
+
+    const $txtNomDistri = $('#txtNomDistri')
         .val('');
 
+    const $txtCodCliente = $('#txtCodPdv')
+        .focus(function () {
+            $(this).select();
+            limpiaCampos();
+            $cbItemsMercha.prop('disabled', true);
+            $txtCanItem.prop('disabled', true);
+            $btnActItem.prop('disabled', true);
 
 
-    const $txtNomDis = $('#txtNomDistri')
-        .val('');
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+
+                e.preventDefault();
+
+                if ($txtCodCliente.val().length > 0) {
+
+                    consultaCliente();
+                }
+
+            }
+        });
 
 
+    const $txtNomCliente = $('#txtNomPdv');
 
 
-    const $txtCanEnt = $('#txtCanEnt')
+    const $cbItemsMercha = $('#cbItemsMercha')
+        .change(() => {
+
+            consultaItemPdv();
+
+        });
+
+    const $txtCanItem = $('#txtCanItem')
         .val('0')
         .focus(function () {
             $(this).select();
@@ -38,7 +87,10 @@ $(function () {
 
                     let x = Number.parseInt($(this).val().replace(/,/g, ''));
                     $(this).val(nf_entero.format(x));
-                    $btnActUsuario.focus();
+
+                    $txtCanItem.val(nf_entero.format(x));
+
+                    $btnActItem.focus();
 
                 }
 
@@ -50,30 +102,28 @@ $(function () {
 
 
 
-    const $txtFechaEnt = $('#txtFecEnt')
-        .val(obtieneFechaActual())
-        .change(function () {
-
-        });
-
-
-
-
     const $btnBuscaDis = $('#btnBuscaDis')
         .click(function (e) {
-
-
-            //llenaTablaUsuarios();
-
-
+            llenaTablaDistribuidores();
+            e.preventDefault();
 
         });
 
+    const $btnBuscaCli = $('#btnBuscaPdv')
+        .click(function (e) {
+            e.preventDefault();
+            llenaTablaClientes();
+        });
 
-    const $btnActMercha = $('#btnActMercha')
+
+    const $btnActItem = $('#btnActItem')
         .click(function (e) {
 
-           
+            actualizaItemMercha().then(() => {
+                llenaTablaItemsPdv();
+            })
+
+
             e.preventDefault();
 
         });
@@ -91,14 +141,16 @@ $(function () {
 
 
 
-    var $tblItemsPdv = $('#tblItemsPdvs').DataTable({
+    var $tblItemsPdv = $('#tblItemsPdv').DataTable({
         //destroy: true,
         responsive: true,
         data: lista_items_pdv,
         columns: [
+
             {
-                data: 'fec_ent',
-                className: 'text-center'
+                data: 'cod_item',
+                visible: false
+
             },
             {
                 data: 'nom_item'
@@ -128,7 +180,9 @@ $(function () {
 
         let fila = $tblItemsPdv.row($(this).parents('tr')).data();
 
-
+        $cbItemsMercha.val(fila.cod_item);
+        $txtCanItem.val(fila.can_item);
+        $txtCanItem.focus();
 
     });
 
@@ -136,7 +190,10 @@ $(function () {
 
         let fila = $tblItemsPdv.row($(this).parents('tr')).data();
 
-        //console.log(fila)
+        $cbItemsMercha.val('0');
+        $txtCanItem.val('0');
+        $cbItemsMercha.focus();
+
 
         Swal
             .fire({
@@ -149,8 +206,10 @@ $(function () {
             .then(resultado => {
                 if (resultado.value) {
 
+                    eliminaItemMercha(fila).then(() => {
 
-
+                        llenaTablaItemsPdv();
+                    });
                 }
             });
 
@@ -165,12 +224,12 @@ $(function () {
         data: lista_distribuidores,
         columns: [
             {
-                data: 'cod_distri',
+                data: 'cod_dis',
                 visible: false
 
             },
             {
-                data: 'nom_distri'
+                data: 'nom_dis'
             },
 
             {
@@ -191,28 +250,34 @@ $(function () {
 
         let fila = $tblDistri.row($(this).parents('tr')).data();
 
-        $txtCodDis.val(fila.cod_usuario);
+        $txtCodDistri.val(fila.cod_dis);
+        $txtNomDistri.val(fila.nom_dis);
 
-        //$('#modBuscaDis').modal('hide');
 
-        //consultaUsuario();
+        $('#modBuscaDis').modal('hide');
+
+        $txtCodCliente.prop('disabled', false);
+        $btnBuscaCli.prop('disabled', false);
+        $txtCodCliente.focus();
+
+
 
 
     });
 
 
-    var $tblPdvs = $('#tblPdvs').DataTable({
+    var $tblClientes = $('#tblPdvs').DataTable({
 
         responsive: true,
-        data: lista_pdvs,
+        data: listaClientes,
         columns: [
             {
-                data: 'cod_pdv',
+                data: 'cod_cliente',
                 visible: false
 
             },
             {
-                data: 'nom_pdv'
+                data: 'nom_cliente'
             },
 
             {
@@ -229,15 +294,16 @@ $(function () {
     }); /// Fin de creacion de datatable
 
 
-    $tblPdvs.on('click', 'button.editar', function () {
+    $tblClientes.on('click', 'button.editar', function () {
 
-        let fila = $tblPdvs.row($(this).parents('tr')).data();
+        let fila = $tblClientes.row($(this).parents('tr')).data();
 
-
+        $txtCodCliente.val(fila.cod_cliente);
+        $txtNomCliente.val(fila.nom_cliente);
 
         $('#modBuscaPdv').modal('hide');
 
-        //consultaUsuario();
+        consultaCliente();
 
 
     });
@@ -246,119 +312,285 @@ $(function () {
 
     function inactivaCampos() {
 
+        $txtCodCliente.prop('disabled', true);
+        $btnBuscaCli.prop('disabled', true);
 
-     
-
-    }
-
-    function activaCampos() {
-
-
+        $cbItemsMercha.prop('disabled', true);
+        $txtCanItem.prop('disabled', true);
+        $btnActItem.prop('disabled', true);
 
     }
+
 
     function limpiaCampos() {
 
-        $tblPickingPdvs.clear().draw();
-        lista_picking_pdvs = [];
+        $cbItemsMercha.val('0');
+        $txtCanItem.val('0');
+
+        $tblItemsPdv.clear().draw();
+        lista_items_pdvs = [];
 
     }
 
 
-    async function llenaTablaUsuarios() {
-
-        let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'lista_usuarios';
-        req.cod_suc = Number.parseInt($cbSucursales.val())
-        req.todos = $todos.prop('checked');
-
-        lista_usuarios = new Array();
-
-        $tblUsuarios.clear().draw();
-
-        $('#spinnerModUsu').show();
 
 
-        await fetch_postRequest(req,
-            function (data) {
+    /***************************************************************
+     *  Consulta distribuidor
+     ***************************************************************/
 
-                $('#spinnerModUsu').hide();
-
-                if (data.resp != null) {
-
-                    let usuarios = data.resp.usuarios;
-
-                    for (let i = 0; i < usuarios.length; i++) {
-
-                        const element = usuarios[i];
-
-                        let usu = new Object();
-                        usu.cod_usuario = element.cod_usuario;
-                        usu.nom_usuario = element.nom_usuario;
-
-                        lista_usuarios.push(usu);
-                    }
-
-                    $tblUsuarios.rows.add(lista_usuarios).draw();
-                }
-            });
-    }
-
-    /******************************************************************************************************************** */
-
-    async function llenaTablaPickingPdv() {
-
-        let req = new Object();
-        req.w = 'api';
-        req.r = 'lista_';
-        req.cod_usuario = Number.parseInt($txtCodUsu.val())
-
-        lista_sorteos_usu = new Array();
-        $tblSorteosUsu.clear().draw();
+    async function consultaDistribuidor() {
 
         $('#spinner').show();
 
-
-        await fetch_postRequest(req,
-            function (data) {
-
-                //console.log(data)
-
-                $('#spinner').hide();
-
-                let sorteos = data.resp.sorteosUsu;
-
-                for (let i = 0; i < sorteos.length; i++) {
-
-                    const element = sorteos[i];
-
-                    let sorteo = new Object();
-                    sorteo.cod_sorteo = element.cod_sorteo;
-                    sorteo.nom_sorteo = element.nom_sorteo;
-                    sorteo.cod_rango = element.cod_rango;
-                    sorteo.nom_rango = element.nom_rango;
-                    sorteo.fac_premio_usu = Number.parseInt(element.facPremioUsu);
-                    sorteo.fac_premio_comb_usu = Number.parseInt(element.facPremioCombUsu);
-                    sorteo.por_comision_suc = Number.parseFloat(element.porComSuc);
-                    sorteo.por_comision_usu = Number.parseFloat(element.porComUsu);
-
-                    lista_sorteos_usu.push(sorteo);
-                }
-
-                $tblSorteosUsu.rows.add(lista_sorteos_usu).draw();
-
-            });
-    }
-
-    /*********************************************************************************************************************** */
-
-    async function consultaPickingPdv() {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'consulta_usuario';
-        req.cod_usuario = Number.parseInt($txtCodUsu.val());
+        req.r = 'consulta_distribuidor';
+        req.cod_usuario = Number.parseInt($txtCodDistri.val());
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                //console.log(data)
+
+                $('#spinner').hide();
+
+                let element = data.resp;
+
+                if (element.estadoRes == 'error') {
+                    $txtCodDistri.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
+                    return;
+                }
+
+                $txtNomDistri.val(element.datos.nom_usuario);
+
+                $txtCodCliente.prop('disabled', false);
+                $btnBuscaCli.prop('disabled', false);
+
+                $txtCodCliente.focus();
+
+            });
+    }
+
+    /***********************************************************************************************************
+     * 
+     *
+    */
+    async function llenaTablaDistribuidores() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_distribuidores';
+        req.filtro = 1;
+
+        listaDistri = new Array();
+
+        $tblDistri.clear().draw();
+
+        $('#spinnerDis').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinnerDis').hide();
+
+                let listaUsuarios = data.resp;
+
+                for (let i = 0; i < listaUsuarios.length; i++) {
+
+                    const element = listaUsuarios[i];
+
+                    let itemTabla = new Object();
+
+                    itemTabla.cod_dis = element.cod_usuario;
+                    itemTabla.nom_dis = element.nom_usuario;
+
+                    listaDistri.push(itemTabla);
+                }
+
+                $tblDistri.rows.add(listaDistri).draw();
+            });
+    }
+
+    /***********************************************************************************
+     * 
+     */
+    async function llenaTablaClientes() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'llena_tabla_clientes';
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
+        req.filtro = 1;
+
+        listaClientes = new Array();
+
+        $tblClientes.clear().draw();
+
+        $('#spinnerModCli').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+                $('#spinnerModCli').hide();
+
+
+                let clientes = data.resp;
+
+                for (let i = 0; i < clientes.length; i++) {
+                    let cliente = new Object();
+                    cliente.cod_cliente = clientes[i].cod_cliente;
+                    cliente.nom_cliente = clientes[i].nom_cliente;
+
+                    listaClientes.push(cliente);
+                }
+
+                $tblClientes.rows.add(listaClientes).draw();
+
+            });
+    }
+
+
+    /***************************************************************
+     *  Consulta cliente
+     ***************************************************************/
+
+    async function consultaCliente() {
+
+        $('#spinner').show();
+
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'consulta_cliente';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_distri = Number.parseInt($txtCodDistri.val());
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinner').hide();
+
+                let element = data.resp;
+
+                if (element.estadoRes == 'error') {
+
+                    $txtCodCliente.focus();
+                    Swal.fire({ title: element.msg, icon: "error" });
+                    return;
+                }
+
+                llenaTablaItemsPdv();
+
+                $txtNomCliente.val(element.datos.nom_cliente);
+
+                $cbItemsMercha.prop('disabled', false);
+                $txtCanItem.prop('disabled', false);
+                $btnActItem.prop('disabled', false);
+
+                $cbItemsMercha.focus();
+
+            });
+    }
+
+    /************************************************************************************
+     * 
+     */
+
+    async function llenaComboItemsMercha() {
+
+        let req = new Object();
+        req.w = "apiSicocir";
+        req.r = "lista_items";
+        req.cat_item = 2;
+
+        $cbItemsMercha.empty();
+
+        $cbItemsMercha.append($("<option>", {
+            value: '0',
+            text: 'Seleccione un item'
+        }));
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                let items = data.resp;
+
+                for (item in items) {
+
+                    let _codItem = items[item]['cod_item'];
+                    let _nomItem = items[item]['nom_item'];
+
+                    $cbItemsMercha.append($("<option>", {
+                        value: _codItem,
+                        text: _nomItem
+                    }));
+                }
+            });
+
+    }
+
+    /**********************************************************************************************
+     * 
+     */
+
+    async function consultaItemPdv() {
+
+
+        if ($cbItemsMercha.val() == '0') {
+
+            $cbItemsMercha.focus();
+            Swal.fire({ title: 'Debe seleccionar un item', icon: "error" });
+            return;
+        }
+
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'consulta_item_mercha_pdv';
+        req.cod_cliente = Number.parseFloat($txtCodCliente.val());
+        req.cod_item = Number.parseInt($cbItemsMercha.val());
+
+
+        $('#spinner').show();
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinner').hide();
+
+                let can = 0;
+
+                let response = data.resp;
+
+                if (response != null) {
+                    can = Number.parseInt(response.can_item);
+                }
+
+                $txtCanItem.val(nf_entero.format(can));
+                $txtCanItem.focus();
+            });
+    }
+
+
+    /***********************************************************************************
+    * 
+    */
+    async function llenaTablaItemsPdv() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_items_mercha_pdv';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+
+        lista_items_pdv = new Array();
+
+        $tblItemsPdv.clear().draw();
 
         $('#spinner').show();
 
@@ -367,47 +599,24 @@ $(function () {
 
                 $('#spinner').hide();
 
-                //console.log(data)
 
-                let element = data.resp;
 
-                $txtIdUsu.val(element.id_usuario);
-                $txtNomUsu.val(element.nom_usuario);
-                $cbTipoUsu.val(element.tipo_usuario);
-                let mon = Number.parseInt(element.lim_venta.replace(/,/g, ''));
-                $txtMonMax.val(nf_entero.format(mon));
-                $cbProcesoOnLIne.val(element.proceso_online);
-                $cbEstadoUsu.val(element.est_usuario);
 
-                mNuevoUsu = false;
+                let items = data.resp;
 
-                let user = sessionStorage.getItem('TIPO_USUARIO');
+                for (let i = 0; i < items.length; i++) {
 
-                if (element.tipo_usuario <= user) {
 
-                    llenaTablaSorteosUsuarios().then(() => {
+                    let item = new Object();
 
-                        //activaCampos();
-                        $txtIdUsu.prop('disabled', true);
-                        $txtNomUsu.prop('disabled', element.tipo_usuario >= user & user < '3')
-                        $cbTipoUsu.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $txtMonMax.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $cbProcesoOnLIne.prop('disabled', element.tipo_usuario <= user & user < '3');
-                        $cbEstadoUsu.prop('disabled', element.tipo_usuario >= user & user < '3');
-                        $btnActUsuario.prop('disabled', element.tipo_usuario >= user & user < '3');
+                    item.cod_item = items[i].cod_item;
+                    item.nom_item = items[i].nom_item;
+                    item.can_item = Number.parseInt(items[i].can_item)
 
-                        $cbProcesoOnLIne.prop('disabled', sessionStorage.getItem('TIPO_USUARIO') < '3' || mProcesoOnLine == 0);
-
-                        $btnAgregaSor.prop('disabled', element.tipo_usuario > user & user < '3');
-
-                        $txtNomUsu.focus();
-                    });
-
-                } else {
-
-                    Swal.fire({ title: "NO autorizado a modificar los datos de este usuario", icon: "warning" });
-
+                    lista_items_pdv.push(item);
                 }
+
+                $tblItemsPdv.rows.add(lista_items_pdv).draw();
 
             });
     }
@@ -416,70 +625,38 @@ $(function () {
 
 
 
-    async function actualizaPickingPdv() {
+    /**********************************************************************************************
+     * 
+     */
+
+    async function actualizaItemMercha() {
 
 
 
-        let index = $cbSucursales.prop('selectedIndex') - 1;
-        mMonMaxSuc = lista_sucursales[index].lim_venta;
-
-
-        if ($txtIdUsu.val().length < 4 && mNuevoUsu) {
-            $txtIdUsu.focus();
-            Swal.fire({ title: "El ID debe tener como minimo 4 caracteres", icon: "warning" });
+        if ($cbItemsMercha.val() == '0') {
+            $cbItemsMercha.focus();
+            Swal.fire({ title: 'Debe seleccionar un item', icon: "error" });
             return;
         }
 
-        if ($txtNomUsu.val().length < 4) {
-            $txtNomUsu.focus();
-            Swal.fire({ title: "El nombre debe tener como minimo 4 caracteres", icon: "warning" });
-            return;
-        }
+        let can = Number.parseInt($txtCanItem.val());
 
-        if ($txtMonMax.val().length == 0) {
-            $txtMonMax.focus();
-            Swal.fire({ title: "El maximo disponible es requerido", icon: "warning" });
+        if (can <= 0) {
+            $cbItemsMercha.focus();
+            Swal.fire({ title: 'Debe digitar una cantidad válida', icon: "error" });
             return;
         }
 
 
-        if ($cbTipoUsu.val() > sessionStorage.getItem('TIPO_USUARIO')) {
-            $cbTipoUsu.focus();
-            Swal.fire({ title: "NO autorizado a asignar este tipo de usuario", icon: "warning" });
-            return;
-        }
-
-        let monMax = Number.parseInt($txtMonMax.val().replace(/,/g, ''));
-
-
-        if (mMonMaxSuc > 0 && monMax > mMonMaxSuc) {
-            $txtMonMax.focus();
-            Swal.fire({ title: "El maximo disponible NO puede ser mayor al limite disponible de la sucursal", icon: "warning" });
-            return;
-        }
-
-
-        let codUsuario = $txtCodUsu.val().length > 0 ? Number.parseInt($txtCodUsu.val()) : 0;
-
-        if (nuevoUsuario) {
-
-            let x = $txtIdUsu.val().replace(/ /g, '');
-            $txtIdUsu.val(x.toLowerCase());
-        }
 
 
         let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'actualiza_usuario';
-        req.nuevo = mNuevoUsu;
-        req.cod_usuario = codUsuario;
-        req.id_usuario = $txtIdUsu.val();
-        req.nom_usuario = $txtNomUsu.val();
-        req.tipo_usuario = Number.parseInt($cbTipoUsu.val());
-        req.cod_suc = Number.parseInt($cbSucursales.val());
-        req.lim_venta = monMax;
-        req.proceso_online = Number.parseInt($cbProcesoOnLIne.val());
-        req.est_usuario = Number.parseInt($cbEstadoUsu.val());
+        req.w = 'apiSicocir';
+        req.r = 'actualiza_item_mercha_pdv';
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_item = Number.parseInt($cbItemsMercha.val());
+        req.can_item = can;
+
 
         $('#spinner').show();
 
@@ -491,17 +668,10 @@ $(function () {
 
 
                 let response = data.resp;
-                if (response.status == 'error') {
 
-                    Swal.fire({ title: response.msg, icon: "error" });
-                    return;
-
-                }
-
-                mNuevoUsu = false;
-                $txtCodUsu.val(response.cod_usuario);
-
-                $btnAgregaSor.prop('disabled', false);
+                $cbItemsMercha.val('0');
+                $txtCanItem.val('0');
+                $cbItemsMercha.focus();
 
                 Swal.fire({
                     position: 'top-end',
@@ -519,32 +689,23 @@ $(function () {
 
 
 
-    async function eliminaPickingPdv(fila) {
+    async function eliminaItemMercha(fila) {
 
         $('#spinner').show();
 
         let req = new Object();
-        req.w = 'apiLotto';
-        req.r = 'elimina_sorteo_usu';
+        req.w = 'apiSicocir';
+        req.r = 'elimina_item_mercha_pdv';
 
-        req.cod_usuario = Number.parseInt($txtCodUsu.val());
-        req.cod_sorteo = Number.parseInt(fila.cod_sorteo);
+        req.cod_cliente = Number.parseInt($txtCodCliente.val());
+        req.cod_item = Number.parseInt(fila.cod_item);
 
 
         await fetch_postRequest(req, function (data) {
 
             $('#spinner').hide();
 
-            //console.log(data)
 
-            if (data.resp.status == 'error') {
-
-                Swal.fire({ title: data.resp.msg, icon: 'error' });
-                return;
-
-            }
-
-            llenaTablaSorteosUsuarios();
 
             Swal.fire({
                 position: 'top-end',
@@ -561,6 +722,7 @@ $(function () {
 
 
     inactivaCampos();
+    llenaComboItemsMercha();
 
 
 

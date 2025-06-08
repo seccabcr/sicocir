@@ -108,10 +108,33 @@ $(function () {
         nuevoUsu = true;
         codUsuario = 0;
 
+        $btnResPin.prop('disabled', true);
         $cbEstadoUsu.val('1');
         $cbTipoUsu.val('2');
         $txtNomUsu.val('');
         $txtIdUsu.val('').focus();
+
+        e.preventDefault();
+
+    });
+
+    const $btnResPin = $('#btnResPin').click(function (e) {
+
+        Swal
+            .fire({
+                title: "Esta seguro de resetear el PIN?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "Sí, resetear",
+                cancelButtonText: "Cancelar",
+            })
+            .then(resultado => {
+                if (resultado.value) {
+
+                    reseteaPin();
+                }
+            });
+
         e.preventDefault();
 
     });
@@ -230,11 +253,9 @@ $(function () {
         $cbTipoUsu.val(listaUsuarios[fila].tipo_usuario);
         $cbEstadoUsu.val(listaUsuarios[fila].est_usuario);
 
+        $btnResPin.prop('disabled', false);
         $txtIdUsu.prop('disabled', true);
         $txtNomUsu.focus();
-
-
-
 
     });
 
@@ -545,6 +566,36 @@ $(function () {
                 }
 
                 $('#modActUsu').modal('hide');
+
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: response.msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            });
+    }
+
+    async function reseteaPin() {
+
+
+        let req = new Object();
+        req.w = "apiSicocir";
+        req.r = "resetea_pin";
+
+        req.cod_usu = codUsuario;
+
+
+        $('#spinnerActUsu').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                $('#spinnerActUsu').hide();
+
+                let response = data.resp;
+
 
                 Swal.fire({
                     position: 'top-end',

@@ -13,9 +13,7 @@ $(function () {
     var $tblClientes;
 
     var mNuevo = true;
-    var mLatitud = 0;
-    var mLongitud = 0;
-
+   
     const $txtCodCliente = $('#txtCodCliente');
     const $txtNomCliente = $('#txtNomCli');
 
@@ -341,6 +339,8 @@ $(function () {
 
 
             e.preventDefault();
+
+            obtieneCoordenadas();
         });
 
 
@@ -435,8 +435,11 @@ $(function () {
                 let _idCanton = Number.parseInt(element.datos.idCanton);
                 let _idDistrito = Number.parseInt(element.datos.idDistrito);
 
-                mLatitud = Number.parseFloat(element.datos.latitud);
-                mLongitud = Number.parseFloat(element.datos.longitud);
+                let lat = Number.parseFloat(element.datos.latitud);
+                let lon = Number.parseFloat(element.datos.longitud);
+
+                $txtLatitud.val(nf_dec6.format(lat));
+                $txtLongitud.val(nf_dec6.format(lon));
 
                 $cbProvincias.val(_idProvincia);
 
@@ -894,6 +897,43 @@ $(function () {
                 $tblClientes.rows.add(listaClientes).draw();
 
             });
+    }
+
+    function obtieneCoordenadas() {
+
+
+        navigator.geolocation.getCurrentPosition(geoposOK, geoposKO);
+
+    }
+
+    function geoposOK(pos) {
+
+        console.log(pos)
+
+        let lat = pos.coords.latitude;
+        let lon = pos.coords.longitude;
+
+        $txtLatitud.val(nf_dec6.format(lat));
+        $txtLongitud.val(nf_dec6.format(lon));
+
+    }
+
+    function geoposKO(err) {
+        console.log(err)
+
+
+        switch (err.code) {
+
+            case err.PERMISION_DENIED:
+                Swal.fire({ title: "Permiso denegado por el usuario", icon: "warning" });
+                break;
+            default:
+                Swal.fire({ title: "No se puedo obtener la posición actual ", icon: "warning" });
+                break;
+        }
+
+
+
     }
 
 

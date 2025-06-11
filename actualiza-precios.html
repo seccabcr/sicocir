@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="cache-control" content="no-cache" />
+
+
+  <title>Control de Circulación</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="./img/logo.ico" rel="icon">
+
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+
+  <!-- DataTables CSS files-->
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/datatables.min.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="./css/style.css" rel="stylesheet">
+
+  <!-- Sweet Alert Files-->
+  <!--link type="text/css" href="../assets/css/sweetalert.css" rel="stylesheet" /-->
+  <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+
+  <!-- jQuery js-->
+  <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+  <!-- App Lotto JS -->
+  <script src="./js/Main.js"></script>
+
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <script>
+
+      addHeader();
+
+    </script>
+
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <script>
+        addMenu();
+
+      </script>
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main" style="min-height:600px">
+
+    <div class="row ">
+      <div class="pagetitle col-lg-4 mb-lg-3">
+        <h1>Actualiza Precios</h1>
+        <!--span>Módulo Mantenimiento</span-->
+
+      </div><!-- End Page Title -->
+
+      <!-- Barra botones -->
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-lg-center justify-content-end">
+
+
+
+        <!--button id="btnActualizar" type="button" class="btn btn-primary" data-bs-toggle="tooltip"
+          title="Actualizar">Actualizar</button-->
+
+        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
+            class="bi bi-search"></i></button-->
+
+      </div>
+
+    </div>
+
+
+
+    <section class="section">
+
+      <div id="spinner" class="text-center" style="display: none">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div class="row d-flex justify-content-center">
+        <!-- Div del formulario-->
+        <div class="col-lg-12">
+
+          <div class="card">
+            <div class="card-body">           
+
+
+
+              <div id="tabs">
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general"
+                      type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual"
+                      type="button" role="tab" aria-controls="individual" aria-selected="false">Por Distribuidor</button>
+                  </li>
+
+                </ul>
+
+
+                <div class="tab-content" id="myTabContent">
+
+                  <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+
+                    <div class="row">
+
+                      <!-- Div del formulario-->
+                      <div class="col-lg-6">
+
+                        <div class="card">
+                          <div class="card-body">
+
+                            <form id="actUsu-form" autocomplete="off">
+
+
+
+
+
+
+
+
+
+                              <div class="col-lg-6">
+                                <div class="row mb-3">
+                                  <label for="txtFecApe" class="col-lg-4 col-5 col-form-label">Fecha Apertura</label>
+                                  <div class="col-lg-4 col-7">
+                                    <input id="txtFecApe" name="txtFecApe" type="date" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+
+
+                              <div class="input-group mb-3">
+                                <label class="col-lg-3 col-form-label"></label>
+                                <div class="col-lg-9">
+
+                                  <button id="btnActPreGen" class="btn btn-success me-3">Acctualizar</button>
+                                  <!--button id="btnCancelar" class="btn btn-dark">Cancelar</button-->
+
+                                </div>
+                              </div>
+
+
+                            </form>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Div del data teble-->
+                      <div class="col-lg-6">
+                        <div class="card">
+                          <div class="card-body">
+
+                            <div class="d-flex mt-2 mb-2">
+                              <h5>Precios registrados</h5>
+
+                              <div id="spinnerPre" class="col-1" style="display: none">
+                                <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;"
+                                  role="status">
+                                  <span class="visually-hidden">Cargando...</span>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+                            <div class="table-responsive">
+                              <table id="tblFecPreGen" class="table table-sm nowrap" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th class="col-2 text-center">Fecha</th>
+                                    <th class="col-2 text-endr">Precio</th>
+                                    <th class="col-2 text-center"></th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+
+
+
+                    </div>
+
+                    <div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual">
+
+                       <div class="input-group mb-3 mt-3">
+                <label for="txtCodDistri" class="col-lg-2 col-4 col-form-label me-1">Distribuidor</label>
+                <div class="col-lg-1 col-4 me-2">
+                  <input id="txtCodDistri" name="txtCodDistri" type="text" class="form-control"
+                    oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6" inputmode="numeric" autofocus
+                    autocomplete="off">
+                </div>
+
+                <div class="col-lg-1 col-2">
+                  <button id="btnBuscaDis" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modBuscaDis"><i
+                      class="bi bi-search" data-bs-toggle="tooltip" title="Buscar"></i></button>
+
+                </div>
+
+                <div class="col-lg-6 col-12 mt-lg-0 mt-2">
+                  <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
+                </div>
+
+              </div>
+
+
+                    </div>
+
+
+
+                  </div>
+
+                </div>
+              </div>
+
+
+
+            </div>
+
+          </div>
+        </div>
+
+    </section>
+
+
+
+
+    <!-- Modal Buscar Distribuidor-->
+    <div class="modal" id="modBuscaDis" tabindex="-1" aria-labelledby="modBuscaDisLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modBuscaDisLabel">Busca Distribuidor</h5>
+            <button id="btnCerrarModDis" type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="card">
+              <div class="card-body">
+
+                <div class="table-responsive">
+                  <table id="tblDistri" class="table table-sm table-striped" width="100%">
+                    <thead>
+                      <tr>
+                        <th class="col-1">Código</th>
+                        <th class="">Nombre</th>
+                        <th class="col-1"></th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+          <!--div class="modal-footer">
+          <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
+        </div-->
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+      </div>
+
+    </footer><!-- End Footer -->
+
+
+
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/datatables/datatables.min.js"></script>
+
+    <!-- Archivo JS pagina -->
+
+    <script src="./js/actualiza-precios.js"></script>
+
+</body>
+
+</html>

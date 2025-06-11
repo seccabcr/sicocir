@@ -239,7 +239,7 @@ function accesoAdmGen(_pagina) {
 
   let tipoUsuario = sessionStorage.getItem('TIPO_USUARIO');
 
-  if (tipoUsuario < 3) {
+  if (tipoUsuario < 4) {
     Swal.fire({ title: "Usuario NO tiene acceso autorizado a esta opción", icon: "info" });
     return;
   }
@@ -248,75 +248,17 @@ function accesoAdmGen(_pagina) {
 
 }
 
-async function accesoUsuOnLine(_pagina) {
-
-
-  let req = new Object();
-  req.w = 'apiLotto';
-  req.r = 'consulta_usuario';
-  req.cod_usuario = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
-
-  //$('#spinnerActSor').show();
-
-  await fetch_postRequest(req,
-    function (data) {
-
-      //$('#spinnerActSor').hide();
-
-      //console.log(data)
-
-      let element = data.resp;
-      let acceso = Number.parseInt(element.proceso_online);
-
-      if (acceso == 0) {
-
-        Swal.fire({ title: "Usuario NO tiene acceso autorizado a esta opción", icon: "error" });
-        return;
-
-      }
-
-      iGoTo(_pagina);
-
-    });
-}
-
-async function accesoAdmOnLine(_pagina) {
+function accesoAdm3(_pagina) {
 
   let tipoUsuario = sessionStorage.getItem('TIPO_USUARIO');
 
-  let req = new Object();
-  req.w = 'apiLotto';
-  req.r = 'consulta_acceso_online';
+  if (tipoUsuario < 3) {
+    Swal.fire({ title: "Usuario NO tiene acceso autorizado a esta opción", icon: "info" });
+    return;
+  }
 
-  $('#spinnerMenu').show();
+  iGoTo(_pagina);
 
-  await fetch_postRequest(req,
-    function (data) {
-
-      $('#spinnerMenu').hide();
-
-      //console.log(data)
-
-
-      let acceso = Number.parseInt(data.resp.venta_online);
-
-      if (acceso == 0) {
-
-        Swal.fire({ title: "Esta cuenta NO tiene activado la venta On Line", icon: "error" });
-        return;
-
-      }
-
-      if (tipoUsuario < 3) {
-        Swal.fire({ title: "Usuario NO tiene acceso autorizado a esta opción", icon: "info" });
-        return;
-      }
-
-
-
-      iGoTo(_pagina);
-
-    });
 }
 
 

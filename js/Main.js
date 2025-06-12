@@ -261,5 +261,18 @@ function accesoAdm3(_pagina) {
 
 }
 
+function accesoAdm2(_pagina) {
+
+  let tipoUsuario = sessionStorage.getItem('TIPO_USUARIO');
+
+  if (tipoUsuario < 2) {
+    Swal.fire({ title: "Usuario NO tiene acceso autorizado a esta opción", icon: "info" });
+    return;
+  }
+
+  iGoTo(_pagina);
+
+}
+
 
 

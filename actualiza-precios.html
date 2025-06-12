@@ -110,9 +110,7 @@
         <div class="col-lg-12">
 
           <div class="card">
-            <div class="card-body">           
-
-
+            <div class="card-body">
 
               <div id="tabs">
 
@@ -123,7 +121,8 @@
                   </li>
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual"
-                      type="button" role="tab" aria-controls="individual" aria-selected="false">Por Distribuidor</button>
+                      type="button" role="tab" aria-controls="individual" aria-selected="false">Por
+                      Distribuidor</button>
                   </li>
 
                 </ul>
@@ -136,57 +135,53 @@
                     <div class="row">
 
                       <!-- Div del formulario-->
-                      <div class="col-lg-6">
+                      <div class="col-lg-6 mt-3">
 
                         <div class="card">
                           <div class="card-body">
 
-                            <form id="actUsu-form" autocomplete="off">
+                            <div class="input-group mb-3 mt-3">
+                              <label for="txtFecIniGen" class="col-lg-3 col-5 col-form-label">Fecha Inicio</label>
+                              <div class="col-lg-4 col-7">
+                                <input id="txtFecIniGen" name="txtFecIniGen" type="date" class="form-control">
+                              </div>
+                            </div>
 
 
+                            <div class="input-group mb-3">
+                              <label for="txtPreGen" class="col-lg-3 col-6 col-form-label">Precio</label>
+                              <div class="col-lg-3 col-6">
+                                <input id="txtPreGen" name="txtPreGen" type="text" inputmode="numeric"
+                                  class="form-control text-end" oninput="this.value = this.value.replace(/[A-Za-z]/,'')"
+                                  maxlength="10">
+                              </div>
+                            </div>
 
 
-
-
-
-
-
+                            <div class="input-group mb-3">
+                              <label class="col-lg-3 col-form-label"></label>
                               <div class="col-lg-6">
-                                <div class="row mb-3">
-                                  <label for="txtFecApe" class="col-lg-4 col-5 col-form-label">Fecha Apertura</label>
-                                  <div class="col-lg-4 col-7">
-                                    <input id="txtFecApe" name="txtFecApe" type="date" class="form-control">
-                                  </div>
-                                </div>
+                                <button id="btnActPreGen" class="btn btn-success me-3">Actualizar</button>
+                                <!--button id="btnCancelar" class="btn btn-dark">Cancelar</button-->
+
                               </div>
+                            </div>
 
 
-
-
-
-                              <div class="input-group mb-3">
-                                <label class="col-lg-3 col-form-label"></label>
-                                <div class="col-lg-9">
-
-                                  <button id="btnActPreGen" class="btn btn-success me-3">Acctualizar</button>
-                                  <!--button id="btnCancelar" class="btn btn-dark">Cancelar</button-->
-
-                                </div>
-                              </div>
-
-
-                            </form>
 
                           </div>
+
+
+
                         </div>
                       </div>
 
                       <!-- Div del data teble-->
-                      <div class="col-lg-6">
+                      <div class="col-lg-4 mt-3">
                         <div class="card">
                           <div class="card-body">
 
-                            <div class="d-flex mt-2 mb-2">
+                            <div class="d-flex mt-3 mb-3">
                               <h5>Precios registrados</h5>
 
                               <div id="spinnerPre" class="col-1" style="display: none">
@@ -202,12 +197,12 @@
 
 
                             <div class="table-responsive">
-                              <table id="tblFecPreGen" class="table table-sm nowrap" style="width: 100%;">
+                              <table id="tblPreciosGen" class="table table-sm nowrap" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th class="col-2 text-center">Fecha</th>
-                                    <th class="col-2 text-endr">Precio</th>
-                                    <th class="col-2 text-center"></th>
+                                    <th class="col-3 text-center">Fecha</th>
+                                    <th class="col-3 text-end">Precio</th>
+                                    <th class="text-center"></th>
                                   </tr>
                                 </thead>
 
@@ -219,48 +214,120 @@
                           </div>
 
                         </div>
+
                       </div>
-
-
-
                     </div>
-
-                    <div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual">
-
-                       <div class="input-group mb-3 mt-3">
-                <label for="txtCodDistri" class="col-lg-2 col-4 col-form-label me-1">Distribuidor</label>
-                <div class="col-lg-1 col-4 me-2">
-                  <input id="txtCodDistri" name="txtCodDistri" type="text" class="form-control"
-                    oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6" inputmode="numeric" autofocus
-                    autocomplete="off">
-                </div>
-
-                <div class="col-lg-1 col-2">
-                  <button id="btnBuscaDis" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modBuscaDis"><i
-                      class="bi bi-search" data-bs-toggle="tooltip" title="Buscar"></i></button>
-
-                </div>
-
-                <div class="col-lg-6 col-12 mt-lg-0 mt-2">
-                  <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
-                </div>
-
-              </div>
-
-
-                    </div>
-
-
 
                   </div>
 
+                  <div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
+
+
+
+                    <div class="row">
+
+                      <!-- Div del formulario-->
+                      <div class="col-lg-8">
+
+                        <div class="card">
+                          <div class="card-body">
+
+                            <div class="input-group mb-3 mt-3">
+                              <label for="txtCodDistri" class="col-lg-3 col-4 col-form-label me-1">Distribuidor</label>
+                              <div class="col-lg-2 col-4 me-2">
+                                <input id="txtCodDistri" name="txtCodDistri" type="text" class="form-control"
+                                  oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="6"
+                                  inputmode="numeric" autofocus autocomplete="off">
+                              </div>
+
+                              <div class="col-lg-1 col-2">
+                                <button id="btnBuscaDis" class="btn btn-light" data-bs-toggle="modal"
+                                  data-bs-target="#modBuscaDis"><i class="bi bi-search" data-bs-toggle="tooltip"
+                                    title="Buscar"></i></button>
+
+                              </div>
+
+                              <div class="col-lg-5 col-12 mt-lg-0 mt-2">
+                                <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
+                              </div>
+                            </div>
+
+                            
+                            <div class="input-group mb-3 mt-3">
+                              <label for="txtFecIniInd" class="col-lg-3 col-5 col-form-label">Fecha Inicio</label>
+                              <div class="col-lg-3 col-6">
+                                <input id="txtFecIniInd" name="txtFecIniInd" type="date" class="form-control">
+                              </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                              <label for="txtPreInd" class="col-lg-3 col-6 col-form-label">Precio</label>
+                              <div class="col-lg-2 col-6">
+                                <input id="txtPreInd" name="txtPreInd" type="text" inputmode="numeric"
+                                  class="form-control text-end" oninput="this.value = this.value.replace(/[A-Za-z]/,'')"
+                                  maxlength="10">
+                              </div>
+                            </div>
+
+
+                            <div class="input-group mb-3">
+                              <label class="col-lg-3 col-form-label"></label>
+                              <div class="col-lg-6">
+                                <button id="btnActPreInd" class="btn btn-success me-3">Actualizar</button>
+                                <!--button id="btnCancelar" class="btn btn-dark">Cancelar</button-->
+
+                              </div>
+                            </div>
+
+
+                          </div>
+                        </div>
+
+                      </div>
+                      <!-- Div del data teble-->
+                      <div class="col-lg-4">
+                        <div class="card">
+                          <div class="card-body">
+
+                            <div class="d-flex mt-3 mb-3">
+                              <h5>Precios registrados</h5>
+
+                              <div id="spinnerInd" class="col-1" style="display: none">
+                                <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;"
+                                  role="status">
+                                  <span class="visually-hidden">Cargando...</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="table-responsive">
+                              <table id="tblPrecioInd" class="table table-sm nowrap" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th class="col-3 text-center">Fecha</th>
+                                    <th class="col-3 text-end">Precio</th>
+                                    <th class="text-center"></th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+
+                                </tbody>
+                              </table>
+                            </div>
+
+                          </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
                 </div>
+
               </div>
 
-
-
             </div>
-
           </div>
         </div>
 

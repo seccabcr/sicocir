@@ -7,70 +7,32 @@ $(function () {
 
 
     /** Crea variables  */
-  
+
     var listaDistri = new Array();
 
-   
 
-   
-   
+
+
+
     const $txtCodDistri = $('#txtCodDistri');
     const $txtNomDistri = $('#txtNomDistri');
 
 
 
-   
-    const $btnBuscaDis = $('#btnBuscaDis');
-   
-    const $btnActualizar = $('#btnActualizar');
-   
 
-   
+    const $btnBuscaDis = $('#btnBuscaDis');
+
+
+
+    const $btnPreGen = $('#btnPreGen');
+
+
+
 
 
     function ini_componentes() {
 
-        $tblClientes = $('#tblClientes').DataTable({
 
-            destroy: true,
-            data: listaClientes,
-            columns: [
-                {
-                    data: 'cod_cliente',
-                    visible: false
-
-                },
-                {
-                    data: 'nom_cliente'
-                },
-
-                {
-                    defaultContent: '<button class="editar btn btn-light"><i class="bi bi-arrow-right-circle"></i></button>',
-                    className: 'dt-right',
-                    with: "10%"
-                }
-
-            ],
-            info: false,
-            ordering: false,
-            language: lenguaje_data_table
-
-        }); /// Fin de creacion de datatable
-
-        $tblClientes.clear().draw();
-
-
-        $('#tblClientes').on('click', 'button.editar', function () {
-
-            let fila = $tblClientes.row($(this).parents('tr')).data();
-
-            $('#modBuscaCli').modal('hide');
-
-            $txtCodCliente.val(fila.cod_cliente);
-
-            consultaCliente();
-
-        });
 
         $tblDistri = $('#tblDistri').DataTable({
 
@@ -112,7 +74,7 @@ $(function () {
             $txtCodDistri.val(fila.cod_dis);
             $txtNomDistri.val(fila.nom_dis);
 
-           
+
 
         });
 
@@ -123,7 +85,7 @@ $(function () {
                 inactivaCampos();
 
                 $txtCodDistri.val('');
-                $txtNomDistri.val('');              
+                $txtNomDistri.val('');
 
 
             }).keydown(function (e) {
@@ -145,7 +107,7 @@ $(function () {
 
 
 
-      
+
 
 
 
@@ -168,15 +130,14 @@ $(function () {
 
 
 
-        $btnActualizar.click(function (e) {
+        $btnPreGen.click(function (e) {
 
-            actualizaCliente();
-
+          
             e.preventDefault();
         });
 
 
-      
+
 
     }
 
@@ -213,15 +174,15 @@ $(function () {
 
                 $txtNomDistri.val(element.datos.nom_usuario);
 
-              
+
             });
     }
 
 
 
-   
 
-   
+
+
     async function llenaTablaDistribuidores() {
 
         let req = new Object();
@@ -256,12 +217,12 @@ $(function () {
 
                 $tblDistri.rows.add(listaDistri).draw();
             });
-    }   
+    }
 
     ini_componentes();
 
-   
-   
+
+
 
 
 

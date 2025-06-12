@@ -79,7 +79,7 @@
 
     <div class="row ">
       <div class="pagetitle col-lg-4 mb-lg-3">
-        <h1>Entrega Diaria</h1>
+        <h1>Consulta Entrega Diaria x PDV</h1>
         <!--span>Módulo Vendedor</span-->
 
       </div><!-- End Page Title -->
@@ -87,13 +87,8 @@
       <!-- Barra botones -->
       <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
 
-        <!--button id="btnEnviar" class="btn btn-primary me-3">Enviar</button-->
-
-        <!--button id="btnCompartir" type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Compartir"><i
-            class="bi bi-share"></i></button-->
-
-        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
-            class="bi bi-search"></i></button-->
+        <button id="btnImprimir" class="btn btn-light" data-bs-toggle="tooltip" title="Imprimir"><i
+            class="bi bi-printer"></i></button-->
 
       </div>
 
@@ -138,17 +133,32 @@
                 </div>
               </div>
 
+              <div class="input-group mb-3">
+                <label for="txtFechaIni" class="col-lg-3 col-5 col-form-label">Fecha Inicial</label>
+                <div class="col-lg-4 col-6">
+                  <input id="txtFechaIni" name="txtFechaIni" type="date" class="form-control">
+                </div>
+              </div>
+
 
               <div class="input-group mb-3">
-                <label for="txtFecEnt" class="col-lg-3 col-6 col-form-label ">Fecha Entrega</label>
+                <label for="txtFechaFin" class="col-lg-3 col-6 col-form-label ">Fecha Final</label>
                 <div class="col-lg-4 col-6 me-lg-2">
-                  <input id="txtFecEnt" name="txtFecEnt" type="date" class="form-control">
+                  <input id="txtFechaFin" name="txtFechaFin" type="date" class="form-control">
                 </div>
 
-                 <div class="col-3">
+                <div class="col-3">
                   <button id="btnConsultar" class="btn btn-dark">Consultar</button>
                 </div>
               </div>
+
+              <div class="input-group mb-3">
+                <label for="txtTotalEnt" class="col-lg-3 col-6 col-form-label">Total Entrega</label>
+                <div class="col-lg-4 col-5">
+                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control text-end" disabled>
+                </div>
+              </div>        
+
 
             </div>
           </div>
@@ -185,8 +195,8 @@
                     <tr>
                       <th class="col-1">Codigo</th>
                       <th class="">Nombre PDV</th>
-                      <th class="col-1">Cantidad</th>
-                      <th class="col-3 text-center"></th>
+                      <th class="col-2 text-end">Cantidad</th>
+
                     </tr>
                   </thead>
 
@@ -196,12 +206,6 @@
                 </table>
               </div>
 
-              <div class="input-group mb-3">
-                <label for="txtTotalEnt" class="col-lg-3 col-6 col-form-label">Total Entrega</label>
-                <div class="col-lg-4 col-6">
-                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control text-end" disabled>
-                </div>
-              </div>
             </div>
 
           </div>
@@ -275,7 +279,7 @@
             <div class="card-body">
 
               <form autocomplete="off">
-            
+
 
                 <div class="input-group mb-3 mt-3">
                   <label for="txtNomPdvMod" class="col-lg-3 col-form-label">PDV</label>
@@ -344,7 +348,7 @@
 
   <!-- Archivo JS pagina -->
 
-  <script src="./js/entrega-diaria.js"></script>
+  <script src="./js/reporte-entrega-PDV.js"></script>
 
 </body>
 

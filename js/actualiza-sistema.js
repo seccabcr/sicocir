@@ -112,7 +112,7 @@ $(function () {
         $cbEstadoUsu.val('1');
         $cbTipoUsu.val('2');
         $txtNomUsu.val('');
-        $txtIdUsu.val('').focus();
+        $txtIdUsu.prop('disabled',false).val('').focus();
 
         e.preventDefault();
 

@@ -79,7 +79,7 @@
 
     <div class="row ">
       <div class="pagetitle col-lg-4 mb-lg-3">
-        <h1>Entrega Diaria</h1>
+        <h1>Consulta Liquidación x PDV</h1>
         <!--span>Módulo Vendedor</span-->
 
       </div><!-- End Page Title -->
@@ -87,13 +87,9 @@
       <!-- Barra botones -->
       <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
 
-        <!--button id="btnEnviar" class="btn btn-primary me-3">Enviar</button-->
+        <button id="btnImprimir" class="btn btn-light" data-bs-toggle="tooltip" title="Imprimir"><i
+            class="bi bi-printer"></i></button>
 
-        <!--button id="btnCompartir" type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Compartir"><i
-            class="bi bi-share"></i></button-->
-
-        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
-            class="bi bi-search"></i></button-->
 
       </div>
 
@@ -111,7 +107,7 @@
 
       <div class="row">
 
-        <div class="col-lg-6">
+        <div class="col-lg-5">
 
           <div class="card">
             <div class="card-body">
@@ -139,14 +135,44 @@
               </div>
 
 
-              <div class="input-group mb-3">
-                <label for="txtFecEnt" class="col-lg-3 col-6 col-form-label ">Fecha Entrega</label>
-                <div class="col-lg-4 col-6 me-lg-2">
-                  <input id="txtFecEnt" name="txtFecEnt" type="date" class="form-control">
-                </div>
 
-                 <div class="col-3">
+
+
+              <div class="input-group mb-3">
+                <label for="txtFechaIni" class="col-lg-3 col-5 col-form-label">Fecha Inicial</label>
+                <div class="col-lg-4 col-6">
+                  <input id="txtFechaIni" name="txtFechaIni" type="date" class="form-control">
+                </div>
+              </div>
+
+
+              <div class="input-group mb-3">
+                <label for="txtFechaFin" class="col-lg-3 col-5 col-form-label">Fecha Final</label>
+                <div class="col-lg-4 col-6 me-2">
+                  <input id="txtFechaFin" name="txtFechaFin" type="date" class="form-control">
+                </div>
+                <div class="col-3">
                   <button id="btnConsultar" class="btn btn-dark">Consultar</button>
+                </div>
+              </div>
+
+
+              <div class="input-group mb-3">
+                <label for="txtTotalEnt" class="col-6 col-form-label text-end me-2">Total Entrega</label>
+                <div class="col-lg-4 col-5">
+                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control text-end" disabled>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <label for="txtTotalDev" class="col-6 col-form-label text-end me-2">Total Devolución</label>
+                <div class="col-lg-4 col-5">
+                  <input id="txtTotalDev" name="txtTotalDev" type="text" class="form-control text-end" disabled>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <label for="txtTotalVta" class="col-6 col-form-label text-end me-2">Total Venta</label>
+                <div class="col-lg-4 col-5">
+                  <input id="txtTotalVta" name="txtTotalVta" type="text" class="form-control text-end" disabled>
                 </div>
               </div>
 
@@ -158,20 +184,20 @@
 
 
 
-        <div class="col-lg-6">
+        <div class="col-lg-7">
 
 
           <div class="card">
             <div class="card-body">
 
               <div class="d-flex mt-3 mb-3">
-                <h5>Detalle de Entrega</h5>
+                <h5>Detalle Liquidación</h5>
                 <!--div class="col-2 text-center">
                   <button id="btnAgregaPickPdv" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modBuscaPdv"><i class="bi bi-plus"
                       data-bs-toggle="tooltip" title="Agregar"></i></button>
 
                 </div-->
-                <div id="spinnerEnt" class="col-1" style="display: none">
+                <div id="spinnerTabla" class="col-1" style="display: none">
                   <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
                     <span class="visually-hidden">Cargando...</span>
                   </div>
@@ -180,13 +206,13 @@
 
 
               <div class="table-responsive">
-                <table id="tblEntregaPdvs" class="table table-primary" style="width: 100%;">
+                <table id="tblLiqPdvs" class="table table-primary nowrap" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="col-1">Codigo</th>
-                      <th class="">Nombre PDV</th>
-                      <th class="col-1">Cantidad</th>
-                      <th class="col-3 text-center"></th>
+                      <th class="col-2">Nombre del PDV</th>
+                      <th class="col-2">Entrega</th>
+                      <th class="col-2">Devolución</th>
+                      <th class="col-2">Venta</th>
                     </tr>
                   </thead>
 
@@ -196,12 +222,7 @@
                 </table>
               </div>
 
-              <div class="input-group mb-3">
-                <label for="txtTotalEnt" class="col-lg-3 col-6 col-form-label">Total Entrega</label>
-                <div class="col-lg-4 col-6">
-                  <input id="txtTotalEnt" name="txtTotalEnt" type="text" class="form-control text-end" disabled>
-                </div>
-              </div>
+
             </div>
 
           </div>
@@ -259,67 +280,6 @@
   </div>
 
 
-
-  <!-- Modal para actualizar datos entrega-->
-  <div id="modActEnt" class="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Actualiza Entrega Diaria</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-
-          <div class="card">
-            <div class="card-body">
-
-              <form autocomplete="off">
-            
-
-                <div class="input-group mb-3 mt-3">
-                  <label for="txtNomPdvMod" class="col-lg-3 col-form-label">PDV</label>
-                  <div class="col-lg-9 col-12">
-                    <input id="txtNomPdv" name="txtNomPdv" type="text" class="form-control" disabled>
-                  </div>
-                </div>
-
-                <div class="input-group mb-3">
-                  <label for="txtCanEnt" class="col-lg-3 col-form-label">Cantidad</label>
-                  <div class="col-lg-4 col-6">
-                    <input id="txtCanEnt" name="txtCanEnt" type="text" class="form-control text-end"
-                      oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="10" inputmode="numeric">
-                  </div>
-
-                </div>
-            </div>
-
-          </div>
-
-          <div class="modal-footer">
-            <!--button id="btnCanSuc" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button-->
-            <button id="btnActEnt" type="button" class="btn btn-primary">Actualizar</button>
-          </div>
-
-          </form>
-
-          <div id="spinnerActEnt" class="text-center" style="display: none">
-            <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
-              <span class="visually-hidden">Cargando...</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
-
-
-
-
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
@@ -344,7 +304,7 @@
 
   <!-- Archivo JS pagina -->
 
-  <script src="./js/entrega-diaria.js"></script>
+  <script src="./js/reporte-liquidacion-PDV.js"></script>
 
 </body>
 

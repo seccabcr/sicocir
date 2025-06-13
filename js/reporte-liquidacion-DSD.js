@@ -10,8 +10,6 @@ $(function () {
 
 
     var lista_liq_dis = [];
- 
-
 
     const $txtFechaIni = $('#txtFechaIni')
         .val(obtieneFechaActual())
@@ -29,12 +27,12 @@ $(function () {
     const $txtTotalDev = $('#txtTotalDev');
     const $txtTotalVta = $('#txtTotalVta');
 
-  
+
 
     const $btnConsultar = $('#btnConsultar')
         .click(function (e) {
 
-       
+            resumenLiquidacionDSD();
 
             e.preventDefault();
 
@@ -43,12 +41,13 @@ $(function () {
 
 
 
-   
-    var $tblLiDis = $('#tblLiqDis').DataTable({
+
+    var $tblLiquidacion = $('#tblLiquidacion').DataTable({
         //destroy: true,
         responsive: true,
         data: lista_liq_dis,
         columns: [
+
             {
                 data: 'nom_dis'
 
@@ -82,26 +81,12 @@ $(function () {
     });
 
 
-  
-   
-  
 
 
 
 
-    function limpiaCampos() {
 
-        $txtFechaIni.val(obtieneFechaActual());
-        $txtFechaFin.val(obtieneFechaActual());
-        $txtTotalEnt.val('0');
-        $txtTotalDev.val('0');
-        $txtTotalVta.val('0');
-        $tblLiqPdvs.clear().draw();
-        lista_liq_pdvs = [];
-    }
-
-
-    async function consultaLiquidacionDis() {
+    async function resumenLiquidacionDSD() {
 
         let fechaIni = $txtFechaIni.val();
         let fechaFin = $txtFechaFin.val();
@@ -117,15 +102,14 @@ $(function () {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'lista_liq_diaria_pdv';
-        req.cod_cliente = Number.parseInt($txtCodCliente.val());
-        req.fecha_ini = $txtFechaIni.val();
-        req.fecha_fin = $txtFechaFin.val();
+        req.r = 'resumen_liquidacion_dsd';
+        req.fec_ini = $txtFechaIni.val();
+        req.fec_fin = $txtFechaFin.val();
         req.cod_item = 1;
 
 
-        listaTablaLiq = new Array();
-        $tblLiqPdvs.clear().draw();
+        lista_liq_dis = new Array();
+        $tblLiquidacion.clear().draw();
 
         $('#spinnerModCli').show();
 
@@ -133,17 +117,16 @@ $(function () {
             function (data) {
                 $('#spinnerModCli').hide();
 
-                lista_liq_pdvs = data.resp;
+                let lista = data.resp;
 
                 let totEnt = 0;
                 let totDev = 0;
                 let totVta = 0;
 
-                for (let i = 0; i < lista_liq_pdvs.length; i++) {
+                for (let i = 0; i < lista.length; i++) {
 
-                    let element = lista_liq_pdvs[i];
+                    let element = lista[i];
 
-                    let a_fecha = element.fec_entrega.split('-');
                     let canEnt = Number.parseInt(element.can_entrega);
                     let canDev = Number.parseInt(element.can_dev);
                     let canVta = canEnt - canDev;
@@ -152,16 +135,17 @@ $(function () {
                     totDev += canDev;
                     totVta += canVta;
 
-                    let fechaLiq = new Object();
-                    fechaLiq.fec_ent = a_fecha[2] + '/' + a_fecha[1] + '/' + a_fecha[0];
-                    fechaLiq.can_ent = canEnt;
-                    fechaLiq.can_dev = canDev;
-                    fechaLiq.can_vta = canVta;
 
-                    listaTablaLiq.push(fechaLiq);
+                    let itemTabla = new Object()
+                    itemTabla.nom_dis = element.nom_usuario;
+                    itemTabla.can_ent = canEnt;
+                    itemTabla.can_dev = canDev;
+                    itemTabla.can_vta = canVta;
+
+                    lista_liq_dis.push(itemTabla);
                 }
 
-                $tblLiqDis.rows.add(listaTablaLiq).draw();
+                $tblLiquidacion.rows.add(lista_liq_dis).draw();
                 $txtTotalEnt.val(nf_entero.format(totEnt));
                 $txtTotalDev.val(nf_entero.format(totDev));
                 $txtTotalVta.val(nf_entero.format(totVta));

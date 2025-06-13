@@ -32,7 +32,7 @@ $(function () {
     const $btnConsultar = $('#btnConsultar')
         .click(function (e) {
 
-
+            consultaEntregaDSD();
 
             e.preventDefault();
 
@@ -68,24 +68,25 @@ $(function () {
 
 
 
-   
+
 
 
 
 
     /******************************************************************************************************************** */
 
-    async function consultaEntregaDis() {
+    async function consultaEntregaDSD() {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'lista_entrega_diaria_pdvs';
-        req.cod_distri = Number.parseInt($txtCodDistri.val());
-        req.cod_item = 1;
-        req.fec_entrega = $txtFechaEnt.val();
+        req.r = 'resumen_entregas_dsd';
 
-        lista_entrega_pdvs = new Array();
-        $tblEntregaPdvs.clear().draw();
+        req.cod_item = 1;
+        req.fec_ini = $txtFechaIni.val();
+        req.fec_fin = $txtFechaFin.val();
+
+        lista_entregas = new Array();
+        $tblEntregas.clear().draw();
 
         $('#spinnerEnt').show();
 
@@ -107,16 +108,16 @@ $(function () {
 
                     let itemTabla = new Object();
 
-                    itemTabla.cod_pdv = element.cod_cliente;
-                    itemTabla.nom_pdv = element.nom_cliente;
+                    itemTabla.cod_dis = element.cod_usuario;
+                    itemTabla.nom_dis = element.nom_usuario;
                     itemTabla.can_ent = element.can_entrega
 
                     totalEnt += Number.parseInt(element.can_entrega);
 
-                    lista_entrega_pdvs.push(itemTabla);
+                    lista_entregas.push(itemTabla);
                 }
 
-                $tblEntregaPdvs.rows.add(lista_entrega_pdvs).draw();
+                $tblEntregas.rows.add(lista_entregas).draw();
 
                 $txtTotalEnt.val(nf_entero.format(totalEnt));
 

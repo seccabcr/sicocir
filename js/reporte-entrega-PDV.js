@@ -9,9 +9,9 @@ $(function () {
 
 
 
-    var lista_entrega_pdvs = [];
+    var lista_entregas = [];
     var lista_distribuidores = [];
- 
+
 
     const $txtCodDistri = $('#txtCodDistri')
         .focus(function () {
@@ -46,7 +46,7 @@ $(function () {
 
 
 
-     const $txtFechaIni = $('#txtFechaIni')
+    const $txtFechaIni = $('#txtFechaIni')
         .val(obtieneFechaActual())
         .change(function () {
 
@@ -59,7 +59,7 @@ $(function () {
         });
 
     const $txtTotalEnt = $('#txtTotalEnt');
-  
+
     const $btnBuscaDis = $('#btnBuscaDis')
         .click(function (e) {
 
@@ -67,23 +67,23 @@ $(function () {
 
         });
 
- 
+
 
 
     const $btnConsultar = $('#btnConsultar')
         .click(function (e) {
 
-          
+            consultaEntregasPDV();
 
             e.preventDefault();
 
         });
 
 
-    var $tblEntregaPdvs = $('#tblEntregaPdvs').DataTable({
+    var $tblEntregas = $('#tblEntregas').DataTable({
         //destroy: true,
         responsive: true,
-        data: lista_entrega_pdvs,
+        data: lista_entregas,
         columns: [
             {
                 data: 'cod_pdv',
@@ -146,7 +146,7 @@ $(function () {
 
         $('#modBuscaDis').modal('hide');
 
-        $btnConsultar.prop('disabled', false);
+
 
 
     });
@@ -165,9 +165,9 @@ $(function () {
     function limpiaCampos() {
 
 
-    
-        $tblEntregaPdvs.clear().draw();
-        lista_entrega_pdvs = [];
+
+        $tblEntregas.clear().draw();
+        lista_entregas = [];
 
     }
 
@@ -202,7 +202,7 @@ $(function () {
                     return;
                 }
 
-                $txtNomDistri.val(element.datos.nom_usuario);           
+                $txtNomDistri.val(element.datos.nom_usuario);
 
                 $btnConsultar.focus();
 
@@ -252,17 +252,18 @@ $(function () {
 
     /******************************************************************************************************************** */
 
-    async function consultaEntregaPdvs() {
+    async function consultaEntregasPDV() {
 
         let req = new Object();
         req.w = 'apiSicocir';
-        req.r = 'lista_entrega_diaria_pdvs';
+        req.r = 'resumen_entregas_pdv';
         req.cod_distri = Number.parseInt($txtCodDistri.val());
         req.cod_item = 1;
-        req.fec_entrega = $txtFechaEnt.val();
+        req.fec_ini = $txtFechaIni.val();
+        req.fec_fin = $txtFechaFin.val();
 
-        lista_entrega_pdvs = new Array();
-        $tblEntregaPdvs.clear().draw();
+        lista_entregas = new Array();
+        $tblEntregas.clear().draw();
 
         $('#spinnerEnt').show();
 
@@ -290,10 +291,10 @@ $(function () {
 
                     totalEnt += Number.parseInt(element.can_entrega);
 
-                    lista_entrega_pdvs.push(itemTabla);
+                    lista_entregas.push(itemTabla);
                 }
 
-                $tblEntregaPdvs.rows.add(lista_entrega_pdvs).draw();
+                $tblEntregas.rows.add(lista_entregas).draw();
 
                 $txtTotalEnt.val(nf_entero.format(totalEnt));
 
@@ -301,8 +302,8 @@ $(function () {
     }
 
 
-  
-   
+
+
 
     if (sessionStorage.getItem('TIPO_USUARIO') == '1') {
 

@@ -429,12 +429,22 @@ $(function () {
 
     function imprimeReporte() {
 
+
+
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/Windows Phone/i)) {
+
+         Swal.fire({ title: "Proceso de impresión no esta disponible en dispositivos móviles", type: "error" });
+            return;
+        }
+
+
+
         if (listaUsuarios.length > 0) {
             console.log('Imprimiendo reporte');
 
             let datos = new Object();
 
-            datos.lista = lista_usuarios;         
+            datos.lista = lista_usuarios;
 
             new Listado_Distribuidores(datos);
 

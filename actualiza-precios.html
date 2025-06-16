@@ -17,13 +17,14 @@
 
 
   <!-- Vendor CSS Files -->
-  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/boostrap/5.3.0/bootstrap.min.css" rel="stylesheet">
   <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
-
   <!-- DataTables CSS files-->
-  <link rel="stylesheet" type="text/css" href="../assets/datatables/datatables.min.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/2.1.5/dataTables.bootstrap5.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.css" />
 
+ 
   <!-- Template Main CSS File -->
   <link href="./css/style.css" rel="stylesheet">
 
@@ -251,7 +252,7 @@
                               </div>
                             </div>
 
-                            
+
                             <div class="input-group mb-3 mt-3">
                               <label for="txtFecIniInd" class="col-lg-3 col-5 col-form-label">Fecha Inicio</label>
                               <div class="col-lg-3 col-6">
@@ -332,70 +333,68 @@
 
     </section>
 
+  </main>
 
 
+  <!-- Modal Buscar Distribuidor-->
+  <div class="modal" id="modBuscaDis" tabindex="-1" aria-labelledby="modBuscaDisLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modBuscaDisLabel">Busca Distribuidor</h5>
+          <button id="btnCerrarModDis" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
 
-    <!-- Modal Buscar Distribuidor-->
-    <div class="modal" id="modBuscaDis" tabindex="-1" aria-labelledby="modBuscaDisLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modBuscaDisLabel">Busca Distribuidor</h5>
-            <button id="btnCerrarModDis" type="button" class="btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="card">
-              <div class="card-body">
+              <div class="table-responsive">
+                <table id="tblDistri" class="table table-sm table-striped" width="100%">
+                  <thead>
+                    <tr>
+                      <th class="col-1">Código</th>
+                      <th class="">Nombre</th>
+                      <th class="col-1"></th>
 
-                <div class="table-responsive">
-                  <table id="tblDistri" class="table table-sm table-striped" width="100%">
-                    <thead>
-                      <tr>
-                        <th class="col-1">Código</th>
-                        <th class="">Nombre</th>
-                        <th class="col-1"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
-
-
           </div>
-          <!--div class="modal-footer">
-          <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
-        </div-->
         </div>
       </div>
     </div>
+  </div>
 
 
 
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+    </div>
+
+  </footer><!-- End Footer -->
 
 
-    <!-- ======= Footer ======= -->
-    <footer id="footer" class="footer">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
-      </div>
+  <!-- Vendor JS Files -->
+  <script src="../assets/boostrap/5.3.0/bootstrap.bundle.min.js"></script>
 
-    </footer><!-- End Footer -->
+  <!--script src="../assets/datatables/datatables.min.js"></script-->
+  <script src="../assets/datatables/2.1.5/datatables.js"></script>
+  <script src="../assets/datatables/2.1.5/dataTables.bootstrap5.js"></script>
 
+  <script src="../assets/datatables/responsive/3.0.3/dataTables.responsive.js"></script>
+  <script src="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.js"></script>
 
+  <!-- Archivo JS pagina -->
 
-    <!-- Vendor JS Files -->
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/datatables/datatables.min.js"></script>
-
-    <!-- Archivo JS pagina -->
-
-    <script src="./js/actualiza-precios.js"></script>
+  <script src="./js/actualiza-precios.js"></script>
 
 </body>
 

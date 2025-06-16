@@ -48,6 +48,16 @@ $(function () {
         });
 
 
+    const $btnImprimir = $('#btnImprimir')
+        .click(function (e) {
+
+            imprimeReporte();
+
+        });
+
+
+
+
 
     var $tblClientes = $('#tblClientes').DataTable({
 
@@ -64,13 +74,19 @@ $(function () {
             },
 
             {
-                data: 'tipo_neg'
+                data: 'tipo_neg',
+                className: 'text-center'
             },
             /*{
                 data: 'fec_ape'
             },*/
             {
                 data: 'est_cliente'
+            },
+            {
+                defaultContent: '<button class="ubicar btn btn-warning"><i class="bi bi-geo-alt"></i></button>',
+                className: 'text-center',
+                with: "10%"
             }
 
         ],
@@ -79,6 +95,28 @@ $(function () {
         language: lenguaje_data_table
 
     }); /// Fin de creacion de datatable
+
+    $tblClientes.on('click', 'button.ubicar', function () {
+
+        let fila = $tblClientes.row($(this).parents('tr')).data();
+
+        if (fila.latidud == 0 || fila.longitud == 0) {
+            Swal.fire({ title: 'Coordenadas invalidas. No se puede mostrar la ubicación', icon: "error" });
+            return;
+
+        }
+
+       let link = 'https://maps.google.com/?q=' + fila.latitud + ',' + fila.longitud;
+
+        //let link = 'https://www.google.com/maps/search/?api=1&query='+fila.latitud+','+fila.longitud+'&query_place_id='+fila.nom_cliente;
+
+        //https://www.google.com/maps/place/Lim%C3%B3n,+Gu%C3%A1piles/@10.2097898,-83.9323539,12z/data=!3m1!4b1!4m6!3m5!1s0x8fa0b8100cd0926d:0xaba36611d67da863!8m2!3d10.2136788!4d-83.7890894!16s%2Fg%2F1ym_l87bf?authuser=0&entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D
+
+
+        window.open(link,'_blank')
+
+      
+    });
 
 
     var $tblDistri = $('#tblDistri').DataTable({
@@ -97,7 +135,7 @@ $(function () {
 
             {
                 defaultContent: '<button class="editar btn btn-light"><i class="bi bi-arrow-right-circle"></i></button>',
-                className: 'dt-right',
+                className: 'text-center',
                 with: "10%"
             }
 
@@ -225,7 +263,7 @@ $(function () {
 
 
         await fetch_postRequest(req,
-            function (data) {            
+            function (data) {
 
                 $('#spinner').hide();
 
@@ -241,7 +279,8 @@ $(function () {
                     itemTabla.cod_cliente = element.cod_cliente;
                     itemTabla.nom_cliente = element.nom_cliente;
                     itemTabla.tipo_neg = element.nom_tipo_neg;
-                    //itemTabla.fec_ape = element.fec_reg;
+                    itemTabla.latitud = Number.parseFloat(element.latitud);
+                    itemTabla.longitud = Number.parseFloat(element.longitud);
                     itemTabla.est_cliente = element.estado_cli == '1' ? 'ACTIVO' : 'INACTIVO';
 
                     listaClientes.push(itemTabla);
@@ -254,6 +293,30 @@ $(function () {
             });
     }
 
+    function imprimeReporte() {
+
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/Windows Phone/i)) {
+
+            Swal.fire({ title: "Proceso de impresión no esta disponible en dispositivos móviles", type: "error" });
+            return;
+        }
+
+
+
+        if (listaClientes.length > 0) {
+            console.log('Imprimiendo reporte');
+
+            let datos = new Object();
+
+            datos.lista = listaClientes;
+
+            new Listado_Clientes(datos);
+
+        }
+    }
+
+
+
 
 
 
@@ -263,8 +326,8 @@ $(function () {
         $txtCodDistri.val(sessionStorage.getItem('COD_USUARIO'));
         $txtNomDistri.val(sessionStorage.getItem('NOM_USUARIO'));
 
-        $txtCodDistri.prop('disabled',true);
-        $btnBuscaDis.prop('disabled',true);
+        $txtCodDistri.prop('disabled', true);
+        $btnBuscaDis.prop('disabled', true);
 
         llenaTablaClientes();
 

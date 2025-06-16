@@ -11,11 +11,8 @@ $(function () {
 
     var lista_entrega_pdvs = [];
     var lista_distribuidores = [];
-    var listaClientes = [];
 
-    var codCliente = 0;
-
-
+    var mPreItem = 0;
 
     const $txtCodDistri = $('#txtCodDistri')
         .focus(function () {
@@ -26,8 +23,6 @@ $(function () {
             $txtCodDistri.val('');
             $txtNomDistri.val('');
 
-            //$btnBuscaCli.prop('disabled', true);
-            //$txtCodCliente.prop('disabled', true);
 
         }).keydown(function (e) {
             let code = e.keyCode || e.which;
@@ -36,7 +31,10 @@ $(function () {
 
                 if ($txtCodDistri.val().length > 0) {
 
-                    consultaDistribuidor();
+                    consultaDistribuidor().then(() => {
+                        consultaPrecioDSD();
+                        llenaTablaEntregaPdvs();
+                    });
                 }
 
 
@@ -53,33 +51,13 @@ $(function () {
     const $txtFechaEnt = $('#txtFecEnt')
         .val(obtieneFechaActual())
         .change(function () {
+            consultaPrecioDSD().then(() => {
+                $tblEntregaPdvs.clear().draw();
+                lista_entrega_pdvs = new Array();
+                llenaTablaEntregaPdvs();
+            });
 
         });
-
-
-
-    /*const $txtCodCliente = $('#txtCodPdv')
-        .focus(function () {
-            $(this).select();
-
-            $txtNomCliente.val('');
-            $txtCanEnt.prop('disabled', true);
-            $btnActEntrega.prop('disabled', true);
-
-
-        }).keydown(function (e) {
-            let code = e.keyCode || e.which;
-            if (code == 13 || code == 9) {
-
-                e.preventDefault();
-
-                if ($txtCodCliente.val().length > 0) {
-
-                    consultaCliente();
-                }
-
-            }
-        });*/
 
 
 
@@ -115,15 +93,9 @@ $(function () {
         .click(function (e) {
 
             llenaTablaDistribuidores();
+            e.preventDefault();
 
         });
-
-    /* const $btnBuscaCli = $('#btnBuscaPdv')
-         .click(function (e) {
- 
- 
-             llenaTablaClientes();
-         });*/
 
 
 
@@ -137,23 +109,15 @@ $(function () {
 
         });
 
-    /*const $btnCancelar = $('#btnCancelar')
-        .click(function (e) {
 
-
-
-            e.preventDefault();
-
-        });*/
-
-    const $btnConsultar = $('#btnConsultar')
+    /*const $btnConsultar = $('#btnConsultar')
         .click(function (e) {
 
             llenaTablaEntregaPdvs();
 
             e.preventDefault();
 
-        });
+        });*/
 
 
     var $tblEntregaPdvs = $('#tblEntregaPdvs').DataTable({
@@ -202,32 +166,6 @@ $(function () {
 
     });
 
-    /*$tblEntregaPdvs.on('click', 'button.eliminar', function () {
-
-        let fila = $tblEntregaPdvs.row($(this).parents('tr')).data();
-
-        //console.log(fila)
-
-        Swal
-            .fire({
-                title: "Desea Eliminar la Entrega del PDV?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: "Sí, eliminar",
-                cancelButtonText: "Cancelar",
-            })
-            .then(resultado => {
-                if (resultado.value) {
-
-
-
-                }
-            });
-
-    });*/
-
-
-
 
     var $tblDistri = $('#tblDistri').DataTable({
 
@@ -266,9 +204,11 @@ $(function () {
 
         $('#modBuscaDis').modal('hide');
 
+        consultaPrecioDSD();
+        llenaTablaEntregaPdvs();
 
-        $txtFechaEnt.prop('disabled', false);
-        $btnConsultar.prop('disabled', false);
+        $txtFechaEnt.prop('disabled', false).focus();
+        //$btnConsultar.prop('disabled', false).focus();
 
 
     });
@@ -282,7 +222,7 @@ $(function () {
 
         $txtFechaEnt.prop('disabled', true);
         //$txtCanEnt.prop('disabled', true);
-        $btnConsultar.prop('disabled', true);
+        //$btnConsultar.prop('disabled', true);
 
     }
 
@@ -290,7 +230,7 @@ $(function () {
     function limpiaCampos() {
 
 
-        $txtFechaEnt.val(obtieneFechaActual());
+        //$txtFechaEnt.val(obtieneFechaActual());
 
         $tblEntregaPdvs.clear().draw();
         lista_entrega_pdvs = [];
@@ -330,14 +270,44 @@ $(function () {
 
                 $txtNomDistri.val(element.datos.nom_usuario);
 
-                $txtFechaEnt.prop('disabled', false);
-                $btnConsultar.prop('disabled', false);
+                $txtFechaEnt.prop('disabled', false).focus();
 
-                $btnConsultar.focus();
+                //$btnConsultar.prop('disabled', false);
+
+                //$btnConsultar.focus();
 
             });
     }
 
+    async function consultaPrecioDSD() {
+
+        $('#spinner').show();
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'consulta_precio_dsd';
+        req.cod_usuario = Number.parseInt($txtCodDistri.val());
+        req.cod_item = 1;
+        req.fec_entrega = $txtFechaEnt.val();
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                //console.log(data)
+
+                $('#spinner').hide();
+
+                mPreItem = Number.parseFloat(data.resp.pre_item);
+
+
+            });
+    }
+
+
+    /*************************************************************************************
+     * 
+     *  */
 
     async function llenaTablaDistribuidores() {
 
@@ -399,8 +369,6 @@ $(function () {
         await fetch_postRequest(req,
             function (data) {
 
-                //console.log(data)
-
                 $('#spinnerEnt').hide();
 
                 let totalEnt = 0;
@@ -438,6 +406,7 @@ $(function () {
 
         req.cod_cliente = codCliente;
         req.cod_item = 1;
+        req.pre_item = mPreItem;
         req.fec_entrega = $txtFechaEnt.val();
         req.can_entrega = Number.parseInt($txtCanEnt.val());
         req.id_usu_reg = sessionStorage.getItem('ID_USUARIO');
@@ -449,9 +418,18 @@ $(function () {
 
                 $('#spinner').hide();
 
+                let response = data.resp;
+
+                if (response.estadoRes == 'error') {
+                    $txtCanEnt.focus();
+                    Swal.fire({ title: response.msg, icon: "error" });
+                    return;
+                }
+
+
+
                 $('#modActEnt').modal('hide');
 
-                let response = data.resp;
 
                 Swal.fire({
                     position: 'top-end',
@@ -475,9 +453,12 @@ $(function () {
         $btnBuscaDis.prop('disabled', true);
         $txtCodDistri.prop('disabled', true);
 
-        $txtFechaEnt.prop('disabled', false);
-        $btnConsultar.prop('disabled', false);
-        $btnConsultar.focus();
+        consultaPrecioDSD();
+        llenaTablaEntregaPdvs();
+
+        $txtFechaEnt.prop('disabled', false).focus();
+        //$btnConsultar.prop('disabled', false);
+        //$btnConsultar.focus();
 
     }
 

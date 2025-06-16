@@ -69,6 +69,15 @@ $(function () {
 
         });
 
+    const $btnimprimir = $('#btnImprimir')
+        .click(function (e) {
+
+            imprimeReporte();
+
+            e.preventDefault();
+
+        });
+
 
 
     const $btnBuscaDis = $('#btnBuscaDis')
@@ -321,9 +330,38 @@ $(function () {
             });
     }
 
+    function imprimeReporte() {
+
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/Windows Phone/i)) {
+
+            Swal.fire({ title: "Proceso de impresión no esta disponible en dispositivos móviles", type: "error" });
+
+            return;
+        }
 
 
 
+        if (lista_liq_pdvs.length > 0) {
+            console.log('Imprimiendo reporte');
+
+            let datos = new Object();
+
+            let a_fecIni = $txtFechaIni.val().split('-');
+            let a_fecFin = $txtFechaFin.val().split('-');
+
+            datos.fecIni = a_fecIni[2] + '/' + a_fecIni[1] + '/' + a_fecIni[0];
+            datos.fecFin = a_fecFin[2] + '/' + a_fecFin[1] + '/' + a_fecFin[0];
+            datos.totEnt = $txtTotalEnt.val();
+            datos.totDev = $txtTotalDev.val();
+            datos.totVta = $txtTotalVta.val();
+            datos.nom_dis = $txtNomDistri.val();
+
+            datos.listaMov = lista_liq_pdvs;
+
+            new Liquidacion_PDV(datos);
+
+        }
+    }
 
 
     if (sessionStorage.getItem('TIPO_USUARIO') == '1') {

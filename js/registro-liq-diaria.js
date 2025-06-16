@@ -599,15 +599,15 @@ $(function () {
             function (data) {
                 $('#spinnerActLiq').hide();
 
-                $('#modActLiqDia').modal('hide');
-
                 let response = data.resp;
 
                 if (response.estadoRes == 'error') {
                     $txtCanDev.focus();
-                    Swal.fire({ title: response.msg, icon: "warning" });
+                    Swal.fire({ title: response.msg, icon: "error" });
                     return;
                 }
+
+                $('#modActLiqDia').modal('hide');
 
                 Swal.fire({
                     position: 'top-end',
@@ -632,7 +632,7 @@ $(function () {
 
         $btnBuscaDis.prop('disabled', true);
         $txtCodDistri.prop('disabled', true);
-        $btnBuscaCli.prop('disabled', false);    
+        $btnBuscaCli.prop('disabled', false);
         $txtCodCliente.focus();
 
     }

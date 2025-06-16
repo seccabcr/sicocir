@@ -11,7 +11,11 @@ $(function () {
     var listaDistri = new Array();
 
     var lista_precios_gen = new Array();
+    var listaTablaPreGen = new Array();
     var lista_precios_ind = new Array();
+    var listaTablaPreInd = new Array();
+
+
 
 
 
@@ -21,8 +25,6 @@ $(function () {
 
     const $txtPreGen = $('#txtPreGen').val('0.00');
     const $txtPreInd = $('#txtPreInd').val('0.00');
-
-
 
     const $btnActPreGen = $('#btnActPreGen');
     const $btnActPreInd = $('#btnActPreInd');
@@ -39,261 +41,257 @@ $(function () {
 
         });
 
+    var $tblDistri = $('#tblDistri');
+    var $tblPreGen = $('#tblPreGen');
+    var $tblPreInd = $('#tblPreInd');
 
 
-    function ini_componentes() {
 
+    $tblDistri.DataTable({
 
+        destroy: true,
+        data: listaDistri,
+        columns: [
+            {
+                data: 'cod_dis',
+                visible: false
 
-        var $tblDistri = $('#tblDistri').DataTable({
+            },
+            {
+                data: 'nom_dis'
+            },
 
-            destroy: true,
-            data: listaDistri,
-            columns: [
-                {
-                    data: 'cod_dis',
-                    visible: false
+            {
+                defaultContent: '<button class="editar btn btn-light"><i class="bi bi-arrow-right-circle"></i></button>',
+                className: 'dt-right',
+                with: "10%"
+            }
 
-                },
-                {
-                    data: 'nom_dis'
-                },
+        ],
+        info: false,
+        ordering: false,
+        language: lenguaje_data_table
 
-                {
-                    defaultContent: '<button class="editar btn btn-light"><i class="bi bi-arrow-right-circle"></i></button>',
-                    className: 'dt-right',
-                    with: "10%"
-                }
+    }); /// Fin de creacion de datatable
 
-            ],
-            info: false,
-            ordering: false,
-            language: lenguaje_data_table
 
-        }); /// Fin de creacion de datatable
 
+    $tblDistri.on('click', 'button.editar', function () {
 
+        let fila = $tblDistri.row($(this).parents('tr')).data();
 
-        $tblDistri.on('click', 'button.editar', function () {
+        //$('#txtNomComercial').focus();
 
-            let fila = $tblDistri.row($(this).parents('tr')).data();
+        $('#modBuscaDis').modal('hide');
 
-            //$('#txtNomComercial').focus();
+        $txtCodDistri.val(fila.cod_dis);
+        $txtNomDistri.val(fila.nom_dis);
+    });
 
-            $('#modBuscaDis').modal('hide');
 
-            $txtCodDistri.val(fila.cod_dis);
-            $txtNomDistri.val(fila.nom_dis);
-        });
 
+    $tblPreGen.DataTable({
+        //destroy: true,
+        responsive: true,
+        data: listaTablaPreGen,
+        columns: [
 
 
-        var $tblPreGen = $('#tblPreGen').DataTable({
-            //destroy: true,
-            responsive: true,
-            data: lista_precios_gen,
-            columns: [
+            {
+                data: 'fec_ini'
 
+            },
+            {
+                data: 'pre_item',
+                className: 'text-end',
+                render: DataTable.render.number(',', '.'),
+                searchable: false
 
-                {
-                    data: 'fec_ini'
+            },
+            {
+                defaultContent: '<button class="editar btn btn-primary"><i class="bi bi-pen"></i></button> <button class="eliminar btn btn-danger"><i class="bi bi-x"></i></button>',
+                className: 'text-center'
 
-                },
-                {
-                    data: 'pre_item',
-                    className: 'text-end',
-                    render: DataTable.render.number(',', '.'),
-                    searchable: false
+            }
 
-                },
-                {
-                    defaultContent: '<button class="editar btn btn-primary"><i class="bi bi-pen"></i></button> <button class="eliminar btn btn-danger"><i class="bi bi-x"></i></button>',
-                    className: 'text-center'
+        ],
+        info: false,
+        ordering: false,
+        language: lenguaje_data_table
+    });
 
-                }
 
-            ],
-            info: false,
-            ordering: false,
-            language: lenguaje_data_table
-        });
+    $tblPreGen.on('click', 'button.editar', function () {
 
+        let fila = $tblPreGen.row($(this).parents('tr')).data();
 
-        $tblPreGen.on('click', 'button.editar', function () {
 
-            let fila = $tblPreGen.row($(this).parents('tr')).data();
+    });
 
+    $tblPreGen.on('click', 'button.eliminar', function () {
 
-        });
+        let fila = $tblPreGen.row($(this).parents('tr')).data();
 
-        $tblPreGen.on('click', 'button.eliminar', function () {
 
-            let fila = $tblPreGen.row($(this).parents('tr')).data();
-
-
-            Swal
-                .fire({
-                    title: "Desea Eliminar el precio registrado?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar",
-                })
-                .then(resultado => {
-                    if (resultado.value) {
-
-                    }
-                });
-
-        });
-
-
-        var $tblPreInd = $('#tblPreInd').DataTable({
-            //destroy: true,
-            responsive: true,
-            data: lista_precios_ind,
-            columns: [
-
-
-                {
-                    data: 'fec_ini'
-
-                },
-                {
-                    data: 'pre_item',
-                    className: 'text-end',
-                    render: DataTable.render.number(',', '.'),
-                    searchable: false
-
-                },
-                {
-                    defaultContent: '<button class="editar btn btn-primary"><i class="bi bi-pen"></i></button> <button class="eliminar btn btn-danger"><i class="bi bi-x"></i></button>',
-                    className: 'text-center'
-
-                }
-
-            ],
-            info: false,
-            ordering: false,
-            language: lenguaje_data_table
-        });
-
-
-        $tblPreInd.on('click', 'button.editar', function () {
-
-            let fila = $tblPreInd.row($(this).parents('tr')).data();
-
-
-        });
-
-        $tblPreInd.on('click', 'button.eliminar', function () {
-
-            let fila = $tblPreInd.row($(this).parents('tr')).data();
-
-
-            Swal
-                .fire({
-                    title: "Desea Eliminar el precio registrado?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar",
-                })
-                .then(resultado => {
-                    if (resultado.value) {
-
-                    }
-                });
-
-        });
-
-
-
-        $txtCodDistri
-            .focus(function () {
-                $(this).select();
-                limpiaCampos();
-                inactivaCampos();
-
-                $txtCodDistri.val('');
-                $txtNomDistri.val('');
-
-
-            }).keydown(function (e) {
-                let code = e.keyCode || e.which;
-                if (code == 13 || code == 9) {
-                    e.preventDefault();
-
-                    if ($txtCodDistri.val().length > 0) {
-
-                        consultaDistribuidor();
-                    }
-
+        Swal
+            .fire({
+                title: "Desea Eliminar el precio registrado?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+            })
+            .then(resultado => {
+                if (resultado.value) {
 
                 }
             });
 
-        $btnBuscaDis.click(function (e) {
-
-            //$('#modBuscaDis').modal('show');
-
-            llenaTablaDistribuidores();
-
-            e.preventDefault();
-
-        });
+    });
 
 
-        $txtPreGen
-            .focus(function () {
-                $(this).select();
+    $tblPreInd.DataTable({
+        //destroy: true,
+        responsive: true,
+        data: listaTablaPreInd,
+        columns: [
 
-            }).keydown(function (e) {
-                let code = e.keyCode || e.which;
-                if (code == 13 || code == 9) {
 
-                    let x = Number.parseFloat($(this).val());
-                    $(this).val(nf_decimal.format(x));
+            {
+                data: 'fec_ini'
 
-                    $btnActPreGen.focus();
-                    e.preventDefault();
+            },
+            {
+                data: 'pre_item',
+                className: 'text-end',
+                render: DataTable.render.number(',', '.'),
+                searchable: false
+
+            },
+            {
+                defaultContent: '<button class="editar btn btn-primary"><i class="bi bi-pen"></i></button> <button class="eliminar btn btn-danger"><i class="bi bi-x"></i></button>',
+                className: 'text-center'
+
+            }
+
+        ],
+        info: false,
+        ordering: false,
+        language: lenguaje_data_table
+    });
+
+
+    $tblPreInd.on('click', 'button.editar', function () {
+
+        let fila = $tblPreInd.row($(this).parents('tr')).data();
+
+
+    });
+
+    $tblPreInd.on('click', 'button.eliminar', function () {
+
+        let fila = $tblPreInd.row($(this).parents('tr')).data();
+
+
+        Swal
+            .fire({
+                title: "Desea Eliminar el precio registrado?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+            })
+            .then(resultado => {
+                if (resultado.value) {
+
                 }
             });
 
-        $txtPreInd
-            .focus(function () {
-                $(this).select();
+    });
 
-            }).keydown(function (e) {
-                let code = e.keyCode || e.which;
-                if (code == 13 || code == 9) {
 
-                    let x = Number.parseFloat($(this).val());
-                    $(this).val(nf_decimal.format(x));
 
-                    $btnActPreInd.focus();
-                    e.preventDefault();
+    $txtCodDistri
+        .focus(function () {
+            $(this).select();
+            
+            $txtCodDistri.val('');
+            $txtNomDistri.val('');
+
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+                e.preventDefault();
+
+                if ($txtCodDistri.val().length > 0) {
+
+                    consultaDistribuidor();
                 }
-            });
 
 
+            }
+        });
 
-        $btnActPreGen.click(function (e) {
+    $btnBuscaDis.click(function (e) {
+
+        //$('#modBuscaDis').modal('show');
+
+        llenaTablaDistribuidores();
+
+        e.preventDefault();
+
+    });
 
 
-            e.preventDefault();
+    $txtPreGen
+        .focus(function () {
+            $(this).select();
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+
+                let x = Number.parseFloat($(this).val());
+                $(this).val(nf_decimal.format(x));
+
+                $btnActPreGen.focus();
+                e.preventDefault();
+            }
+        });
+
+    $txtPreInd
+        .focus(function () {
+            $(this).select();
+
+        }).keydown(function (e) {
+            let code = e.keyCode || e.which;
+            if (code == 13 || code == 9) {
+
+                let x = Number.parseFloat($(this).val());
+                $(this).val(nf_decimal.format(x));
+
+                $btnActPreInd.focus();
+                e.preventDefault();
+            }
         });
 
 
-        $btnActPreInd.click(function (e) {
+
+    $btnActPreGen.click(function (e) {
 
 
-            e.preventDefault();
-        });
+        e.preventDefault();
+    });
 
 
+    $btnActPreInd.click(function (e) {
 
-    }
+
+        e.preventDefault();
+    });
+
+
 
 
     /***************************************************************
@@ -327,14 +325,11 @@ $(function () {
                 }
 
                 $txtNomDistri.val(element.datos.nom_usuario);
+                $txtPreInd.focus();
 
 
             });
     }
-
-
-
-
 
 
     async function llenaTablaDistribuidores() {
@@ -373,6 +368,53 @@ $(function () {
             });
     }
 
-    ini_componentes();
+
+    async function llenaTablaPreciosGen() {
+
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_precios_gen';
+        req.cod_item = 1;
+
+
+        listaTablaPreGen = new Array();
+       
+        $tblPreGen.clear().draw();
+
+        $('#spinner').show();
+
+        await fetch_postRequest(req,
+            function (data) {
+                $('#spinner').hide();
+
+                console.log(data)
+
+                lista_precios_gen = data.resp;
+
+                for (let i = 0; i < lista_precios_gen.length; i++) {
+
+                    let element = lista_precios_gen[i];
+
+                    let a_fecha = element.fec_ini.split('-');
+                    let preItem = Number.parseFloat(element.pre_item);
+
+
+                    let fechaPre = new Object();
+                    fechaPre.fec_ini = a_fecha[2] + '/' + a_fecha[1] + '/' + a_fecha[0];
+                    fechaPre.pre_item = preItem;
+
+                    listaTablaPreGen.push(fechaPre);
+                }
+
+                $tblPreGen.rows.add(listaTablaPreGen).draw();
+
+            });
+    }
+
+
+  
+
+    llenaTablaPreciosGen()
 
 });

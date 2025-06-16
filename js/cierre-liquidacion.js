@@ -27,10 +27,6 @@ $(function () {
         });
 
 
-
-
-
-
     const $btnActCierre = $('#btnActCierre')
         .click(function (e) {
 
@@ -137,8 +133,9 @@ $(function () {
         req.cod_dis = codDis;
         req.fec_ini = $txtFechaIni.val();
         req.fec_fin = $txtFechaFin.val();
-        req.est_mov = $estCierre.prop('checked') ? 0 : 1;
-
+        req.est_mov = $estCierre.prop('checked') ? 2 : 1;
+        
+        
         $('#spinnerActCierre').show();
 
         await fetch_postRequest(req,

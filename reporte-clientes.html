@@ -85,7 +85,7 @@
       </div><!-- End Page Title -->
 
       <!-- Barra botones -->
-      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">      
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
 
         <button id="btnImprimir" class="btn btn-light" data-bs-toggle="tooltip" title="Imprimir"><i
             class="bi bi-printer"></i></button-->
@@ -131,7 +131,7 @@
                 <div class="col-lg-9 col-12">
                   <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
                 </div>
-              </div>          
+              </div>
 
 
 
@@ -151,7 +151,7 @@
 
               <div class="d-flex mt-3 mb-3">
                 <h5>Clientes registrados</h5>
-              
+
                 <div id="spinnerEnt" class="col-1" style="display: none">
                   <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
                     <span class="visually-hidden">Cargando...</span>
@@ -161,14 +161,15 @@
 
 
               <div class="table-responsive">
-                <table id="tblClientes" class="table table-primary " style="width: 100%;">
+                <table id="tblClientes" class="table table-primary nowrap" style="width: 100%;">
                   <thead>
                     <tr>
                       <th class="col-1">Codigo</th>
                       <th class="">Nombre Cliente</th>
-                      <th class="col-2 text-center">Tipo Negocio</th>
+                      <th class="col-4 text-center">Tipo Negocio</th>
                       <!--th class="col-2 text-center">Fecha Apertura</th-->
-                      <th class="col-1">Estado</th>                    
+                      <th class="col-1">Estado</th>                     
+                      <th class="col-1"></th>
                     </tr>
                   </thead>
 
@@ -178,12 +179,12 @@
                 </table>
               </div>
 
-             
+
+            </div>
+
           </div>
 
         </div>
-
-      </div>
 
 
 
@@ -262,6 +263,9 @@
   <!-- Archivo JS pagina -->
 
   <script src="./js/reporte-clientes.js"></script>
+  <script src="../assets/jsPDF/jspdf.debug.js"></script>
+  <script src="./js/reportesPDF.js"></script>
+
 
 </body>
 

@@ -50,8 +50,9 @@ $(function () {
         let x = $idUsuario.val().replace(/ /g, '');
         $idUsuario.val(x.toLowerCase());
 
-        let url = window.location.origin + '/sicocir-ge/'; // Url API
-        console.log(url)
+        let url = window.location.origin + '/sicocir-ge/'; // Url API pruebas
+        //let url = window.location.origin + ''; // Url API sicocir-ge.com
+        //console.log(url)
         sessionStorage.setItem("URL_API", url);
 
 

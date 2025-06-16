@@ -7,8 +7,6 @@ $(function () {
     activaBotonMenu();
 
 
-
-
     var lista_liq_dis = [];
 
     const $txtFechaIni = $('#txtFechaIni')
@@ -34,6 +32,14 @@ $(function () {
 
             resumenLiquidacionDSD();
 
+            e.preventDefault();
+
+        });
+
+    const $btnImprimir = $('#btnImprimir')
+        .click(function (e) {
+
+            imprimeReporte()
             e.preventDefault();
 
         });
@@ -151,6 +157,37 @@ $(function () {
                 $txtTotalVta.val(nf_entero.format(totVta));
 
             });
+    }
+
+    function imprimeReporte() {
+
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/Windows Phone/i)) {
+
+           Swal.fire({ title: "Proceso de impresión no esta disponible en dispositivos móviles", type: "error" });
+            return;
+        }
+
+
+
+        if (lista_liq_dis.length > 0) {
+            console.log('Imprimiendo reporte');
+
+            let datos = new Object();
+
+            let a_fecIni = $txtFechaIni.val().split('-');
+            let a_fecFin = $txtFechaFin.val().split('-');
+
+            datos.fecIni = a_fecIni[2] + '/' + a_fecIni[1] + '/' + a_fecIni[0];
+            datos.fecFin = a_fecFin[2] + '/' + a_fecFin[1] + '/' + a_fecFin[0];
+            datos.totEnt = $txtTotalEnt.val();
+            datos.totDev = $txtTotalDev.val();
+            datos.totVta = $txtTotalVta.val();
+
+            datos.listaMov = lista_liq_dis;
+
+            new Liquidacion_DSD(datos);
+
+        }
     }
 
 

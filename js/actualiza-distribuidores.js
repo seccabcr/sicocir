@@ -75,6 +75,13 @@ $(function () {
             $btnActUsuario.focus();
         });
 
+    const $cbEjecutivos = $('#cbEjecutivos')
+        .change(function () {
+
+            $btnActUsuario.focus();
+        });
+
+
 
     const $cbFiltraDis = $('#cbFiltraDis')
         .change(function () {
@@ -210,6 +217,7 @@ $(function () {
         $txtIdUsu.prop('disabled', true);
         $txtNomUsu.prop('disabled', true);
         $cbEstadoUsu.prop('disabled', true);
+        $cbEjecutivos.prop('disabled', true);
         $btnActUsuario.prop('disabled', true);
         $btnResPin.prop('disabled', true);
 
@@ -220,6 +228,7 @@ $(function () {
         $txtIdUsu.prop('disabled', nuevoUsu == false);
         $txtNomUsu.prop('disabled', false);
         $cbEstadoUsu.prop('disabled', false);
+        $cbEjecutivos.prop('disabled', false);
         $btnActUsuario.prop('disabled', false);
 
     }
@@ -229,6 +238,7 @@ $(function () {
         $txtIdUsu.val('');
         $txtNomUsu.val('');
         $cbEstadoUsu.val('1');
+        $cbEjecutivos.val('0');
 
 
     }
@@ -246,6 +256,45 @@ $(function () {
 
     }
 
+    async function llenaComboEjecutivos() {
+
+        let req = new Object();
+        req.w = 'apiSicocir';
+        req.r = 'lista_ejecutivos';
+        req.filtro = 1;
+
+
+        $cbEjecutivos.empty();
+
+        $cbEjecutivos.append($("<option>", {
+            value: '0',
+            text: 'Sin asignar'
+        }));
+
+
+        await fetch_postRequest(req,
+            function (data) {
+
+                console.log(data)
+
+                let items = data.resp;
+
+                for (item in items) {
+
+                    let _codEje = items[item]['cod_usuario'];
+                    let _nomEje = items[item]['nom_usuario'];
+
+                    $cbEjecutivos.append($("<option>", {
+                        value: _codEje,
+                        text: _nomEje
+                    }));
+                }
+
+
+            });
+
+    }
+
 
     async function llenaTablaDistribuidores() {
 
@@ -253,6 +302,8 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'lista_distribuidores';
         req.filtro = Number.parseInt($cbFiltraDis.val());
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'));   
 
         lista_usuarios = new Array();
 
@@ -275,8 +326,6 @@ $(function () {
                     itemTabla.id_usu = element.id_usuario;
                     itemTabla.cod_usu = element.cod_usuario;
                     itemTabla.nom_usu = element.nom_usuario;
-
-                    //itemTabla.tipo_usu = aTipoUsu[Number.parseInt(element.tipo_usuario) - 2];
                     itemTabla.est_usu = Number.parseInt(element.est_usuario) == 1 ? 'ACTIVO' : 'INACTIVO';
                     lista_usuarios.push(itemTabla);
                 }
@@ -295,6 +344,10 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'consulta_distribuidor';
         req.cod_usuario = Number.parseInt($txtCodUsu.val());
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'))
+
+
 
         $('#spinner').show();
 
@@ -317,7 +370,7 @@ $(function () {
 
                 $txtIdUsu.val(element.datos.id_usuario);
                 $txtNomUsu.val(element.datos.nom_usuario);
-
+                $cbEjecutivos.val(element.datos.cod_ejecutivo);
                 $cbEstadoUsu.val(element.datos.est_usuario);
 
                 nuevoUsu = false;
@@ -360,6 +413,7 @@ $(function () {
         req.cod_usu = Number.parseInt($txtCodUsu.val());
         req.id_usu = $txtIdUsu.val();
         req.nom_usu = $txtNomUsu.val();
+        req.cod_eje = Number.parseInt($cbEjecutivos.val());
         req.tipo_usu = 1;
         req.est_usu = Number.parseInt($cbEstadoUsu.val());
 
@@ -433,7 +487,7 @@ $(function () {
 
         if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/Windows Phone/i)) {
 
-         Swal.fire({ title: "Proceso de impresión no esta disponible en dispositivos móviles", type: "error" });
+            Swal.fire({ title: "Proceso de impresión no esta disponible en dispositivos móviles", type: "error" });
             return;
         }
 
@@ -454,6 +508,7 @@ $(function () {
 
 
     llenaTablaDistribuidores();
+    llenaComboEjecutivos();
 
     inactivaCampos();
 

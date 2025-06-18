@@ -196,6 +196,9 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'consulta_distribuidor';
         req.cod_usuario = Number.parseInt($txtCodDistri.val());
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'));
+
 
 
         await fetch_postRequest(req,
@@ -227,6 +230,9 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'lista_distribuidores';
         req.filtro = 1;
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'));
+
 
         listaDistri = new Array();
 

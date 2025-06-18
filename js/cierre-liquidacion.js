@@ -87,6 +87,9 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'lista_distribuidores';
         req.filtro = 1;
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'));
+
 
         listaDistri = new Array();
 
@@ -134,8 +137,8 @@ $(function () {
         req.fec_ini = $txtFechaIni.val();
         req.fec_fin = $txtFechaFin.val();
         req.est_mov = $estCierre.prop('checked') ? 2 : 1;
-        
-        
+
+
         $('#spinnerActCierre').show();
 
         await fetch_postRequest(req,

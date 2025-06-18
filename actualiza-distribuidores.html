@@ -139,39 +139,51 @@
                   </div>
                 </div>
 
-                <div class="row">
 
-                  <div class="col-lg-8 mb-3">
-                    <div class="input-group ">
-                      <label class="col-lg-4 col-6 form-label me-lg-3">Estado</label>
-                      <div class="col-6">
-                        <select id="cbEstadoUsu" class="form-select" aria-label="Default select example">
-                          <option value="0">Inactivo</option>
-                          <option value="1">Activo</option>
-                        </select>
+                <div class="input-group mb-3 ">
+                  <label class="col-lg-3 col-6 form-label">Ejecutivo</label>
+                  <div class="col-lg-8 col-12">
+                    <select id="cbEjecutivos" class="form-select" aria-label="Default select example">
+                      <option value="0">Sin Asignar</option>
+
+                    </select>
+                  </div>
+                </div>
+
+
+                  <div class="row">
+
+                    <div class="col-lg-8 mb-3">
+                      <div class="input-group ">
+                        <label class="col-lg-4 col-6 form-label me-lg-3">Estado</label>
+                        <div class="col-6">
+                          <select id="cbEstadoUsu" class="form-select" aria-label="Default select example">
+                            <option value="0">Inactivo</option>
+                            <option value="1">Activo</option>
+                          </select>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-lg-4">
+                      <div class="text-center">
+                        <button id="btnResPin" class="btn btn-primary">Resetea PIN</button>
                       </div>
                     </div>
-
                   </div>
 
-                  <div class="col-lg-4">
-                    <div class="text-center">
-                      <button id="btnResPin" class="btn btn-primary">Resetea PIN</button>
+
+
+                  <div class="input-group mb-3">
+                    <label class="col-lg-3 col-form-label"></label>
+                    <div class="col-lg-9">
+
+                      <button id="btnActUsuario" class="btn btn-success me-3">Actualizar</button>
+                      <button id="btnCancelar" class="btn btn-dark">Cancelar</button>
+
                     </div>
                   </div>
-                </div>
-
-
-
-                <div class="input-group mb-3">
-                  <label class="col-lg-3 col-form-label"></label>
-                  <div class="col-lg-9">
-
-                    <button id="btnActUsuario" class="btn btn-success me-3">Actualizar</button>
-                    <button id="btnCancelar" class="btn btn-dark">Cancelar</button>
-
-                  </div>
-                </div>
 
 
               </form>
@@ -260,8 +272,8 @@
   <!-- Archivo JS pagina -->
 
   <script src="./js/actualiza-distribuidores.js"></script>
-   <script src="../assets/jsPDF/jspdf.debug.js"></script>
-   <script src="./js/reportesPDF.js"></script>
+  <script src="../assets/jsPDF/jspdf.debug.js"></script>
+  <script src="./js/reportesPDF.js"></script>
 
 
 </body>

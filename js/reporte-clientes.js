@@ -106,16 +106,12 @@ $(function () {
 
         }
 
-       let link = 'https://maps.google.com/?q=' + fila.latitud + ',' + fila.longitud;
-
-        //let link = 'https://www.google.com/maps/search/?api=1&query='+fila.latitud+','+fila.longitud+'&query_place_id='+fila.nom_cliente;
-
-        //https://www.google.com/maps/place/Lim%C3%B3n,+Gu%C3%A1piles/@10.2097898,-83.9323539,12z/data=!3m1!4b1!4m6!3m5!1s0x8fa0b8100cd0926d:0xaba36611d67da863!8m2!3d10.2136788!4d-83.7890894!16s%2Fg%2F1ym_l87bf?authuser=0&entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D
+        let link = 'https://maps.google.com/?q=' + fila.latitud + ',' + fila.longitud;
 
 
-        window.open(link,'_blank')
+        window.open(link, '_blank')
 
-      
+
     });
 
 
@@ -182,6 +178,9 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'consulta_distribuidor';
         req.cod_usuario = Number.parseInt($txtCodDistri.val());
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'));
+
 
 
         await fetch_postRequest(req,
@@ -213,6 +212,9 @@ $(function () {
         req.w = 'apiSicocir';
         req.r = 'lista_distribuidores';
         req.filtro = 1;
+        req.cod_ejecutivo = Number.parseInt(sessionStorage.getItem('COD_USUARIO'));
+        req.tipo_usu = Number.parseInt(sessionStorage.getItem('TIPO_USUARIO'));
+
 
         listaDistri = new Array();
 

@@ -679,7 +679,7 @@ $(function () {
     async function llenaComboProvincias() {
 
         let req = new Object();
-        req.w = 'apiSeccab';
+        req.w = 'apiSicocir';
         req.r = 'llena_provincias';
 
         $('#cbProvincias').empty();
@@ -715,7 +715,7 @@ $(function () {
     async function llenaComboCantones() {
 
         let req = new Object();
-        req.w = 'apiSeccab';
+        req.w = 'apiSicocir';
         req.r = 'llena_cantones';
         req.idProvincia = $cbProvincias.val();
 
@@ -751,7 +751,7 @@ $(function () {
     async function llenaComboDistritos() {
 
         let req = new Object();
-        req.w = 'apiSeccab';
+        req.w = 'apiSicocir';
         req.r = 'llena_distritos';
         req.idProvincia = $cbProvincias.val();
         req.idCanton = $cbCantones.val();

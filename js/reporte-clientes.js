@@ -77,9 +77,10 @@ $(function () {
                 data: 'tipo_neg',
                 className: 'text-center'
             },
-            /*{
-                data: 'fec_ape'
-            },*/
+            {
+                data: 'fec_ape',
+                 className: 'text-center'
+            },
             {
                 data: 'est_cliente'
             },
@@ -281,6 +282,7 @@ $(function () {
                     itemTabla.cod_cliente = element.cod_cliente;
                     itemTabla.nom_cliente = element.nom_cliente;
                     itemTabla.tipo_neg = element.nom_tipo_neg;
+                    itemTabla.fec_ape = element.fec_reg;
                     itemTabla.latitud = Number.parseFloat(element.latitud);
                     itemTabla.longitud = Number.parseFloat(element.longitud);
                     itemTabla.est_cliente = element.estado_cli == '1' ? 'ACTIVO' : 'INACTIVO';

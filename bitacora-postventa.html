@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="cache-control" content="no-cache" />
+
+  <title>Control de Circulación</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="./img/logo.ico" rel="icon">
+  <!--link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"-->
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/boostrap/5.3.0/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- DataTables CSS files-->
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/2.1.5/dataTables.bootstrap5.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="./css/style.css" rel="stylesheet">
+
+  <!-- Sweet Alert Files-->
+  <script src="../assets/js/sweetalert2.all.min.js"></script>
+
+
+  <!-- jQuery js-->
+  <script src="../assets/js/jquery-3.6.3.min.js"></script>
+
+  <!-- App Lotto JS -->
+  <script src="./js/Main.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <script>
+
+      //checkInicioSesion();
+
+      addHeader();
+
+    </script>
+
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+
+      <script>
+        addMenu();
+
+
+
+      </script>
+
+
+    </ul>
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main" style="min-height:600px">
+
+    <div class="row ">
+      <div class="pagetitle col-lg-4 mb-lg-3">
+        <h1>Bitacora Post-Venta</h1>
+        <!--span>Módulo Vendedor</span-->
+
+      </div><!-- End Page Title -->
+
+      <!-- Barra botones -->
+      <div class="col-lg-8 d-flex mb-lg-3 justify-content-end">
+
+        <!--button id="btnEnviar" class="btn btn-primary me-3">Enviar</button-->
+
+        <!--button id="btnCompartir" type="button" class="btn btn-light" data-bs-toggle="tooltip" title="Compartir"><i
+            class="bi bi-share"></i></button-->
+
+        <!--button id="btnVistaPrevia" class="btn btn-light" data-bs-toggle="tooltip" title="Vista Previa"><i
+            class="bi bi-search"></i></button-->
+
+      </div>
+
+    </div>
+
+
+
+    <section class="section">
+
+      <div id="spinner" class="text-center" style="display: none">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-body">
+
+              <form autocomplete="off">
+
+                <div class="input-group mb-2 mt-3">
+                  <label for="txtCodDistri" class="col-lg-3 col-6 col-form-label me-1">Distribuidor</label>
+                  <div class="col-lg-2 col-3 me-lg-2 me-3">
+                    <input id="txtCodDistri" name="txtCodDistri" type="text" class="form-control"
+                      oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="5" inputmode="numeric"
+                      autofocus>
+                  </div>
+
+                  <div class="col-lg-1 col-2">
+                    <button id="btnBuscaDis" class="btn btn-light" data-bs-toggle="modal"
+                      data-bs-target="#modBuscaDis"><i class="bi bi-search" data-bs-toggle="tooltip"
+                        title="Buscar Distribuidor"></i></button>
+
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label for="txtNomDistri" class="col-lg-3 col-form-label"></label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomDistri" name="txtNomDistri" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+
+                <div class="input-group mb-2">
+                  <label for="txtCodPdv" class="col-lg-3 col-6 col-form-label">PDV</label>
+                  <div class="col-lg-2 col-3 me-2">
+                    <input id="txtCodPdv" name="txtCodPdv" type="text" class="form-control"
+                      oninput="this.value = this.value.replace(/[A-Za-z]/,'')" maxlength="5" inputmode="numeric"
+                      autofocus>
+                  </div>
+
+                  <div class="col-lg-1 col-2">
+                    <button id="btnBuscaPdv" class="btn btn-light" data-bs-toggle="modal"
+                      data-bs-target="#modBuscaPdv"><i class="bi bi-search" data-bs-toggle="tooltip"
+                        title="Buscar PDV"></i></button>
+
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label for="txtNomPdv" class="col-lg-3 col-form-label"></label>
+                  <div class="col-lg-9 col-12">
+                    <input id="txtNomPdv" name="txtNomPdv" type="text" class="form-control" disabled>
+                  </div>
+                </div>
+
+
+
+                <div class="input-group mb-3 mt-3">
+                  <label for="txtFechaBit" class="col-lg-3 col-5 col-form-label">Fecha Bitácora</label>
+                  <div class="col-lg-4 col-6">
+                    <input id="txtFechaBit" name="txtFechaBit" type="date" class="form-control">
+                  </div>
+                </div>
+
+
+                <!--div class="input-group mb-3">
+                      <label class="col-6 col-form-label">Cliente </label>
+                      <div class="col-6">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="juegaRev">
+                          <!label class="form-check-label" for="juegaRev">Juega Reventado</label>
+                        </div>
+                      </div>
+                    </div-->
+
+
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-12 col-form-label">Estado Atención</label>
+                  <div class="col-lg-6 col-12">
+                    <select id="cbEstado" class="form-select" aria-label="Default select example">
+                      <option value="1">PDV Atendido</option>
+                      <option value="0">PDV NO Atendido</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label for="txtCanDiaria" class="col-lg-3 col-6 col-form-label">Cantidad Diaria</label>
+                  <div class="col-lg-2 col-6">
+                    <input id="txtCanDiaria" name="txtCanDiaria" type="text" inputmode="numeric"
+                      class="form-control text-end" oninput="this.value = this.value.replace(/[A-Za-z]/,'')"
+                      maxlength="6">
+                  </div>
+                </div>
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-12 col-form-label">Motivos NO atención</label>
+                  <div class="col-lg-6 col-12">
+                    <select id="cbMotivos" class="form-select" aria-label="Default select example">
+                      <option value="0">Ninguno</option>
+                      <option value="1">NO atendido por el DSS</option>
+                      <option value="2">PDV NO vende</option>
+                    </select>
+                  </div>
+                </div>
+
+
+                <div class="input-group mb-3">
+                  <label for="txtNotas" class="col-lg-3 col-12 col-form-label">Observaciones</label>
+                  <div class="col-lg-9 col-12">
+                    <textarea class="form-control" name="txtNotas" id="txtNotas" rows="3" maxlength="200"></textarea>
+                  </div>
+
+                </div>
+
+
+                <div class="input-group mb-3">
+                  <label class="col-lg-3 col-form-label"></label>
+                  <div class="col-lg-9">
+
+                    <button id="btnActualizar" class="btn btn-success me-2">Actualizar</button>
+                    <button id="btnCancelar" class="btn btn-dark me-2">Cancelar</button>
+                    <button id="btnEliminar" class="btn btn-danger">Cancelar</button>
+
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+        <div class="col-lg-6">
+
+
+          <div class="card">
+            <div class="card-body">
+
+              <div class="d-flex mt-3 mb-3">
+                <h5>Detalle Visitas Efectuadas</h5>
+                <!--div class="col-2 text-center">
+                  <button id="btnAgregaPickPdv" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modBuscaPdv"><i class="bi bi-plus"
+                      data-bs-toggle="tooltip" title="Agregar"></i></button>
+
+                </div-->
+                <div id="spinnerPdv" class="col-1" style="display: none">
+                  <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="table-responsive">
+                <table id="tblVisitas" class="table table-primary nowrap" style="width: 100%;">
+                  <thead>
+                    <tr>
+                      <th class="text-center col-2">Fecha</th>
+                      <th class="">Resultado</th>
+                      <th class="col-2 text-center"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+    </section>
+
+  </main><!-- End #main -->
+
+
+  <!-- Modal Buscar Distribuidor-->
+  <div class="modal" id="modBuscaDis" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Busca Distribuidor</h5>
+          <button id="btnCerrarModDis" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="table-responsive">
+                <table id="tblDistri" class="table table-light" width="100%">
+                  <thead>
+                    <tr>
+                      <th class="col-1">Código</th>
+                      <th class="">Nombre</th>
+                      <th class="col-1"></th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+        <!--div class="modal-footer">
+          <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
+        </div-->
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Modal Buscar PDV -->
+  <div class="modal" id="modBuscaPdv" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Busca PDV</h5>
+
+          <button id="btnCerrarModPdv" type="button" class="btn-close" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body">
+
+              <div id="spinnerModUsu" class="text-center" style="display: none">
+                <div class="spinner-border text-primary" style="width: 1.5rem; height: 1.5rem;" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+
+
+              <div class="table-responsive">
+                <table id="tblPdvs" class="table table-light" width="100%">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nombre PDV</th>
+                      <th></th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--div class="modal-footer">
+        <button id="btnSelCliMod" type="button" class="btn btn-primary">Seleccionar</button>
+      </div-->
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Seccab Software</span></strong>. Derechos Reservados
+    </div>
+
+  </footer><!-- End Footer -->
+
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/boostrap/5.3.0/bootstrap.bundle.min.js"></script>
+
+
+  <!--script src="../assets/datatables/datatables.min.js"></script-->
+  <script src="../assets/datatables/2.1.5/datatables.js"></script>
+  <script src="../assets/datatables/2.1.5/dataTables.bootstrap5.js"></script>
+
+  <script src="../assets/datatables/responsive/3.0.3/dataTables.responsive.js"></script>
+  <script src="../assets/datatables/responsive/3.0.3/responsive.bootstrap5.js"></script>
+
+  <!-- Archivo JS pagina -->
+
+  <!-- Archivo JS pagina -->
+
+  <script src="./js/bitacora-postventa.js"></script>
+
+</body>
+
+</html>
